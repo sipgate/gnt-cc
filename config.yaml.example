@@ -1,0 +1,36 @@
+---
+bind: 127.0.0.1
+port: 8080
+developmentMode: true
+logLevel: warning
+jwtSigningKey: "weNFEWFWKJEnfWknfewlkjenfFE"
+jwtExpire: "2000m"
+authenticationMethod: "builtin"
+users:
+  - username: "admin"
+    password: "admin"
+  - username: "admin2"
+    password: "admin"
+ldapConfig:
+  host: "some.server"
+  port: 389
+  skipCertificateVerify: false
+  userFilter: "(&(objectClass=posixAccount)(uid=%s))"
+  groupFilter: "(&(objectClass=posixGroup)(cn=someGroupName)(memberUid=%s))"
+  baseDn: "dc=domain,dc=org"
+clusters:
+  - name: "test-cluster"
+    hostname: "test-cluster.examlpe.com"
+    port: 5080
+    description: "Ganeti Test Cluster"
+    username: "gnt-cc"
+    password: "gnt-cc"
+    ssl: True
+  - name: "production-cluster"
+    hostname: "prod-cluster.example.com"
+    port: 5080
+    description: "Ganeti Production Cluster"
+    username: "gnt-cc"
+    password: "somepassword"
+    ssl: True
+

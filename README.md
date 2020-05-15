@@ -14,14 +14,23 @@ swag init
 go run main.go
 ```
 
+## API Documentation
+
+You can access the API documentation through `/swagger/index.html` on your gnt-cc instance, e.g. `https://gnt-cc.example.com/swagger/index.html` or `http://localhost:8080/swagger/index.html`.
+
 ## Features
 
 ### Implemented
 
 - Authentication with local or LDAP backend
-- 
+- Integrated API documentation (using swagger)
+- Enumerate clusters, nodes, instances, and jobs
+- Read cluster, instance and job details
+- Provide a WebSocket proxy to enable authenticated access to the VNC or Spice port of an instance (needs a HTML5 VNC or Spice client)
 
 ### Planned
+
+- implement the full RAPI functionallity
 
 ## Configuration
 

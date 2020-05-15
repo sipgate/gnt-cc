@@ -24,6 +24,7 @@ jobs:
 
     - name: Get dependencies
       run: |
+        go get -u github.com/swaggo/swag/cmd/swag
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
@@ -31,7 +32,9 @@ jobs:
         fi
 
     - name: Build
-      run: go build -v .
+      run: |
+        swag init
+        go build -v .
 
     - name: Test
       run: go test -v .

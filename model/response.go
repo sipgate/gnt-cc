@@ -3,11 +3,11 @@ package model
 import "gnt-cc/rapi"
 
 type ClusterResponse struct {
-	Name string `json:"name"`
+	Cluster GntCluster `json:"cluster"`
 }
 
 type AllClustersResponse struct {
-	Names []string `json:"names"`
+	Clusters []GntCluster `json:"clusters"`
 }
 
 type AllInstancesResponse struct {

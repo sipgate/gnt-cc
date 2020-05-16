@@ -74,7 +74,7 @@ func main() {
 	auth.Use(authMiddleware.MiddlewareFunc())
 	{
 		auth.GET("/clusters", handlers.FindAllClusters)
-		auth.GET("/clusters/:cluster", handlers.FindCluster)
+		//auth.GET("/clusters/:cluster", handlers.FindCluster)
 		auth.GET("/clusters/:cluster/nodes", handlers.FindAllNodes)
 		auth.GET("/clusters/:cluster/instances", handlers.FindAllInstances)
 		auth.GET("/clusters/:cluster/instances/:instance", handlers.FindInstance)

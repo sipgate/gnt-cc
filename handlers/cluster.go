@@ -1,26 +1,32 @@
 package handlers
 
 import (
-	"errors"
 	"github.com/gin-gonic/gin"
 	"gnt-cc/config"
-	"gnt-cc/httputil"
-	"gnt-cc/utils"
+	"gnt-cc/model"
 )
 
 // FindAllClusters godoc
-// @Summary Get all cluster names
-// @Description get all clusters (currently only returns names of clusters)
+// @Summary Get all clusters
+// @Description get all clusters
 // @Produce  json
 // @Success 200 {object} model.AllClustersResponse
 // @Router /clusters [get]
 func FindAllClusters(context *gin.Context) {
-	var names []string
-	for _, cluster := range config.Get().Clusters {
-		names = append(names, cluster.Name)
+	configClusters := config.Get().Clusters
+	clusters := make([]model.GntCluster, len(configClusters))
+
+	for i, cluster := range configClusters {
+		clusters[i] = model.GntCluster{
+			Name:        cluster.Name,
+			Hostname:    cluster.Hostname,
+			Description: cluster.Description,
+			Port:        cluster.Port,
+		}
 	}
+
 	context.JSON(200, gin.H{
-		"clusters": names,
+		"clusters": clusters,
 	})
 }
 
@@ -29,15 +35,14 @@ func FindAllClusters(context *gin.Context) {
 // @Description get details of a cluster with a given name (Currently only returns its name)
 // @Produce  json
 // @Success 200 {object} model.ClusterResponse
-// @Router /clusters/{cluster} [get]
-func FindCluster(c *gin.Context) {
-	name := c.Param("cluster")
-	if !utils.IsValidCluster(name) {
-		httputil.NewError(c, 404, errors.New("cluster not found"))
-	} else {
-		// TODO: return actual information, not just name
-		c.JSON(200, gin.H{
-			"cluster": name,
-		})
-	}
-}
+//// @Router /clusters/{cluster} [get]
+//func FindCluster(c *gin.Context) {
+//	name := c.Param("cluster")
+//	if !utils.IsValidCluster(name) {
+//		httputil.NewError(c, 404, errors.New("cluster not found"))
+//	} else {
+//		c.JSON(200, gin.H{
+//			"cluster": ,
+//		})
+//	}
+//}

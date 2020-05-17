@@ -35,17 +35,13 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ClusterStatsDigits from "@/components/ClusterStatsDigits.vue";
 import Component from "vue-class-component";
 import Api from "@/store/api";
 import PageNames from "@/data/enum/PageNames";
 import { REDIRECT_TO_QUERY_KEY } from "@/router";
 
 @Component({
-  name: "LoginView",
-  components: {
-    ClusterStatsDigits
-  }
+  name: "LoginView"
 })
 export default class LoginView extends Vue {
   credentials = {

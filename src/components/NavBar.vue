@@ -79,6 +79,8 @@ export default class NavBar extends Vue {
   align-items: center;
   padding: 2rem;
   background: #fff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid #eaedf3;
 
   .logo-container {
     display: flex;

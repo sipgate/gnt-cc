@@ -73,6 +73,7 @@ body {
   padding: 0;
   margin: 0;
   background: #fbfbfd;
+  min-height: 100vh;
 }
 
 * {

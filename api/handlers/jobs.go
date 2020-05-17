@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gnt-cc/httputil"
-	"gnt-cc/rapi"
-	"gnt-cc/utils"
+	"gnt-cc/api/httputil"
+	"gnt-cc/api/rapi"
+	"gnt-cc/api/utils"
 	"strconv"
 	"time"
 )

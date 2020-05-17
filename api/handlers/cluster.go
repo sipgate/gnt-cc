@@ -3,7 +3,7 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 	"gnt-cc/config"
-	"gnt-cc/model"
+	"gnt-cc/api/model"
 )
 
 // FindAllClusters godoc

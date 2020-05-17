@@ -1,6 +1,6 @@
 package model
 
-import "gnt-cc/rapi"
+import "gnt-cc/api/rapi"
 
 type ClusterResponse struct {
 	Cluster GntCluster `json:"cluster"`

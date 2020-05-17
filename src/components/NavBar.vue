@@ -1,32 +1,28 @@
 <template>
-  <div id="nav">
-    <b-navbar>
-      <template slot="brand">
-        <b-navbar-item tag="router-link" to="/">
-          <img class="brand-logo" src="../assets/ganeti_logo.svg" />
-        </b-navbar-item>
-      </template>
-      <template slot="start">
-        <b-navbar-item tag="router-link" :to="links.statistics" class="needs-exact-match">
+  <nav class="navbar">
+    <div class="begin">
+      <router-link class="logo-container" to="/">
+        <img class="logo" src="../assets/ganeti_logo.svg" />
+      </router-link>
+      <div class="items">
+        <router-link class="item needs-exact-match" :to="links.statistics">
           Statistics
-        </b-navbar-item>
-        <b-navbar-item tag="router-link" :to="links.instances">
+        </router-link>
+        <router-link class="item" :to="links.instances">
           Instances
-        </b-navbar-item>
-        <b-navbar-item tag="router-link" :to="links.jobs">
+        </router-link>
+        <router-link class="item" :to="links.jobs">
           Jobs
-        </b-navbar-item>
-        <b-navbar-item tag="router-link" :to="links.nodes">
+        </router-link>
+        <router-link class="item" :to="links.nodes">
           Nodes
-        </b-navbar-item>
-      </template>
-      <template slot="end">
-        <b-navbar-item tag="div">
-          <ClusterSelector />
-        </b-navbar-item>
-      </template>
-    </b-navbar>
-  </div>
+        </router-link>
+      </div>
+    </div>
+    <div class="end">
+      <ClusterSelector />
+    </div>
+  </nav>
 </template>
 
 <script lang="ts">
@@ -76,26 +72,49 @@ export default class NavBar extends Vue {
 }
 </script>
 
-<style scoped>
-#nav {
-  padding: 30px;
-  background: #ffffff;
-}
+<style scoped lang="scss">
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  background: #fff;
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-#nav a.router-link-exact-active.needs-exact-match {
-  color: #42b983;
-}
+    .logo {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
 
-#nav a.router-link-active:not(.needs-exact-match) {
-  color: #42b983;
-}
+  .begin {
+    display: flex;
+    align-items: center;
 
-.brand-logo {
-  max-height: 3rem;
+    .items {
+      display: flex;
+      align-items: center;
+      margin-left: 2rem;
+
+      .item {
+        display: block;
+        font-weight: bold;
+        color: #2c3e50;
+        padding: 1rem;
+
+        &.router-link-exact-active.needs-exact-match {
+          color: #42b983;
+        }
+
+        &.router-link-active:not(.needs-exact-match) {
+          color: #42b983;
+        }
+      }
+    }
+  }
 }
 </style>

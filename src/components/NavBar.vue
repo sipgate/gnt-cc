@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="begin">
-      <router-link class="logo-container" to="/">
+      <router-link class="logo-container" :to="links.statistics">
         <img class="logo" src="../assets/ganeti_logo.svg" />
       </router-link>
       <div class="items">

@@ -2,11 +2,10 @@
   <div class="dropdown" :class="{ expanded: isExpanded, 'has-icon': !!icon }" @click.stop="toggle">
     <div class="current">
       <span class="label">{{ label }}</span>
-      <b-icon v-if="icon" class="icon" :icon="icon" size="is-small" />
+      <Icon v-if="icon" class="icon" :icon="icon" />
     </div>
     <div class="options">
       <span class="triangle" />
-
       <div class="options-items">
         <slot />
       </div>
@@ -18,9 +17,11 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
+import Icon from "@/components/Icon.vue";
 
 @Component({
-  name: "Dropdown"
+  name: "Dropdown",
+  components: { Icon }
 })
 export default class Dropdown extends Vue {
   @Prop({ required: true })

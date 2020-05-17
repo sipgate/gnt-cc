@@ -54,9 +54,10 @@ library.add(
   faServer,
   faSkullCrossbones
 );
-Vue.component("vue-fontawesome", FontAwesomeIcon);
+Vue.component("vue-fontawesome", FontAwesomeIcon); // TODO: remove, once buefy is gone
 
 Vue.use(Buefy, {
+  // TODO: remove, once buefy is gone
   defaultIconComponent: "vue-fontawesome",
   defaultIconPack: "fas"
 });
@@ -73,4 +74,4 @@ new Vue({
   render: h => h(App)
 }).$mount("#app");
 
-Object.defineProperty(Vue.prototype, "$filesize", { value: filesize });
+Object.defineProperty(Vue.prototype, "$filesize", { value: filesize }); // TODO: what's this for?

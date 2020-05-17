@@ -4,7 +4,7 @@
     @click="onClick"
     :class="{ 'has-label': !!label, 'has-icon': !!icon, [type]: !!type }"
   >
-    <b-icon :icon="icon" size="is-small" v-if="icon" />
+    <Icon v-if="icon" :icon="icon" />
     <span class="custom-label" v-if="label">{{ label }}</span>
   </button>
 </template>
@@ -13,9 +13,11 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
+import Icon from "@/components/Icon.vue";
 
 @Component({
-  name: "Button"
+  name: "Button",
+  components: { Icon }
 })
 export default class Button extends Vue {
   @Prop({ default: false })

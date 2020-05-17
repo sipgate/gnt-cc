@@ -1,6 +1,6 @@
 <template>
-  <button class="button-round" :class="size" @click.prevent="onClick" :disabled="disabled">
-    <b-icon :icon="icon" :size="size" />
+  <button class="button-round" @click.prevent="onClick" :disabled="disabled">
+    <Icon :icon="icon" />
   </button>
 </template>
 
@@ -8,15 +8,15 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
+import Icon from "@/components/Icon.vue";
 
 @Component({
-  name: "ButtonRound"
+  name: "ButtonRound",
+  components: { Icon }
 })
 export default class ButtonRound extends Vue {
   @Prop(String)
   readonly icon!: string;
-  @Prop({ default: "is-small" })
-  readonly size!: string;
   @Prop({ default: false })
   readonly disabled!: boolean;
 
@@ -37,20 +37,7 @@ export default class ButtonRound extends Vue {
   justify-content: center;
   align-items: center;
   color: #555;
-
-  &.is-small {
-    width: 24px;
-    height: 24px;
-  }
-
-  &.is-medium {
-    width: 32px;
-    height: 32px;
-  }
-
-  &.is-large {
-    width: 48px;
-    height: 48px;
-  }
+  width: 24px;
+  height: 24px;
 }
 </style>

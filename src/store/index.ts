@@ -16,21 +16,23 @@ export interface StoreState {
 const initialState: StoreState = {
   clusters: [],
   nodes: {},
-  instances: {}
+  instances: {},
 };
 
 export const Actions = {
   LoadClusters: "loadClusters",
   LoadNodes: "loadNodes",
   LoadInstances: "loadInstances",
-  LoadInstance: "loadInstance"
+  LoadInstance: "loadInstance",
+  RemoveToken: "removeToken",
 };
 
 export const Mutations = {
   SetClusters: "setClusters",
   SetNodes: "setNodes",
   SetInstances: "setInstances",
-  AddInstance: "addInstance"
+  AddInstance: "addInstance",
+  UnsetToken: "unsetToken",
 };
 
 export default new Vuex.Store({
@@ -42,7 +44,7 @@ export default new Vuex.Store({
     [Mutations.SetNodes](state, { cluster, nodes }: { cluster: string; nodes: GntNode[] }) {
       state.nodes = {
         ...state.nodes,
-        [cluster]: nodes
+        [cluster]: nodes,
       };
     },
     [Mutations.SetInstances](
@@ -51,7 +53,7 @@ export default new Vuex.Store({
     ) {
       state.instances = {
         ...state.instances,
-        [cluster]: instances
+        [cluster]: instances,
       };
     },
     [Mutations.AddInstance](
@@ -60,7 +62,7 @@ export default new Vuex.Store({
     ) {
       const instances = state.instances[cluster] || [];
 
-      const oldIndex = instances.findIndex(el => el.name === instance.name);
+      const oldIndex = instances.findIndex((el) => el.name === instance.name);
 
       if (oldIndex > -1) {
         instances[oldIndex] = instance;
@@ -70,16 +72,22 @@ export default new Vuex.Store({
 
       state.instances = {
         ...state.instances,
-        [cluster]: instances
+        [cluster]: instances,
       };
     },
     setToken(state, token: string) {
       localStorage.setItem(Api.tokenStorageKey, token);
-    }
+    },
+    [Mutations.UnsetToken](state, token: string) {
+      localStorage.removeItem(Api.tokenStorageKey);
+    },
   },
   actions: {
     async saveToken({ commit }, token: string) {
       commit("setToken", token);
+    },
+    async [Actions.RemoveToken]({ commit }, token: string) {
+      commit(Mutations.UnsetToken, token);
     },
     async [Actions.LoadClusters]({ commit }) {
       const response = await Api.get("clusters");
@@ -90,22 +98,22 @@ export default new Vuex.Store({
       const response = await Api.get(`clusters/${cluster}/nodes`);
       commit(Mutations.SetNodes, {
         cluster,
-        nodes: response.nodes
+        nodes: response.nodes,
       });
     },
     async [Actions.LoadInstances]({ commit }, { cluster }) {
       const response = await Api.get(`clusters/${cluster}/instances`);
       commit(Mutations.SetInstances, {
         cluster,
-        instances: response.instances
+        instances: response.instances,
       });
     },
     async [Actions.LoadInstance]({ commit }, { cluster, instance }) {
       const response = await Api.get(`clusters/${cluster}/instances/${instance}`);
       commit(Mutations.AddInstance, {
         cluster,
-        instance: response.instance
+        instance: response.instance,
       });
-    }
-  }
+    },
+  },
 });

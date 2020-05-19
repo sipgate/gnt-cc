@@ -21,6 +21,7 @@
     </div>
     <div class="end">
       <ClusterSelector />
+      <Button @click="logout" class="logout-button" icon="sign-out-alt" />
     </div>
   </nav>
 </template>
@@ -30,11 +31,14 @@ import PageNames from "@/data/enum/PageNames";
 import Vue from "vue";
 import Component from "vue-class-component";
 import ClusterSelector from "@/components/ClusterSelector.vue";
+import Button from "@/components/Button.vue";
 import Params from "@/data/enum/Params";
+import Api from "../store/api";
+import { Actions } from "../store";
 
 @Component({
   name: "NavBar",
-  components: { ClusterSelector }
+  components: { ClusterSelector, Button },
 })
 export default class NavBar extends Vue {
   get currentCluster(): string {
@@ -46,28 +50,34 @@ export default class NavBar extends Vue {
       statistics: {
         name: PageNames.Statistics,
         params: {
-          cluster: this.currentCluster
-        }
+          cluster: this.currentCluster,
+        },
       },
       instances: {
         name: PageNames.InstancesList,
         params: {
-          cluster: this.currentCluster
-        }
+          cluster: this.currentCluster,
+        },
       },
       jobs: {
         name: PageNames.Jobs,
         params: {
-          cluster: this.currentCluster
-        }
+          cluster: this.currentCluster,
+        },
       },
       nodes: {
         name: PageNames.Nodes,
         params: {
-          cluster: this.currentCluster
-        }
-      }
+          cluster: this.currentCluster,
+        },
+      },
     };
+  }
+
+  logout() {
+    this.$store
+      .dispatch(Actions.RemoveToken)
+      .then(() => this.$router.push({ name: PageNames.Login }));
   }
 }
 </script>
@@ -116,6 +126,14 @@ export default class NavBar extends Vue {
           color: #42b983;
         }
       }
+    }
+  }
+
+  .end {
+    display: flex;
+
+    .logout-button {
+      margin-left: 1rem;
     }
   }
 }

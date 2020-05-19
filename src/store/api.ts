@@ -14,7 +14,7 @@ export default class Api {
 
   static async get(slug: string) {
     const options = {
-      method: "GET"
+      method: "GET",
     };
 
     return Api.request(slug, options);
@@ -25,8 +25,8 @@ export default class Api {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     };
 
     return Api.request(slug, options);
@@ -37,8 +37,8 @@ export default class Api {
       ...options,
       headers: {
         ...options.headers,
-        Authorization: `Bearer ${localStorage.getItem(Api.tokenStorageKey)}`
-      }
+        Authorization: `Bearer ${localStorage.getItem(Api.tokenStorageKey)}`,
+      },
     };
 
     const response = await fetch(Api.buildUrl(slug), options);
@@ -60,9 +60,9 @@ export default class Api {
     const response = await fetch(Api.buildUrl("login"), {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(credentials)
+      body: JSON.stringify(credentials),
     });
 
     return response.json();

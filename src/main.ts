@@ -22,7 +22,8 @@ import {
   faMinus,
   faUndo,
   faServer,
-  faSkullCrossbones
+  faSkullCrossbones,
+  faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import App from "./App.vue";
@@ -52,14 +53,15 @@ library.add(
   faMinus,
   faUndo,
   faServer,
-  faSkullCrossbones
+  faSkullCrossbones,
+  faSignOutAlt
 );
 Vue.component("vue-fontawesome", FontAwesomeIcon); // TODO: remove, once buefy is gone
 
 Vue.use(Buefy, {
   // TODO: remove, once buefy is gone
   defaultIconComponent: "vue-fontawesome",
-  defaultIconPack: "fas"
+  defaultIconPack: "fas",
 });
 
 Vue.config.productionTip = false;
@@ -71,7 +73,7 @@ for (const [key, value] of filters) {
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
 
 Object.defineProperty(Vue.prototype, "$filesize", { value: filesize }); // TODO: what's this for?

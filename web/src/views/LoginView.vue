@@ -4,31 +4,7 @@
       <img class="brand-logo" src="../assets/ganeti_logo.svg" />
     </section>
     <section class="login-form">
-      <form @submit.prevent="login">
-        <b-field>
-          <b-input
-            icon="user"
-            placeholder="Username"
-            required
-            type="text"
-            v-model="credentials.username"
-          />
-        </b-field>
-        <b-field>
-          <b-input
-            password-reveal
-            icon="lock"
-            placeholder="Password"
-            required
-            type="password"
-            v-model="credentials.password"
-          />
-        </b-field>
-        <div class="login-error">
-          <p class="error">{{ error }}</p>
-        </div>
-        <b-button :loading="loading" native-type="submit" type="is-primary">Login</b-button>
-      </form>
+      <Form @submit="login" :fields="formFields" :values="credentials" />
     </section>
   </div>
 </template>
@@ -39,15 +15,38 @@ import Component from "vue-class-component";
 import Api from "@/store/api";
 import PageNames from "@/data/enum/PageNames";
 import { REDIRECT_TO_QUERY_KEY } from "@/router";
+import Input from "@/components/form/Input.vue";
+import Form from "@/components/form/Form.vue";
 
 @Component({
-  name: "LoginView"
+  name: "LoginView",
+  components: { Input, Form }
 })
 export default class LoginView extends Vue {
   credentials = {
     username: "",
-    password: ""
+    password: "",
+    remember: false
   };
+
+  formFields = [
+    {
+      name: "username",
+      label: "Username",
+      required: true
+    },
+    {
+      name: "password",
+      label: "Password",
+      type: "password",
+      required: true
+    },
+    {
+      name: "remember",
+      label: "Remember on this computer",
+      type: "checkbox"
+    }
+  ];
 
   loading = false;
   error = "";
@@ -75,7 +74,9 @@ export default class LoginView extends Vue {
 
     await this.$store.dispatch("saveToken", response.token);
     if (typeof this.$route.query[REDIRECT_TO_QUERY_KEY] !== "undefined") {
-      await this.$router.push(this.$route.query[REDIRECT_TO_QUERY_KEY] as string);
+      await this.$router.push(
+        this.$route.query[REDIRECT_TO_QUERY_KEY] as string
+      );
     } else {
       await this.$router.push({ name: PageNames.Statistics });
     }

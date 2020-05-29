@@ -24,6 +24,8 @@ import {
   faServer,
   faSkullCrossbones,
   faSignOutAlt,
+  faSquare,
+  faCheckSquare
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import App from "./App.vue";
@@ -54,7 +56,9 @@ library.add(
   faUndo,
   faServer,
   faSkullCrossbones,
-  faSignOutAlt
+  faSignOutAlt,
+  faSquare,
+  faCheckSquare
 );
 Vue.component("vue-fontawesome", FontAwesomeIcon); // TODO: remove, once buefy is gone
 

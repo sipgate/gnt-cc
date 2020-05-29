@@ -22,13 +22,17 @@ export default class Icon extends Vue {
 
 <style lang="scss" scoped>
 .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 1rem;
   height: 1rem;
   flex-grow: 0;
   flex-shrink: 0;
 
   .svg-icon {
-    width: 0.875em;
+    width: 80%;
+    height: 80%;
   }
 }
 </style>

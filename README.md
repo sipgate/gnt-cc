@@ -14,6 +14,20 @@ swag init
 go run main.go
 ```
 
+## Frontend
+
+### Development
+
+```shell script
+yarn && yarn serve
+```
+
+### Build (TODO)
+
+```shell script
+yarn build
+```
+
 ## API Documentation
 
 You can access the API documentation through `/swagger/index.html` on your gnt-cc instance, e.g. `https://gnt-cc.example.com/swagger/index.html` or `http://localhost:8080/swagger/index.html`.

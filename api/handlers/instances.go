@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+	"gnt-cc/config"
+	"gnt-cc/dummy"
 	"gnt-cc/httputil"
 	"gnt-cc/model"
 	"gnt-cc/rapi"
@@ -25,11 +27,11 @@ import (
 // @Failure 502 {object} httputil.HTTPError
 // @Router /clusters/{cluster}/instances [get]
 func FindAllInstances(context *gin.Context) {
-	name := context.Param("cluster")
-	if !utils.IsValidCluster(name) {
+	clusterName := context.Param("cluster")
+	if !utils.IsValidCluster(clusterName) {
 		httputil.NewError(context, 404, errors.New("cluster not found"))
 	} else {
-		/*content, err := rapi.Get(name, "/2/instances?bulk=1")
+		/*content, err := rapi.Get(clusterName, "/2/instances?bulk=1")
 		if err != nil {
 			httputil.NewError(context, 502, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
 			return
@@ -37,33 +39,24 @@ func FindAllInstances(context *gin.Context) {
 		var instanceData rapi.InstancesBulk
 		json.Unmarshal([]byte(content), &instanceData)*/
 
-		dummyCount := 20
-		dummyInstances := make([]model.GntInstance, dummyCount)
+		var instances []model.GntInstance
 
-		for i := 0; i < dummyCount; i++ {
-			dummyInstances[i] = model.GntInstance{
-				Name:        fmt.Sprintf("%d.instances.dummy.example.com", i),
-				PrimaryNode: "ganeti-node03.example.com",
-				SecondaryNodes: []string{
-					"ganeti-node01.example.com",
-					"ganeti-node02.example.com",
-				},
-				Disks: []model.Disk{
-					{
-						Name: "disk0",
-						Size: 500000,
-						Uuid: "12345678-12345678-12345678",
-					},
-				},
-				MemoryTotal: 4096,
-				CpuCount:    6,
+		if config.Get().DummyMode {
+			instances = dummy.GetInstances(20)
+		} else {
+			var err error
+			instances, err = rapi.GetInstances(clusterName)
+
+			if err != nil {
+				httputil.NewError(context, 500, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
+				return
 			}
 		}
 
 		context.JSON(200, gin.H{
-			"cluster":           name,
-			"numberOfInstances": dummyCount,
-			"instances":         dummyInstances,
+			"cluster":           clusterName,
+			"numberOfInstances": len(instances),
+			"instances":         instances,
 		})
 	}
 }

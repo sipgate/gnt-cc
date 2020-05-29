@@ -40,6 +40,7 @@ type Config struct {
 	JwtExpire            string
 	AuthenticationMethod string
 	Loglevel             string
+	DummyMode            bool
 	Users                []UserSet
 	Clusters             []GanetiCluster
 	LDAPConfig           LdapConfig

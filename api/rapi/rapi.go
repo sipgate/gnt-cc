@@ -7,6 +7,7 @@ import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
 	"gnt-cc/config"
+	"gnt-cc/model"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -53,6 +54,36 @@ func NewGanetiInstance(instanceDetails CreateInstanceParameters) InstanceCreate 
 	inst.NoInstall = true
 	inst.WaitForSync = false
 	return inst
+}
+
+func GetInstances(clusterName string) ([]model.GntInstance, error) {
+	response, err := Get(clusterName, "/2/instances?bulk=1")
+
+	if err != nil {
+		return nil, err
+	}
+
+	var instanceData []Instance
+	err = json.Unmarshal([]byte(response), &instanceData)
+
+	if err != nil {
+		return nil, err
+	}
+
+	instances := make([]model.GntInstance, len(instanceData))
+
+	for i, instance:= range instanceData {
+		instances[i] = model.GntInstance{
+			Name:           instance.Name,
+			PrimaryNode:    instance.Pnode,
+			SecondaryNodes: instance.Snodes,
+			Disks:          nil,
+			CpuCount:       instance.BeParams.Vcpus,
+			MemoryTotal:    instance.BeParams.Memory,
+		}
+	}
+
+	return instances, nil
 }
 
 func Get(clusterName string, resource string) (string, error) {

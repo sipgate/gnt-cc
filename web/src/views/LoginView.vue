@@ -54,7 +54,8 @@ export default class LoginView extends Vue {
   async login() {
     this.error = "";
     this.loading = true;
-    const response = await Api.login(this.credentials);
+    const { username, password } = this.credentials;
+    const response = await Api.login({ username, password });
     this.loading = false;
 
     if (response.code === 401) {
@@ -74,9 +75,7 @@ export default class LoginView extends Vue {
 
     await this.$store.dispatch("saveToken", response.token);
     if (typeof this.$route.query[REDIRECT_TO_QUERY_KEY] !== "undefined") {
-      await this.$router.push(
-        this.$route.query[REDIRECT_TO_QUERY_KEY] as string
-      );
+      await this.$router.push(this.$route.query[REDIRECT_TO_QUERY_KEY] as string);
     } else {
       await this.$router.push({ name: PageNames.Statistics });
     }

@@ -73,6 +73,6 @@ export default class Api {
       slug = slug.slice(1);
     }
 
-    return `/api/v1/${slug}`;
+    return `http://localhost:8000/v1/${slug}`;
   }
 }

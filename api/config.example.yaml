@@ -33,4 +33,4 @@ clusters:
     username: "gnt-cc"
     password: "somepassword"
     ssl: True
-
+dummyMode: False

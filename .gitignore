@@ -7,6 +7,9 @@ dist
 .env.*.local
 config.yaml
 
+# Binaries
+gnt-cc
+
 # Built documentation
 docs
 

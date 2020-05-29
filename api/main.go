@@ -1,9 +1,9 @@
 package main
 
 import (
-	auth2 "gnt-cc/api/auth"
+	auth2 "gnt-cc/auth"
 	"gnt-cc/config"
-	"gnt-cc/api/handlers"
+	"gnt-cc/handlers"
 	"net/http"
 	"strconv"
 	"time"

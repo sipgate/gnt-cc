@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gnt-cc/api/httputil"
-	"gnt-cc/api/rapi"
-	"gnt-cc/api/utils"
+	"gnt-cc/httputil"
+	"gnt-cc/rapi"
+	"gnt-cc/utils"
 	"math/rand"
 )
 

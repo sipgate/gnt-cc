@@ -2,9 +2,10 @@ package config
 
 import (
 	"fmt"
+	"strings"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"strings"
 )
 
 type GanetiCluster struct {

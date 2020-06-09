@@ -10,5 +10,6 @@ For build/test/development information, please check the relevant READMEs for [f
 
 TODO
 
-Build Status Backend: ![]https://github.com/sipgate/gnt-cc/workflows/Go/badge.svg
+Build Status Backend: ![](https://github.com/sipgate/gnt-cc/workflows/Go/badge.svg)
+
 Build Status Frontend: sorry, no pipeline yet.

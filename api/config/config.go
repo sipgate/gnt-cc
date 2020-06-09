@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -61,7 +62,12 @@ func Get() Config {
 
 func Parse() {
 	viper.SetConfigName("config")
-	viper.AddConfigPath(".")
+	alternateConfigDir := os.Getenv("GNT_CC_CONFIG_DIR")
+	if alternateConfigDir != "" {
+		viper.AddConfigPath(alternateConfigDir)
+	} else {
+		viper.AddConfigPath(".")
+	}
 
 	viper.SetDefault("bind", "127.0.0.1")
 	viper.SetDefault("port", "8000")
@@ -93,6 +99,7 @@ func GetClusterConfig(clusterName string) GanetiCluster {
 			return cluster
 		}
 	}
+	// TODO: panic() is probably not a great reaction to querying a non-existant cluster
 	panic(fmt.Sprintf("Could not find requested config for ganeti cluster '%s'", clusterName))
 }
 
@@ -137,6 +144,6 @@ func parseLogLevel(logLevel string) log.Level {
 	case "fatal":
 		return log.FatalLevel
 	}
-	log.Fatalf("Invalid loglevel given: %s", logLevel)
+	log.Errorf("Invalid loglevel given: '%s', falling back to 'warning'", logLevel)
 	return log.WarnLevel
 }

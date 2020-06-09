@@ -1,0 +1,21 @@
+name: Web
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install yarnpkg
+      run: apt-get update && apt-get -y install yarnpkg
+    - name: Run a multi-line script
+      run: |
+        cd web
+        yarn build

@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"gnt-cc/httputil"
+	"gnt-cc/model"
 	"gnt-cc/rapi"
 	"gnt-cc/utils"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 // FindAllJobs godoc
@@ -33,7 +35,15 @@ func FindAllJobs(c *gin.Context) {
 		var jobsData rapi.JobsBulk
 		json.Unmarshal([]byte(content), &jobsData)
 
-		var jobsCount rapi.JobStatusCount
+		gntJobs := make([]model.GntJob, len(jobsData))
+		for _, job := range jobsData {
+			gntJobs = append(gntJobs, model.GntJob{
+				ID:     job.ID,
+				Status: job.Status,
+			})
+		}
+
+		var jobsCount model.JobStatusCount
 
 		for _, job := range jobsData {
 			switch job.Status {
@@ -51,11 +61,11 @@ func FindAllJobs(c *gin.Context) {
 				jobsCount.Waiting++
 			}
 		}
-		c.JSON(200, gin.H{
-			"cluster":              name,
-			"numberOfJobs":         len(jobsData),
-			"numberOfJobsByStatus": jobsCount,
-			"jobs":                 jobsData,
+		c.JSON(200, model.AllJobsResponse{
+			Cluster:              name,
+			NumberOfJobs:         len(jobsData),
+			NumberOfJobsByStatus: jobsCount,
+			Jobs:                 gntJobs,
 		})
 	}
 }

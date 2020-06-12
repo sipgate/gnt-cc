@@ -16,8 +16,28 @@ type GntInstance struct {
 }
 
 type GntCluster struct {
-	Name string `json:"name"`
-	Hostname string `json:"hostname"`
+	Name        string `json:"name"`
+	Hostname    string `json:"hostname"`
 	Description string `json:"description"`
-	Port int `json:"port"`
+	Port        int    `json:"port"`
+}
+
+type GntJob struct {
+	ID     int    `json:"id"`
+	Status string `json:"status"`
+}
+
+type GntNode struct {
+	Name        string `json:"name"`
+	MemoryTotal int    `json:"memoryTotal"`
+	MemoryFree  int    `json:"memoryFree"`
+}
+
+type JobStatusCount struct {
+	Canceled int `json:"canceled"`
+	Error    int `json:"error"`
+	Pending  int `json:"pending"`
+	Queued   int `json:"queued"`
+	Success  int `json:"success"`
+	Waiting  int `json:"waiting"`
 }

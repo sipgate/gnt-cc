@@ -53,13 +53,13 @@ export default class NodesView extends Vue {
         sortable: true
       },
       {
-        field: "mtotal",
+        field: "memoryTotal",
         label: "Total Memory",
         searchable: false,
         sortable: true
       },
       {
-        field: "mfree",
+        field: "memoryFree",
         label: "Free Memory",
         searchable: false,
         sortable: true

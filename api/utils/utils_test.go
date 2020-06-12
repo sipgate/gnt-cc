@@ -3,17 +3,15 @@ package utils
 import (
 	"gnt-cc/config"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestIsvalidCluster(t *testing.T) {
 	config.Parse()
 	validClusterName := "production-cluster"
-	if !IsValidCluster(validClusterName) {
-		t.Errorf("IsValidCluster failed to validate a proper cluster name")
-	}
+	assert.True(t, IsValidCluster(validClusterName))
 
 	invalidClusterName := "myInvalidCluster"
-	if IsValidCluster(invalidClusterName) {
-		t.Errorf("IsValidCluster failed to invalidate a wrong cluster name")
-	}
+	assert.False(t, IsValidCluster(invalidClusterName))
 }

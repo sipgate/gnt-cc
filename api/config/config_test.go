@@ -4,47 +4,25 @@ import (
 	"testing"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParseLogLevel(t *testing.T) {
 	log.StandardLogger().ExitFunc = nil
 
-	if parseLogLevel("debug") != log.DebugLevel {
-		t.Errorf("failed to parse 'debug' loglevel")
-	}
-
-	if parseLogLevel("info") != log.InfoLevel {
-		t.Errorf("failed to parse 'info' loglevel")
-	}
-
-	if parseLogLevel("warning") != log.WarnLevel {
-		t.Errorf("failed to parse 'warning' loglevel")
-	}
-
-	if parseLogLevel("error") != log.ErrorLevel {
-		t.Errorf("failed to parse 'error' loglevel")
-	}
-
-	if parseLogLevel("fatal") != log.FatalLevel {
-		t.Errorf("failed to parse 'fatal' loglevel")
-	}
-
-	if parseLogLevel("randomString") != log.WarnLevel {
-		t.Errorf("failed to set fallback 'warning' loglevel")
-	}
-
+	assert.Equal(t, parseLogLevel("debug"), log.DebugLevel, "failed to parse loglevel 'debug'")
+	assert.Equal(t, parseLogLevel("info"), log.InfoLevel, "failed to parse loglevel 'info'")
+	assert.Equal(t, parseLogLevel("warning"), log.WarnLevel, "failed to parse loglevel 'warning'")
+	assert.Equal(t, parseLogLevel("error"), log.ErrorLevel, "failed to parse loglevel 'error'")
+	assert.Equal(t, parseLogLevel("fatal"), log.FatalLevel, "failed to parse loglevel 'fatal'")
+	assert.Equal(t, parseLogLevel("randomString"), log.WarnLevel, "failed to parse illegal loglevel 'randomString'")
 }
 
 func TestIsInSlice(t *testing.T) {
 	var stringSlice = []string{"this", "that", "these", "those"}
 
-	if !isInSlice("this", stringSlice) {
-		t.Errorf("sample string 'this' falsly not detected in slice")
-	}
-
-	if isInSlice("not_in_slice", stringSlice) {
-		t.Errorf("sample string 'not_in_slice' falsly detected slice")
-	}
+	assert.True(t, isInSlice("this", stringSlice))
+	assert.False(t, isInSlice("not_in_slice", stringSlice))
 }
 
 func TestGetClusterConfig(t *testing.T) {

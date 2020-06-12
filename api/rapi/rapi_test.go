@@ -3,6 +3,8 @@ package rapi
 import (
 	"gnt-cc/config"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewGanetiInstance(t *testing.T) {
@@ -13,21 +15,11 @@ func TestNewGanetiInstance(t *testing.T) {
 		MemoryInMegabytes: 1024,
 	}
 	instCreateStruct := NewGanetiInstance(p)
-	if instCreateStruct.Version != 1 {
-		t.Errorf("instanceCreateObject contains the wrong version (expected: '1', got: '%d')", instCreateStruct.Version)
-	}
 
-	if instCreateStruct.Hypervisor != "fake" {
-		t.Errorf("instanceCreateObject contains the wrong hypervisor (expected: 'fake', got: '%s')", instCreateStruct.Hypervisor)
-	}
-
-	if instCreateStruct.DiskTemplate != "plain" {
-		t.Errorf("instanceCreateObject contains the wrong disk template (expected: 'plain', got: '%s')", instCreateStruct.DiskTemplate)
-	}
-
-	if instCreateStruct.InstanceName != "my-test-instance" {
-		t.Errorf("instanceCreateObject contains the wrong instance name (expected: 'my-test-instance', got: '%s')", instCreateStruct.InstanceName)
-	}
+	assert.Equal(t, instCreateStruct.Version, 1)
+	assert.Equal(t, instCreateStruct.Hypervisor, "fake")
+	assert.Equal(t, instCreateStruct.DiskTemplate, "plain")
+	assert.Equal(t, instCreateStruct.InstanceName, "my-test-instance")
 
 	// add many more checks
 }
@@ -35,7 +27,6 @@ func TestNewGanetiInstance(t *testing.T) {
 func TestGetRapiConnection(t *testing.T) {
 	config.Parse()
 	url, _ := getRapiConnection("production-cluster")
-	if url != "https://gnt-cc:somepassword@prod-cluster.example.com:5080" {
-		t.Errorf("Expected URL 'https://gnt-cc:somepassword@prod-cluster.example.com:5080', got: '%s'", url)
-	}
+
+	assert.Equal(t, url, "https://gnt-cc:somepassword@prod-cluster.example.com:5080")
 }

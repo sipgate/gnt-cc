@@ -82,7 +82,6 @@ func Parse() {
 	}
 
 	log.SetLevel(parseLogLevel(c.Loglevel))
-	log.Debugf("Current configuration:\n%+v\n", c)
 
 	validateConfig()
 }

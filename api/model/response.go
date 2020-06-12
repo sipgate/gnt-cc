@@ -15,26 +15,30 @@ type AllInstancesResponse struct {
 }
 
 type InstanceResponse struct {
-	Cluster  string        `json:"cluster"`
+	Cluster  string      `json:"cluster"`
+	Instance GntInstance `json:"instance"`
 }
 
 type CreateInstanceResponse struct {
 	Cluster  string `json:"cluster"`
 	Instance string `json:"instance"`
 	Status   string `json:"status"`
-	JobId    string `json:"jobId"`
+	JobId    int    `json:"jobId"`
 }
 
 type AllJobsResponse struct {
-	Cluster              string              `json:"cluster"`
-	NumberOfJobsByStatus int                 `json:"number_of_jobs_by_status"`
+	Cluster              string         `json:"cluster"`
+	NumberOfJobs         int            `json:"number_ob_jobs"`
+	NumberOfJobsByStatus JobStatusCount `json:"number_of_jobs_by_status"`
+	Jobs                 []GntJob       `json:"jobs"`
 }
 
 type JobResponse struct {
-	Cluster string   `json:"cluster"`
+	Cluster string `json:"cluster"`
 }
 
 type AllNodesResponse struct {
-	Cluster       string         `json:"cluster"`
-	NumberOfNodes int            `json:"number_of_nodes"`
+	Cluster       string    `json:"cluster"`
+	NumberOfNodes int       `json:"number_of_nodes"`
+	Nodes         []GntNode `json:"nodes"`
 }

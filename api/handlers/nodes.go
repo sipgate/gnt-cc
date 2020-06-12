@@ -3,11 +3,12 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"gnt-cc/httputil"
-	"gnt-cc/rapi"
+	"gnt-cc/model"
 	"gnt-cc/utils"
 	"math/rand"
+
+	"github.com/gin-gonic/gin"
 )
 
 // FindAllNodes godoc
@@ -37,20 +38,20 @@ func FindAllNodes(c *gin.Context) {
 			"nodes":         nodesData,
 		})*/
 		dummyCount := 150
-		dummyNodes := make([]rapi.Node, dummyCount)
+		dummyNodes := make([]model.GntNode, dummyCount)
 
 		for i := 0; i < dummyCount; i++ {
-			dummyNodes[i] = rapi.Node{
-				Name:   fmt.Sprintf("dummy_node_%s_%d", name, i),
-				Mtotal: 2000,
-				Mfree:  rand.Intn(2000),
+			dummyNodes[i] = model.GntNode{
+				Name:        fmt.Sprintf("dummy_node_%s_%d", name, i),
+				MemoryTotal: 2000,
+				MemoryFree:  rand.Intn(2000),
 			}
 		}
 
-		c.JSON(200, gin.H{
-			"cluster":         name,
-			"number_of_nodes": 200,
-			"nodes":           dummyNodes,
+		c.JSON(200, model.AllNodesResponse{
+			Cluster:       name,
+			NumberOfNodes: 200,
+			Nodes:         dummyNodes,
 		})
 	}
 }

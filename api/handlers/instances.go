@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 	"gnt-cc/config"
 	"gnt-cc/dummy"
 	"gnt-cc/httputil"
@@ -16,6 +14,9 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 )
 
 // FindAllInstances godoc
@@ -53,10 +54,10 @@ func FindAllInstances(context *gin.Context) {
 			}
 		}
 
-		context.JSON(200, gin.H{
-			"cluster":           clusterName,
-			"numberOfInstances": len(instances),
-			"instances":         instances,
+		context.JSON(200, model.AllInstancesResponse{
+			Cluster:           clusterName,
+			NumberOfInstances: len(instances),
+			Instances:         instances,
 		})
 	}
 }
@@ -106,9 +107,9 @@ func FindInstance(context *gin.Context) {
 			CpuCount:    6,
 		}
 
-		context.JSON(200, gin.H{
-			"cluster":  name,
-			"instance": dummyInstance,
+		context.JSON(200, model.InstanceResponse{
+			Cluster:  name,
+			Instance: dummyInstance,
 		})
 	}
 }
@@ -211,11 +212,11 @@ func CreateInstance(context *gin.Context) {
 			return
 		}
 
-		context.JSON(200, gin.H{
-			"cluster":  name,
-			"instance": newInstance.InstanceName,
-			"status":   "jobSubmitted",
-			"jobId":    gntJobID,
+		context.JSON(200, model.CreateInstanceResponse{
+			Cluster:  name,
+			Instance: newInstance.InstanceName,
+			Status:   "jobSubmitted",
+			JobId:    gntJobID,
 		})
 	}
 }

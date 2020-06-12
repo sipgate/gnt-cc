@@ -26,8 +26,8 @@ func FindAllClusters(context *gin.Context) {
 		}
 	}
 
-	context.JSON(200, gin.H{
-		"clusters": clusters,
+	context.JSON(200, model.AllClustersResponse{
+		Clusters: clusters,
 	})
 }
 

@@ -42,3 +42,8 @@ type AllNodesResponse struct {
 	NumberOfNodes int       `json:"number_of_nodes"`
 	Nodes         []GntNode `json:"nodes"`
 }
+
+type NodeResponse struct {
+	Cluster string  `json:"cluster"`
+	Node    GntNode `json:"node"`
+}

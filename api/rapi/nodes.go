@@ -2,6 +2,7 @@ package rapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"gnt-cc/model"
 )
 
@@ -28,3 +29,23 @@ func GetNodes(clusterName string) ([]model.GntNode, error) {
 	return nodes, nil
 }
 
+func GetNode(clusterName string, nodeName string) (model.GntNode, error) {
+	response, err := Get(clusterName, fmt.Sprintf("/2/node/%s", nodeName))
+
+	if err != nil {
+		return model.GntNode{}, err
+	}
+
+	var nodeData Node
+	err = json.Unmarshal([]byte(response), &nodeData)
+
+	if err != nil {
+		return model.GntNode{}, err
+	}
+
+	return model.GntNode{
+		Name:        nodeData.Name,
+		MemoryTotal: nodeData.Mtotal,
+		MemoryFree:  nodeData.Mfree,
+	}, nil
+}

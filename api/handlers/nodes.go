@@ -47,3 +47,32 @@ func FindAllNodes(context *gin.Context) {
 		Nodes:         nodes,
 	})
 }
+
+func FindNode(context *gin.Context) {
+	clusterName := context.Param("cluster")
+	nodeName := context.Param("node")
+
+	if !utils.IsValidCluster(clusterName) {
+		httputil.NewError(context, 404, errors.New("cluster not found"))
+		return
+	}
+
+	var node model.GntNode
+
+	if config.Get().DummyMode {
+		node = dummy.GetNode(nodeName)
+	} else {
+		var err error
+		node, err = rapi.GetNode(clusterName, nodeName)
+
+		if err != nil {
+			httputil.NewError(context, 500, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
+			return
+		}
+	}
+
+	context.JSON(200, model.NodeResponse{
+		Cluster: clusterName,
+		Node:    node,
+	})
+}

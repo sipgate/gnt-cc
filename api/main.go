@@ -76,6 +76,7 @@ func main() {
 		auth.GET("/clusters", handlers.FindAllClusters)
 		//auth.GET("/clusters/:cluster", handlers.FindCluster)
 		auth.GET("/clusters/:cluster/nodes", handlers.FindAllNodes)
+		auth.GET("/clusters/:cluster/nodes/:node", handlers.FindNode)
 		auth.GET("/clusters/:cluster/instances", handlers.FindAllInstances)
 		auth.GET("/clusters/:cluster/instances/:instance", handlers.FindInstance)
 		auth.POST("/clusters/:cluster/instance", handlers.CreateInstance)

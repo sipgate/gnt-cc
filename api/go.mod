@@ -23,7 +23,7 @@ require (
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/viper v1.6.2
-	github.com/stretchr/testify v1.5.1 // indirect
+	github.com/stretchr/testify v1.5.1
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.5

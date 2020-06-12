@@ -32,14 +32,6 @@ func FindAllInstances(context *gin.Context) {
 	if !utils.IsValidCluster(clusterName) {
 		httputil.NewError(context, 404, errors.New("cluster not found"))
 	} else {
-		/*content, err := rapi.Get(clusterName, "/2/instances?bulk=1")
-		if err != nil {
-			httputil.NewError(context, 502, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
-			return
-		}
-		var instanceData rapi.InstancesBulk
-		json.Unmarshal([]byte(content), &instanceData)*/
-
 		var instances []model.GntInstance
 
 		if config.Get().DummyMode {
@@ -71,47 +63,32 @@ func FindAllInstances(context *gin.Context) {
 // @Failure 502 {object} httputil.HTTPError502
 // @Router /clusters/{cluster}/instances/{instance} [get]
 func FindInstance(context *gin.Context) {
-	name := context.Param("cluster")
+	clusterName := context.Param("cluster")
 	instanceName := context.Param("instance")
-	if !utils.IsValidCluster(name) {
+	if !utils.IsValidCluster(clusterName) {
 		context.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Cluster not found"})
+		return
+	}
+
+	var instance model.GntInstance
+
+	if config.Get().DummyMode {
+		instance = dummy.GetInstance(instanceName)
 	} else {
-		/*content, err := rapi.Get(name, "/2/instances/"+instanceName)
+		var err error
+		instance, err = rapi.GetInstance(clusterName, instanceName)
+
 		if err != nil {
-			httputil.NewError(context, 502, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
+			httputil.NewError(context, 500, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
 			return
 		}
-		var instanceData rapi.Instance
-		json.Unmarshal([]byte(content), &instanceData)*/
-
-		dummyInstance := model.GntInstance{
-			Name:        instanceName,
-			PrimaryNode: "dummy02.example.com",
-			SecondaryNodes: []string{
-				"dummy01.example.com",
-				"dummy03.example.com",
-			},
-			Disks: []model.Disk{
-				{
-					Name: "disk0",
-					Size: 25000,
-					Uuid: "12345678-12345678-12345678",
-				},
-				{
-					Name: "disk1",
-					Size: 30000,
-					Uuid: "12345678-12345678-12w45678",
-				},
-			},
-			MemoryTotal: 4096,
-			CpuCount:    6,
-		}
-
-		context.JSON(200, model.InstanceResponse{
-			Cluster:  name,
-			Instance: dummyInstance,
-		})
 	}
+
+	context.JSON(200, model.InstanceResponse{
+		Cluster:  clusterName,
+		Instance: instance,
+	})
+
 }
 
 // OpenInstanceConsole godoc

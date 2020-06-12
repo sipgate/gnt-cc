@@ -86,6 +86,30 @@ func GetInstances(clusterName string) ([]model.GntInstance, error) {
 	return instances, nil
 }
 
+func GetInstance(clusterName string, instanceName string) (model.GntInstance, error) {
+	response, err := Get(clusterName, fmt.Sprintf("/2/instances/%s", instanceName))
+
+	if err != nil {
+		return model.GntInstance{}, err
+	}
+
+	var instanceData Instance
+	err = json.Unmarshal([]byte(response), &instanceData)
+
+	if err != nil {
+		return model.GntInstance{}, err
+	}
+
+	return model.GntInstance{
+		Name:           instanceData.Name,
+		PrimaryNode:    instanceData.Pnode,
+		SecondaryNodes: instanceData.Snodes,
+		Disks:          nil,
+		CpuCount:       instanceData.BeParams.Vcpus,
+		MemoryTotal:    instanceData.BeParams.Memory,
+	}, nil
+}
+
 func Get(clusterName string, resource string) (string, error) {
 	url, netClient := getRapiConnection(clusterName)
 

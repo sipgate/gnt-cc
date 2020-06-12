@@ -30,3 +30,28 @@ func GetInstances(count int) []model.GntInstance {
 
 	return instances
 }
+
+func GetInstance(name string) model.GntInstance {
+	return model.GntInstance{
+		Name:        name,
+		PrimaryNode: "dummy02.example.com",
+		SecondaryNodes: []string{
+			"dummy01.example.com",
+			"dummy03.example.com",
+		},
+		Disks: []model.Disk{
+			{
+				Name: "disk0",
+				Size: 25000,
+				Uuid: "12345678-12345678-12345678",
+			},
+			{
+				Name: "disk1",
+				Size: 30000,
+				Uuid: "12345678-12345678-12w45678",
+			},
+		},
+		MemoryTotal: 4096,
+		CpuCount:    6,
+	}
+}

@@ -88,7 +88,6 @@ func FindInstance(context *gin.Context) {
 		Cluster:  clusterName,
 		Instance: instance,
 	})
-
 }
 
 // OpenInstanceConsole godoc

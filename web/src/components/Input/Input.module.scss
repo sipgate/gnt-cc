@@ -1,0 +1,61 @@
+$padding: 0.5rem;
+$transitionDuration: 0.1s;
+$outlineColor: #797979;
+$errorColor: #e74c3c;
+$activeColor: #567ca0;
+
+.inputWrapper {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid $outlineColor;
+  border-radius: 3px;
+  margin: 1rem 0;
+
+  .input {
+    border: 0;
+    outline: 0;
+    font-size: 1rem;
+    padding: 2*$padding $padding;
+    transition: transform $transitionDuration;
+  }
+
+  .label,
+  .error {
+    position: absolute;
+    right: $padding;
+    font-size: 0.75rem;
+  }
+
+  .label {
+    top: -0.2rem;
+    left: $padding;
+    color: $outlineColor;
+    opacity: 0;
+    transition: opacity $transitionDuration, transform $transitionDuration;
+  }
+
+  .error {
+    color: $errorColor;
+    top: 0.3rem;
+  }
+
+  &.isFocused {
+    border-color: $activeColor;
+  }
+
+  &.hasError,
+  &.hasError.isFocused {
+    border-color: $errorColor;
+  }
+
+  &.hasContent {
+    .input,
+    .label {
+      transform: translateY($padding);
+    }
+
+    .label {
+      opacity: 1;
+    }
+  }
+}

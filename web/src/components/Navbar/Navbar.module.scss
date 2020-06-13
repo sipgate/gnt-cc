@@ -1,0 +1,51 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  background: #fff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid #eaedf3;
+
+  .begin {
+    display: flex;
+    align-items: center;
+
+    .logoContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .logo {
+        width: 3rem;
+        height: 3rem;
+      }
+    }
+
+    .items {
+      display: flex;
+      align-items: center;
+      margin-left: 2rem;
+
+      .item {
+        display: block;
+        font-weight: bold;
+        color: #2c3e50;
+        padding: 1rem;
+
+        &.active {
+          color: #42b983;
+        }
+      }
+    }
+  }
+
+  .end {
+    display: flex;
+    align-items: center;
+
+    .logoutButton {
+      margin-left: 1rem;
+    }
+  }
+}

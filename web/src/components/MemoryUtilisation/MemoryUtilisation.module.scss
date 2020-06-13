@@ -1,0 +1,50 @@
+$colorOk: green;
+$colorWarn: orange;
+$colorCritical: red;
+
+.wrapper {
+  position: relative;
+  padding: 0.25rem 0;
+
+  .total,
+  .inUse {
+    padding: 0 0.1rem;
+    font-weight: bold;
+    color: #666;
+  }
+
+  .separator,
+  .unit {
+    color: rgba(#666, 0.5);
+    font-weight: bold;
+  }
+
+  .indicator {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    opacity: 0.5;
+    background: #e2e2e2;
+
+    .progress {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+    }
+  }
+
+  &.critical .indicator .progress {
+    background: $colorCritical;
+  }
+
+  &.warn .indicator .progress {
+    background: $colorWarn;
+  }
+
+  &.ok .indicator .progress {
+    background: $colorOk;
+  }
+}

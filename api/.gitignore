@@ -1,0 +1,8 @@
+# Local config
+/config.yaml
+
+# Built documentation
+/docs/
+
+# Binaries
+/gnt-cc

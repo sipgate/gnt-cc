@@ -1,0 +1,13 @@
+.loadingIndicator {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 6rem;
+  box-sizing: border-box;
+
+  .icon {
+    width: 32px;
+    height: 32px;
+    opacity: 0.5;
+  }
+}

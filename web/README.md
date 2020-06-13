@@ -6,12 +6,43 @@ This is the frontend to gnt-cc.
 
 ### Development
 
-```shell script
-yarn && yarn serve
+The application will be available at [http://localhost:3000](http://localhost:3000).
+
+```shell
+# Install dependencies
+yarn
+
+# Start development server
+yarn start
+
+# lint application
+yarn lint
+
+# fix linting errors
+yarn lint:fix
+```
+
+**Note for VSCode:** The ESLint plugin for VSCode requires the following options to be set in `../.vscode/settings.json` for proper linting and to fix errors on save.
+
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.workingDirectories": [
+    "./web"
+  ]
+}
+```
+
+### Testing (TODO)
+
+```shell
+yarn test
 ```
 
 ### Build (TODO)
 
-```shell script
+```shell
 yarn build
 ```

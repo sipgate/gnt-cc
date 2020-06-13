@@ -1,0 +1,39 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 3px;
+  padding: 0 30px;
+  border: 1px solid #eaedf3;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+
+  &.noHorizontalPadding {
+    padding: 0;
+  }
+
+  .cardHeader,
+  .cardFooter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    font-size: 0.75rem;
+
+    .cardTitle {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-weight: 500;
+      color: #9ea0a5;
+      text-transform: uppercase;
+    }
+  }
+
+  .cardHeader {
+    justify-content: space-between;
+  }
+
+  .cardBody {
+    margin: 12px 0;
+  }
+}

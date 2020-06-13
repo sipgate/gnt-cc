@@ -1,0 +1,46 @@
+.instanceDetail {
+  .hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 1rem;
+    background: #555;
+    color: #fff;
+
+    .title {
+      font-size: 1.5rem;
+    }
+
+    .actions {
+      display: flex;
+
+      .action {
+        margin: 0 0.25rem;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+  .details {
+    .nodeList {
+      list-style: none;
+      font-size: 1rem;
+      margin: 0.5rem 0;
+
+      .nodeListNode {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem;
+        border-bottom: 1px solid rgba(#000, 0.1);
+      }
+    }
+  }
+}

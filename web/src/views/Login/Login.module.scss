@@ -1,0 +1,20 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem;
+
+  .logo {
+    margin: 2rem 0;
+
+    img {
+      width: 160px;
+      height: auto;
+    }
+  }
+
+  .loginError {
+    color: red;
+  }
+}

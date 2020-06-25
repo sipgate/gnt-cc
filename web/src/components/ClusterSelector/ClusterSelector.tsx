@@ -3,20 +3,17 @@ import styles from "./ClusterSelector.module.scss";
 import Dropdown from "../Dropdown/Dropdown";
 import { faServer } from "@fortawesome/free-solid-svg-icons";
 import { GntCluster } from "../../api/models";
-import { useParams, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { classNameHelper } from "../../helpers";
+import { useClusterName } from "../../helpers/hooks";
 
 interface Props {
   clusters: GntCluster[];
 }
 
 const ClusterSelector = ({ clusters }: Props): ReactElement => {
-  const { clusterName } = useParams();
+  const clusterName = useClusterName();
   const history = useHistory();
-
-  if (!clusterName) {
-    throw new Error("cluster not found");
-  }
 
   const selectCluster = (name: string): void => {
     // TODO: this is rather ugly and error-prone right now

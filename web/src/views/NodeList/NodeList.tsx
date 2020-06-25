@@ -1,12 +1,13 @@
 import React, { ReactElement } from "react";
 import styles from "./NodeList.module.scss";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import DataTable, { IDataTableColumn } from "react-data-table-component";
 import { GntNode } from "../../api/models";
 import { useApi } from "../../api";
 import { convertMBToGB } from "../../helpers";
 import MemoryUtilisation from "../../components/MemoryUtilisation/MemoryUtilisation";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
+import { useClusterName } from "../../helpers/hooks";
 
 interface NodesResponse {
   nodes: GntNode[];
@@ -35,11 +36,7 @@ const columns: IDataTableColumn<GntNode>[] = [
 ];
 
 function NodeList(): ReactElement {
-  const { clusterName } = useParams();
-
-  if (!clusterName) {
-    throw new Error("cluster not found");
-  }
+  const clusterName = useClusterName();
 
   const [{ data, isLoading, error }] = useApi<NodesResponse>(
     `clusters/${clusterName}/nodes`

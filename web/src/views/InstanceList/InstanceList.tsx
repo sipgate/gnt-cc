@@ -1,12 +1,12 @@
 import React, { ReactElement } from "react";
 import styles from "./InstanceList.module.scss";
-import { useParams } from "react-router-dom";
 import { GntInstance } from "../../api/models";
 import DataTable, { IDataTableColumn } from "react-data-table-component";
 import Tag from "../../components/Tag/Tag";
 import { useApi } from "../../api";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import PrefixLink from "../../components/PrefixLink";
+import { useClusterName } from "../../helpers/hooks";
 
 interface InstancesResponse {
   cluster: string;
@@ -63,11 +63,7 @@ const columns: IDataTableColumn<GntInstance>[] = [
 ];
 
 function InstanceList(): ReactElement {
-  const { clusterName } = useParams();
-
-  if (!clusterName) {
-    throw new Error("cluster not found");
-  }
+  const clusterName = useClusterName();
 
   const [{ data, isLoading, error }] = useApi<InstancesResponse>(
     `clusters/${clusterName}/instances`

@@ -8,17 +8,15 @@ import { faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
 import Card from "../../components/cards/Card/Card";
 import Tag from "../../components/Tag/Tag";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
+import { useClusterName } from "../../helpers/hooks";
 
 interface InstanceResponse {
   instance: GntInstance;
 }
 
 const InstanceDetail = (): ReactElement => {
-  const { instanceName, clusterName } = useParams();
-
-  if (!clusterName) {
-    throw new Error("cluster not found");
-  }
+  const { instanceName } = useParams();
+  const clusterName = useClusterName();
 
   const [{ data, isLoading, error }] = useApi<InstanceResponse>(
     `clusters/${clusterName}/instances/${instanceName}`

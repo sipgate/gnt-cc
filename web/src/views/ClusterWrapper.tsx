@@ -34,7 +34,7 @@ const ClusterWrapper = (): ReactElement => {
         <>
           {!clusterName && <Redirect to={`${clusterData.clusters[0].name}`} />}
 
-          {!clusterExists && (
+          {!clusterExists && clusterName && (
             <div>
               <p>Cluster not found, please choose a different one.</p>
               <ClusterSelector clusters={clusterData.clusters} />

@@ -1,5 +1,6 @@
 import React, { ReactElement, PropsWithChildren } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useClusterName } from "../helpers/hooks";
 
 interface Props {
   to: string;
@@ -11,11 +12,7 @@ const PrefixLink = ({
   className,
   children,
 }: PropsWithChildren<Props>): ReactElement => {
-  const { clusterName } = useParams();
-
-  if (!clusterName) {
-    throw new Error("Could not get clusterName from router params");
-  }
+  const clusterName = useClusterName();
 
   return (
     <Link to={`/${clusterName}${to}`} className={className}>

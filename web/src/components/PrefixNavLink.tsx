@@ -1,5 +1,6 @@
 import React, { ReactElement, PropsWithChildren } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useClusterName } from "../helpers/hooks";
 interface Props {
   to: string;
   className?: string;
@@ -12,11 +13,7 @@ const PrefixNavLink = ({
   children,
   ...rest
 }: PropsWithChildren<Props>): ReactElement => {
-  const { clusterName } = useParams();
-
-  if (!clusterName) {
-    throw new Error("Could not get clusterName from router params");
-  }
+  const clusterName = useClusterName();
 
   return (
     <NavLink {...rest} to={`/${clusterName}${to}`}>

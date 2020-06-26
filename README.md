@@ -12,4 +12,4 @@ TODO
 
 Build Status Backend: ![](https://github.com/sipgate/gnt-cc/workflows/Go/badge.svg)
 
-Build Status Frontend: sorry, no pipeline yet.
+Build Status Frontend: ![](https://github.com/sipgate/gnt-cc/workflows/Web/badge.svg)

@@ -3,9 +3,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 1rem;
-  background: #fff;
+  background: var(--backgroundPrimary);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
-  border-bottom: 1px solid #eaedf3;
+  border-bottom: 1px solid var(--backgroundSecondary);
 
   .begin {
     display: flex;
@@ -30,11 +30,11 @@
       .item {
         display: block;
         font-weight: bold;
-        color: #2c3e50;
+        color: var(--inactiveForeground);
         padding: 1rem;
 
         &.active {
-          color: #42b983;
+          color: var(--activeColorForeground);
         }
       }
     }

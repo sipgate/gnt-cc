@@ -15,12 +15,12 @@ $borderRadius: 4px;
     align-items: center;
     z-index: 1;
     padding: 0 $spacingOuter;
-    background: #fff;
+    background: var(--backgroundPrimary);
     border-radius: $borderRadius;
-    color: #000;
+    color: var(--foregroundPrimary);
     width: 100%;
     height: 100%;
-    border: 1px solid rgba(#222, 0.4);
+    border: 1px solid var(--foregroundSecondary);
 
     .label {
       width: 100%;
@@ -39,8 +39,8 @@ $borderRadius: 4px;
     top: calc(100% + 24px);
     min-width: $width;
     border-top: 0;
-    background: #fff;
-    box-shadow: 0 0 1rem rgba(#222, 0.4);
+    background: var(--backgroundSecondary);
+    box-shadow: 0 0 1rem var(--shadow);
     opacity: 0;
     border-radius: $borderRadius;
     transition: opacity $transitionDuration, visibility 0s $transitionDuration;
@@ -49,7 +49,7 @@ $borderRadius: 4px;
     .triangle {
       width: $spacingOuter;
       height: $spacingOuter;
-      background: #fff;
+      background: var(--backgroundSecondary);
       position: absolute;
       top: $spacingOuter * -0.5;
       right: $spacingOuter;
@@ -59,6 +59,7 @@ $borderRadius: 4px;
     .options {
       overflow: hidden;
       border-radius: $borderRadius;
+      color: var(--foregroundPrimary);
     }
   }
 

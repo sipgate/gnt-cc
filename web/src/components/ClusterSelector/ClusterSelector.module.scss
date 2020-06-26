@@ -6,7 +6,7 @@
     text-decoration: none;
     padding: 0.5rem 1rem;
     min-width: 260px;
-    color: #222;
+    color: var(--foregroundPrimary);
     opacity: 0.8;
     transition: opacity 0.2s;
     border-left: 6px solid transparent;
@@ -29,16 +29,16 @@
     }
 
     &.active {
-      border-color: #e2e2e2;
+      color: var(--foregroundPrimary);
       opacity: 0.5;
     }
 
     &:hover {
-      border-color: green;
+      border-color: var(--activeColorForeground);
       opacity: 1;
 
       .name {
-        color: green;
+        color: var(--activeColorForeground);
       }
     }
   }

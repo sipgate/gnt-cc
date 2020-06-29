@@ -14,15 +14,13 @@
 $white: #fff;
 $darkerWhite: #eee;
 $darkerWhiteShadow: rgba(79, 79, 79, 0);
-$dark: #222222;
+$dark: #222;
 $darkGrey: #292929;
 $darkerShadow: rgba(34, 34, 34, 0.4);
 $errorColor: #e74c3c;
 $outlineColor: #797979;
 $activeColor: #67a0d5;
 $inactiveColor: #2c3e50;
-
-
 
 body {
   --foregroundPrimary: #{$dark};

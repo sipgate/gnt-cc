@@ -1,7 +1,8 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import Toggle from "react-toggle";
-import "react-toggle/style.css";
 import styles from "./ThemeToggle.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
+import { classNameHelper } from "../../helpers";
 
 const DARK_CLASS = "dark";
 
@@ -27,12 +28,17 @@ export const ThemeToggle = (): ReactElement => {
   }, [isDark]);
 
   return (
-    <Toggle
-      className={styles.toggle}
-      checked={isDark}
-      onChange={(toggleEvent) => setIsDark(toggleEvent.target.checked)}
-      icons={{ checked: "🌙", unchecked: "🔆" }}
-      aria-label="Dark mode"
-    />
+    <div
+      className={classNameHelper([styles.toggle, { [styles.isDark]: isDark }])}
+      onClick={() => setIsDark(!isDark)}
+    >
+      <span className={styles.knob} />
+      <span className={styles.light}>
+        <FontAwesomeIcon icon={faSun} />
+      </span>
+      <span className={styles.dark}>
+        <FontAwesomeIcon icon={faMoon} />
+      </span>
+    </div>
   );
 };

@@ -9,6 +9,7 @@ import {
 import Login from "./views/Login/Login";
 import AuthContext from "./api/AuthContext";
 import ClusterWrapper from "./views/ClusterWrapper";
+import { ThemeToggle } from "./components/ThemeToggle/ThemeToggle";
 
 const STORAGE_TOKEN_KEY = "gnt-cc-token";
 
@@ -42,6 +43,7 @@ function App(): ReactElement {
           authToken,
         }}
       >
+        <ThemeToggle />
         <Router>
           <Switch>
             <Route exact path="/login" component={Login} />

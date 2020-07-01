@@ -2,7 +2,7 @@ $spacingOuter: 1rem;
 $spacingInner: 0.5rem;
 $transitionDuration: 0.2s;
 $width: 200px;
-$borderRadius: 4px;
+$borderRadius: 2px;
 
 .dropdown {
   position: relative;
@@ -36,11 +36,10 @@ $borderRadius: 4px;
     position: absolute;
     right: 0;
     visibility: hidden;
-    top: calc(100% + 24px);
+    top: calc(100% + 1rem);
     min-width: $width;
-    border-top: 0;
     background: #fff;
-    box-shadow: 0 0 1rem rgba(#222, 0.4);
+    box-shadow: 0 0.25rem 1rem rgba(#222, 0.4);
     opacity: 0;
     border-radius: $borderRadius;
     transition: opacity $transitionDuration, visibility 0s $transitionDuration;

@@ -8,6 +8,7 @@ interface Props {
   noHorizontalPadding?: boolean;
   leftTitleSlot?: () => ReactElement;
   rightTitleSlot?: () => ReactElement;
+  className?: string;
 }
 
 function Card({
@@ -17,8 +18,10 @@ function Card({
   noHorizontalPadding,
   leftTitleSlot,
   rightTitleSlot,
+  className,
 }: PropsWithChildren<Props>): ReactElement {
   const classNames = classNameHelper([
+    className || null,
     styles.card,
     {
       [styles.noHorizontalPadding]: !!noHorizontalPadding,

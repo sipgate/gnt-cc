@@ -18,12 +18,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Login(username string, password string) (int, string) {
+func login(username string, password string) (int, string) {
 	r := gin.New()
-	router.Routes(r, true)
+	router.Routes(r, false)
 
 	recorder := httptest.NewRecorder()
-	login, _ := json.Marshal(auth.Login{
+	login, _ := json.Marshal(auth.Credentials{
 		Username: username,
 		Password: password,
 	})
@@ -39,17 +39,18 @@ func Login(username string, password string) (int, string) {
 }
 
 func TestLogin_can_successfully_login(t *testing.T) {
-	config.Parse()
+	config.Parse("../testfiles/config.default.test.yaml")
 
-	status, token := Login("admin", "admin")
+	status, token := login("admin", "test")
 
 	assert.NotEqual(t, "", token)
 	assert.Equal(t, http.StatusOK, status)
 }
-func TestLogin_cannot_login_with_bad_credentials(t *testing.T) {
-	config.Parse()
 
-	status, token := Login("admin", "not-the-password")
+func TestLogin_cannot_login_with_bad_credentials(t *testing.T) {
+	config.Parse("../testfiles/config.default.test.yaml")
+
+	status, token := login("admin", "not-the-password")
 
 	assert.Equal(t, "", token)
 	assert.Equal(t, http.StatusUnauthorized, status)

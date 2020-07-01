@@ -1,12 +1,8 @@
 package utils
 
-import (
-	"gnt-cc/config"
-)
-
-func IsValidCluster(clusterName string) bool {
-	for _, cluster := range []config.GanetiCluster(config.Get().Clusters) {
-		if cluster.Name == clusterName {
+func IsInSlice(needle string, list []string) bool {
+	for _, entry := range list {
+		if entry == needle {
 			return true
 		}
 	}

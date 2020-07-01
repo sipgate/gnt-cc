@@ -1,32 +1,56 @@
-package config
+package config_test
 
 import (
+	"gnt-cc/config"
 	"testing"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestParseLogLevel(t *testing.T) {
-	log.StandardLogger().ExitFunc = nil
-
-	assert.Equal(t, parseLogLevel("debug"), log.DebugLevel, "failed to parse loglevel 'debug'")
-	assert.Equal(t, parseLogLevel("info"), log.InfoLevel, "failed to parse loglevel 'info'")
-	assert.Equal(t, parseLogLevel("warning"), log.WarnLevel, "failed to parse loglevel 'warning'")
-	assert.Equal(t, parseLogLevel("error"), log.ErrorLevel, "failed to parse loglevel 'error'")
-	assert.Equal(t, parseLogLevel("fatal"), log.FatalLevel, "failed to parse loglevel 'fatal'")
-	assert.Equal(t, parseLogLevel("randomString"), log.WarnLevel, "failed to parse illegal loglevel 'randomString'")
-}
-
-func TestIsInSlice(t *testing.T) {
-	var stringSlice = []string{"this", "that", "these", "those"}
-
-	assert.True(t, isInSlice("this", stringSlice))
-	assert.False(t, isInSlice("not_in_slice", stringSlice))
-}
-
 func TestGetClusterConfig(t *testing.T) {
-	Parse()
-	// the following function either returns a ClusterConfig struct or panics (and hence should be improved)
-	GetClusterConfig("production-cluster")
+	config.Parse("../testfiles/config.default.test.yaml")
+
+	validClusterName := "test"
+
+	cluster, err := config.GetClusterConfig(validClusterName)
+	assert.Nil(t, err)
+	assert.Equal(t, validClusterName, cluster.Name)
+
+	invalidClusterName := "invalid-cluster"
+	cluster, err = config.GetClusterConfig(invalidClusterName)
+	assert.NotNil(t, err)
+}
+
+func TestIsvalidCluster(t *testing.T) {
+	config.Parse("../testfiles/config.default.test.yaml")
+
+	validClusterName := "test"
+	assert.True(t, config.ClusterExists(validClusterName))
+
+	invalidClusterName := "invalid-cluster"
+	assert.False(t, config.ClusterExists(invalidClusterName))
+}
+
+func TestConfig_it_should_panic_if_auth_method_is_set_to_builtin_and_users_are_missing(t *testing.T) {
+	assert.PanicsWithError(t, "Authentication Method has been set to 'builtin' but no user is specified", func() {
+		config.Parse("../testfiles/config.missing-users.test.yaml")
+	})
+}
+
+func TestConfig_it_should_panic_with_an_invalid_auth_method(t *testing.T) {
+	assert.PanicsWithError(t, "Invalid authentication method 'test'", func() {
+		config.Parse("../testfiles/config.invalid-auth-method.test.yaml")
+	})
+}
+
+func TestConfig_it_should_panic_with_an_empty_config(t *testing.T) {
+	assert.PanicsWithError(t, "No JWT signing key is set", func() {
+		config.Parse("../testfiles/config.empty.test.yaml")
+	})
+}
+
+func TestConfig_it_should_panic_if_auth_method_is_set_to_ldap_without_ldap_config(t *testing.T) {
+	assert.PanicsWithError(t, "Authentication Method has been set to 'ldap' but no LDAP host is specified", func() {
+		config.Parse("../testfiles/config.invalid-ldap.test.yaml")
+	})
 }

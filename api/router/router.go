@@ -15,11 +15,11 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func Routes(r *gin.Engine, devMode bool) {
+func Routes(r *gin.Engine, developmentMode bool) {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	if devMode {
+	if developmentMode {
 		r.Use(cors.New(cors.Config{
 			AllowOrigins:     []string{"*", "http://localhost:8080"},
 			AllowCredentials: true,

@@ -31,7 +31,7 @@ import (
 // @name Authorization
 
 func main() {
-	config.Parse()
+	config.Init()
 
 	if !config.Get().DevelopmentMode {
 		gin.SetMode(gin.ReleaseMode)

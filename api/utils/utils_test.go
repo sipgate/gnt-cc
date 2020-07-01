@@ -1,17 +1,15 @@
-package utils
+package utils_test
 
 import (
-	"gnt-cc/config"
+	"gnt-cc/utils"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestIsvalidCluster(t *testing.T) {
-	config.Parse()
-	validClusterName := "production-cluster"
-	assert.True(t, IsValidCluster(validClusterName))
+func TestIsInSlice(t *testing.T) {
+	var stringSlice = []string{"this", "that", "these", "those"}
 
-	invalidClusterName := "myInvalidCluster"
-	assert.False(t, IsValidCluster(invalidClusterName))
+	assert.True(t, utils.IsInSlice("this", stringSlice))
+	assert.False(t, utils.IsInSlice("not_in_slice", stringSlice))
 }

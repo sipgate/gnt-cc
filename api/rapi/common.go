@@ -5,12 +5,13 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"gnt-cc/config"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func Get(clusterName string, resource string) (string, error) {
@@ -70,7 +71,12 @@ func Post(clusterName string, resource string, postData interface{}) (string, er
 }
 
 func getRapiConnection(clusterName string) (string, *http.Client) {
-	cluster := config.GetClusterConfig(clusterName)
+	cluster, err := config.GetClusterConfig(clusterName)
+
+	if err != nil {
+		panic(fmt.Sprintf("Cannot get cluster config for '%s'", clusterName))
+	}
+
 	var url string
 	if cluster.SSL {
 		url = "https://"

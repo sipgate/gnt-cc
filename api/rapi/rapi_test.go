@@ -25,8 +25,12 @@ func TestNewGanetiInstance(t *testing.T) {
 }
 
 func TestGetRapiConnection(t *testing.T) {
-	config.Parse()
-	url, _ := getRapiConnection("production-cluster")
+	config.Parse("../testfiles/config.default.test.yaml")
 
-	assert.Equal(t, url, "https://gnt-cc:somepassword@prod-cluster.example.com:5080")
+	url, _ := getRapiConnection("test")
+	assert.Equal(t, url, "https://test:supersecret@test-cluster.example.com:5080")
+
+	assert.Panics(t, func() {
+		getRapiConnection("test2")
+	})
 }

@@ -1,17 +1,19 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
-type GanetiCluster struct {
-	Name        string `mapstructure:"name"`
-	Hostname    string `mapstructure:"hostname"`
+type ClusterConfig struct {
+	Name        string
+	Hostname    string
 	Port        int
 	Description string
 	Username    string
@@ -19,12 +21,12 @@ type GanetiCluster struct {
 	SSL         bool
 }
 
-type UserSet struct {
+type UserConfig struct {
 	Username string
 	Password string
 }
 
-type LdapConfig struct {
+type LDAPConfig struct {
 	Host                  string
 	Port                  int
 	SkipCertificateVerify bool
@@ -38,36 +40,51 @@ type Config struct {
 	Port                 int
 	DevelopmentMode      bool
 	JwtSigningKey        string
-	JwtExpire            string
+	JwtExpire            time.Duration
 	AuthenticationMethod string
 	Loglevel             string
 	DummyMode            bool
-	Users                []UserSet
-	Clusters             []GanetiCluster
-	LDAPConfig           LdapConfig
+	Users                []UserConfig
+	Clusters             []ClusterConfig
+	LDAPConfig           LDAPConfig
 }
 
-var (
-	ValidAuthMethods = []string{
-		"builtin",
-		"ldap",
-	}
+const (
+	AuthMethodBuiltin = "builtin"
+	AuthMethodLDAP    = "ldap"
 
-	c Config
+	ConfigFileEnv = "GNT_CC_CONFIG"
 )
+
+var c Config
+
+func ClusterExists(clusterName string) bool {
+	for _, cluster := range c.Clusters {
+		if cluster.Name == clusterName {
+			return true
+		}
+	}
+	return false
+}
 
 func Get() Config {
 	return c
 }
 
-func Parse() {
-	viper.SetConfigName("config")
-	alternateConfigDir := os.Getenv("GNT_CC_CONFIG_DIR")
-	if alternateConfigDir != "" {
-		viper.AddConfigPath(alternateConfigDir)
-	} else {
-		viper.AddConfigPath(".")
+func Init() {
+	configFile, configFileSet := os.LookupEnv(ConfigFileEnv)
+
+	if !configFileSet {
+		configFile = "./config.yaml"
 	}
+
+	Parse(configFile)
+}
+
+func Parse(configPath string) {
+	var config Config
+
+	viper.SetConfigFile(configPath)
 
 	viper.SetDefault("bind", "127.0.0.1")
 	viper.SetDefault("port", "8000")
@@ -78,56 +95,58 @@ func Parse() {
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s", err))
+		panic(err)
 	}
 
-	err = viper.Unmarshal(&c)
-
+	err = viper.Unmarshal(&config)
 	if err != nil {
-		panic(fmt.Errorf("unable to decode into struct, %v", err))
+		panic(err)
 	}
 
 	log.SetLevel(parseLogLevel(c.Loglevel))
 
-	validateConfig()
+	err = validateConfig(&config)
+
+	if err != nil {
+		panic(err)
+	}
+
+	c = config
 }
 
-func GetClusterConfig(clusterName string) GanetiCluster {
+func GetClusterConfig(clusterName string) (ClusterConfig, error) {
 	for _, cluster := range c.Clusters {
 		if cluster.Name == clusterName {
-			return cluster
+			return cluster, nil
 		}
 	}
-	// TODO: panic() is probably not a great reaction to querying a non-existant cluster
-	panic(fmt.Sprintf("Could not find requested config for ganeti cluster '%s'", clusterName))
+
+	return ClusterConfig{}, errors.New(fmt.Sprintf("Cluster '%s' does not exist", clusterName))
 }
 
-func validateConfig() bool {
-	if !isInSlice(c.AuthenticationMethod, ValidAuthMethods) {
-		panic(fmt.Sprintf("'%s' is not a valid Authentication Method (available methods: %v)", c.AuthenticationMethod, ValidAuthMethods))
+func validateConfig(config *Config) error {
+	if config.JwtSigningKey == "" {
+		return errors.New("No JWT signing key is set")
 	}
 
-	switch c.AuthenticationMethod {
-	case "builtin":
-		if len(c.Users) == 0 {
-			panic(fmt.Sprintf("Authentication Method has been set to 'builtin' but no users have been specified."))
+	switch config.AuthenticationMethod {
+	case AuthMethodBuiltin:
+		if len(config.Users) == 0 {
+			return errors.New("Authentication Method has been set to 'builtin' but no user is specified")
 		}
-	}
-
-	if len(c.Clusters) == 0 {
-		panic(fmt.Sprintf("No Ganeti clusters have been specified in the configuration file."))
-	}
-
-	return true
-}
-
-func isInSlice(needle string, list []string) bool {
-	for _, entry := range list {
-		if entry == needle {
-			return true
+	case AuthMethodLDAP:
+		if config.LDAPConfig.Host == "" {
+			return errors.New("Authentication Method has been set to 'ldap' but no LDAP host is specified")
 		}
+	default:
+		return errors.New(fmt.Sprintf("Invalid authentication method '%s'", config.AuthenticationMethod))
 	}
-	return false
+
+	if len(config.Clusters) == 0 {
+		return errors.New("No Ganeti clusters have been specified in the configuration file")
+	}
+
+	return nil
 }
 
 func parseLogLevel(logLevel string) log.Level {
@@ -143,6 +162,6 @@ func parseLogLevel(logLevel string) log.Level {
 	case "fatal":
 		return log.FatalLevel
 	}
-	log.Errorf("Invalid loglevel given: '%s', falling back to 'warning'", logLevel)
+	log.Warnf("Invalid loglevel given: '%s', falling back to 'warning'", logLevel)
 	return log.WarnLevel
 }

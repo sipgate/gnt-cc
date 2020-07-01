@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"gnt-cc/config"
 	"gnt-cc/httputil"
 	"gnt-cc/model"
 	"gnt-cc/rapi"
-	"gnt-cc/utils"
 	"strconv"
 	"time"
 
@@ -24,7 +24,7 @@ import (
 // @Router /clusters/{cluster}/jobs [get]
 func FindAllJobs(c *gin.Context) {
 	name := c.Param("cluster")
-	if !utils.IsValidCluster(name) {
+	if !config.ClusterExists(name) {
 		httputil.NewError(c, 404, errors.New("cluster not found"))
 	} else {
 		content, err := rapi.Get(name, "/2/jobs?bulk=1")
@@ -92,7 +92,7 @@ func FindJob(c *gin.Context) {
 		}
 	}
 
-	if !utils.IsValidCluster(name) {
+	if !config.ClusterExists(name) {
 		httputil.NewError(c, 404, errors.New("cluster not found"))
 	} else {
 		content, err := rapi.Get(name, "/2/jobs/"+jobID)

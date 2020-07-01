@@ -9,7 +9,6 @@ import (
 	"gnt-cc/httputil"
 	"gnt-cc/model"
 	"gnt-cc/rapi"
-	"gnt-cc/utils"
 	"gnt-cc/websocket"
 	"net/http"
 	"strconv"
@@ -29,7 +28,7 @@ import (
 // @Router /clusters/{cluster}/instances [get]
 func FindAllInstances(context *gin.Context) {
 	clusterName := context.Param("cluster")
-	if !utils.IsValidCluster(clusterName) {
+	if !config.ClusterExists(clusterName) {
 		httputil.NewError(context, 404, errors.New("cluster not found"))
 	} else {
 		var instances []model.GntInstance
@@ -65,7 +64,7 @@ func FindAllInstances(context *gin.Context) {
 func FindInstance(context *gin.Context) {
 	clusterName := context.Param("cluster")
 	instanceName := context.Param("instance")
-	if !utils.IsValidCluster(clusterName) {
+	if !config.ClusterExists(clusterName) {
 		context.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Cluster not found"})
 		return
 	}
@@ -100,7 +99,7 @@ func FindInstance(context *gin.Context) {
 func OpenInstanceConsole(context *gin.Context) {
 	name := context.Param("cluster")
 	instanceName := context.Param("instance")
-	if !utils.IsValidCluster(name) {
+	if !config.ClusterExists(name) {
 		httputil.NewError(context, 404, errors.New("cluster not found"))
 	} else {
 		content, err := rapi.Get(name, "/2/instances/"+instanceName)
@@ -145,7 +144,7 @@ func OpenInstanceConsole(context *gin.Context) {
 // @Router /clusters/{cluster}/instance [post]
 func CreateInstance(context *gin.Context) {
 	name := context.Param("cluster")
-	if !utils.IsValidCluster(name) {
+	if !config.ClusterExists(name) {
 		httputil.NewError(context, 404, errors.New("cluster not found"))
 	} else {
 		var json model.CreateInstanceRequest

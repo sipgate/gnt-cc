@@ -1,0 +1,14 @@
+---
+jwtSigningKey: "test"
+authenticationMethod: "builtin"
+users:
+  - username: "admin"
+    password: "test"
+clusters:
+  - name: "test"
+    hostname: "test-cluster.example.com"
+    port: 5080
+    description: "Ganeti Test Cluster"
+    username: "test"
+    password: "supersecret"
+    ssl: True

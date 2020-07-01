@@ -1,31 +1,26 @@
 package auth
 
 import (
-	"fmt"
+	"gnt-cc/config"
+	"time"
+
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
-	"gnt-cc/config"
-	"time"
 )
 
 const identityKey = "id"
 
-type Login struct {
+type Credentials struct {
 	Username string `form:"username" json:"username" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required"`
 }
 
 func GetMiddleware() (ginJWTMiddleware *jwt.GinJWTMiddleware) {
-	// the jwt middleware
-	timeout, err := time.ParseDuration(config.Get().JwtExpire)
-	if err != nil {
-		panic(fmt.Errorf("Could not parse time duration format %s", err))
-	}
-	ginJWTMiddleware, err = jwt.New(&jwt.GinJWTMiddleware{
+	ginJWTMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "gnt-cc",
 		Key:         []byte(config.Get().JwtSigningKey),
-		Timeout:     timeout,
+		Timeout:     config.Get().JwtExpire,
 		MaxRefresh:  time.Hour,
 		IdentityKey: identityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
@@ -43,7 +38,7 @@ func GetMiddleware() (ginJWTMiddleware *jwt.GinJWTMiddleware) {
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
-			var loginVals Login
+			var loginVals Credentials
 			if err := c.ShouldBind(&loginVals); err != nil {
 				return "", jwt.ErrMissingLoginValues
 			}
@@ -93,7 +88,7 @@ func GetMiddleware() (ginJWTMiddleware *jwt.GinJWTMiddleware) {
 	})
 
 	if err != nil {
-		log.Errorf("JWT Error:" + err.Error())
+		log.Errorf("Error initializing JWT middleware: %s", err)
 	}
 
 	return

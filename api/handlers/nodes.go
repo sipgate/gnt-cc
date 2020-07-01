@@ -3,13 +3,13 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"gnt-cc/config"
 	"gnt-cc/dummy"
 	"gnt-cc/httputil"
 	"gnt-cc/model"
 	"gnt-cc/rapi"
-	"gnt-cc/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 // FindAllNodes godoc
@@ -22,7 +22,7 @@ import (
 // @Router /clusters/{cluster}/nodes [get]
 func FindAllNodes(context *gin.Context) {
 	clusterName := context.Param("cluster")
-	if !utils.IsValidCluster(clusterName) {
+	if !config.ClusterExists(clusterName) {
 		httputil.NewError(context, 404, errors.New("cluster not found"))
 		return
 	}
@@ -52,7 +52,7 @@ func FindNode(context *gin.Context) {
 	clusterName := context.Param("cluster")
 	nodeName := context.Param("node")
 
-	if !utils.IsValidCluster(clusterName) {
+	if !config.ClusterExists(clusterName) {
 		httputil.NewError(context, 404, errors.New("cluster not found"))
 		return
 	}

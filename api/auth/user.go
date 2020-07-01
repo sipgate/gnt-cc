@@ -1,9 +1,10 @@
 package auth
 
 import (
+	"gnt-cc/config"
+
 	"github.com/jtblin/go-ldap-client"
 	log "github.com/sirupsen/logrus"
-	"gnt-cc/config"
 )
 
 type User struct {
@@ -24,7 +25,7 @@ func validateUser(userID string, password string) bool {
 
 func validateLocalUser(userID string, password string) bool {
 	for _, el := range config.Get().Users {
-		userSet := config.UserSet(el)
+		userSet := config.UserConfig(el)
 		if userSet.Username == userID && userSet.Password == password {
 			return true
 		}

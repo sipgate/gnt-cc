@@ -9,6 +9,7 @@ import Card from "../../components/cards/Card/Card";
 import Tag from "../../components/Tag/Tag";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import { useClusterName } from "../../helpers/hooks";
+import PrefixLink from "../../components/PrefixLink";
 
 interface InstanceResponse {
   instance: GntInstance;
@@ -39,13 +40,14 @@ const InstanceDetail = (): ReactElement => {
           <div className={styles.hero}>
             <h1 className={styles.title}>{instance.name}</h1>
             <div className={styles.actions}>
-              <Button className={styles.action} label="Migrate" />
-              <Button className={styles.action} label="Failover" />
-              <Button className={styles.action} label="Shutdown" />
+              <Button className={styles.action} label="Migrate" primary />
+              <Button className={styles.action} label="Failover" primary />
+              <Button className={styles.action} label="Shutdown" danger />
               <Button
                 className={styles.action}
                 label="Kill"
                 icon={faSkullCrossbones}
+                danger
               />
             </div>
           </div>
@@ -56,9 +58,9 @@ const InstanceDetail = (): ReactElement => {
             >
               <ul className={styles.nodeList}>
                 <li className={styles.nodeListNode}>
-                  <Link to={`/nodes/${instance.primaryNode}`}>
+                  <PrefixLink to={`/nodes/${instance.primaryNode}`}>
                     {instance.primaryNode}
-                  </Link>
+                  </PrefixLink>
                   <Tag label="primary" />
                 </li>
                 {instance.secondaryNodes.map((node) => (

@@ -1,16 +1,51 @@
+$size: 48px;
+$sizeSmall: 28px;
+
 .button {
-  border: 0;
   transition: transform 0.2s, opacity 0.2s;
   cursor: pointer;
-  opacity: 0.8;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 0.75rem;
   height: 48px;
-  background: var(--activeColorForeground);
-  color: #fff;
+  background: var(--backgroundSecondary);
+  color: var(--foregroundPrimary);
   border-radius: 2px;
+  border: 1px solid #a6a6a6;
+
+  &.danger {
+    color: #fff;
+    background: #e53935;
+    border-color: transparent;
+  }
+
+  &.primary {
+    background: var(--activeColorForeground);
+    color: #fff;
+    border-color: transparent;
+  }
+
+  &.isSmall {
+    height: $sizeSmall;
+  }
+
+  &:not(.hasLabel) {
+    width: $size;
+    padding: 0;
+
+    &.isSmall {
+      width: $sizeSmall;
+    }
+  }
+
+  &.isRound {
+    border-radius: $size / 2;
+
+    &.isSmall {
+      border-radius: $sizeSmall / 2;
+    }
+  }
 
   &:hover {
     opacity: 1;

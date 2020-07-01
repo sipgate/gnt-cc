@@ -5,12 +5,16 @@ import Icon from "../Icon/Icon";
 import { classNameHelper } from "../../helpers";
 
 export interface ButtonProps {
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent) => void;
   disabled?: boolean;
   label?: string;
   icon?: IconDefinition;
   type?: "button" | "submit";
   className?: string;
+  round?: boolean;
+  small?: boolean;
+  primary?: boolean;
+  danger?: boolean;
 }
 
 function Button({
@@ -20,10 +24,14 @@ function Button({
   label,
   type,
   className,
+  round,
+  small,
+  primary,
+  danger,
 }: ButtonProps): ReactElement {
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent) => {
     if (!disabled && onClick) {
-      onClick();
+      onClick(event);
     }
   };
 
@@ -32,6 +40,11 @@ function Button({
     {
       [styles.button]: true,
       [styles.hasSpacing]: !!icon && !!label,
+      [styles.hasLabel]: !!label,
+      [styles.isRound]: !!round,
+      [styles.isSmall]: !!small,
+      [styles.primary]: !!primary,
+      [styles.danger]: !!danger,
     },
   ]);
 

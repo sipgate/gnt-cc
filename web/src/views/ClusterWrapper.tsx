@@ -10,6 +10,7 @@ import InstanceList from "./InstanceList/InstanceList";
 import NodeList from "./NodeList/NodeList";
 import Navbar from "../components/Navbar/Navbar";
 import ClusterSelector from "../components/ClusterSelector/ClusterSelector";
+import ClusterNotFound from "../components/ClusterNotFound/ClusterNotFound";
 
 interface ClusterResponse {
   clusters: GntCluster[];
@@ -35,10 +36,7 @@ const ClusterWrapper = (): ReactElement => {
           {!clusterName && <Redirect to={`${clusterData.clusters[0].name}`} />}
 
           {!clusterExists && clusterName && (
-            <div>
-              <p>Cluster not found, please choose a different one.</p>
-              <ClusterSelector clusters={clusterData.clusters} />
-            </div>
+            <ClusterNotFound clusters={clusterData.clusters} />
           )}
 
           {clusterExists && (

@@ -1,0 +1,14 @@
+.clusterNotFound {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20vh;
+
+  .header {
+    margin-right: 4rem;
+
+    h1 {
+      color: #777;
+    }
+  }
+}

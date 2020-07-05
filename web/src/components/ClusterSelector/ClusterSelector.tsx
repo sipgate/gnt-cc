@@ -15,9 +15,21 @@ const ClusterSelector = ({ clusters }: Props): ReactElement => {
   const clusterName = useClusterName();
   const history = useHistory();
 
+  const isValidCluster = (name: string): boolean => {
+    return clusters.findIndex((cluster) => cluster.name === name) !== -1;
+  };
+
   const selectCluster = (name: string): void => {
-    // TODO: this is rather ugly and error-prone right now
-    history.push(history.location.pathname.replace(clusterName, name));
+    const { pathname } = history.location;
+
+    const parts = pathname.split("/");
+    parts.shift(); // remove empty string
+
+    if (isValidCluster(clusterName)) {
+      parts.shift();
+    }
+
+    history.push(`/${name}/${parts.join("/")}`);
   };
 
   return (

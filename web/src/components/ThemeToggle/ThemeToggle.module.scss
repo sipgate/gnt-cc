@@ -1,0 +1,44 @@
+$transitionDuration: 0.15s;
+$height: 26px;
+$width: 54px;
+$outerSpacing: 12px;
+$padding: 2px;
+$knobSize: $height - ($padding * 2);
+
+.toggle {
+  position: fixed;
+  z-index: 10;
+  left: $outerSpacing;
+  bottom: $outerSpacing;
+  border: 1px solid var(--foregroundPrimary);
+  border-radius: $height / 2;
+  height: $height;
+  width: $width;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-sizing: content-box;
+
+  .knob {
+    position: absolute;
+    width: $knobSize;
+    height: $knobSize;
+    border-radius: $knobSize / 2;
+    background: var(--foregroundPrimary);
+    left: $padding;
+    top: $padding;
+    bottom: $padding;
+    transition: transform $transitionDuration;
+  }
+
+  .light {
+    color: #fff;
+  }
+
+  &.isDark {
+    .knob {
+      transform: translateX($width - $knobSize - (2 * $padding));
+    }
+  }
+}

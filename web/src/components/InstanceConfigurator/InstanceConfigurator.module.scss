@@ -1,0 +1,32 @@
+
+.instanceConfigurator {
+  background: #f2f2f2;
+
+  .header {
+    padding: 0 1rem 1rem;
+    overflow: hidden;
+
+    .actions {
+      display: inline-flex;
+      transition: transform 0.15s, opacity 0.15s;
+      padding: 0.5rem 1rem;
+      background: #fff;
+      border-radius: 0 0 2px 2px;
+      box-shadow: 0 0.25rem 0.5rem rgba(#222, 0.2);
+
+      .action:not(:last-child) {
+        margin-right: 0.5rem;
+      }
+
+      &.hidden {
+        opacity: 0;
+        transform: translateY(-100%);
+      }
+    }
+  }
+
+  .cards {
+    padding: 1rem;
+    display: flex;
+  }
+}

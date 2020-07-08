@@ -10,6 +10,7 @@ import Tag from "../../components/Tag/Tag";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import { useClusterName } from "../../helpers/hooks";
 import PrefixLink from "../../components/PrefixLink";
+import InstanceConfigurator from "../../components/InstanceConfigurator/InstanceConfigurator";
 
 interface InstanceResponse {
   instance: GntInstance;
@@ -51,6 +52,7 @@ const InstanceDetail = (): ReactElement => {
               />
             </div>
           </div>
+          <InstanceConfigurator instance={instance} />
           <div className={styles.details}>
             <Card
               title="Nodes"

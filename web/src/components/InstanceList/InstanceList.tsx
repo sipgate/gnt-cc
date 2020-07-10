@@ -2,17 +2,8 @@ import React, { ReactElement } from "react";
 import styles from "./InstanceList.module.scss";
 import { GntInstance } from "../../api/models";
 import DataTable, { IDataTableColumn } from "react-data-table-component";
-import Tag from "../../components/Tag/Tag";
-import { useApi } from "../../api";
-import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
-import PrefixLink from "../../components/PrefixLink";
-import { useClusterName } from "../../helpers/hooks";
-
-interface InstancesResponse {
-  cluster: string;
-  number_of_instances: number;
-  instances: GntInstance[];
-}
+import Tag from "../Tag/Tag";
+import PrefixLink from "../PrefixLink";
 
 const columns: IDataTableColumn<GntInstance>[] = [
   {
@@ -70,23 +61,11 @@ const columns: IDataTableColumn<GntInstance>[] = [
   },
 ];
 
-function InstanceList(): ReactElement {
-  const clusterName = useClusterName();
+interface Props {
+  instances: GntInstance[];
+}
 
-  const [{ data, isLoading, error }] = useApi<InstancesResponse>(
-    `clusters/${clusterName}/instances`
-  );
-
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
-  if (!data) {
-    return <div>Failed to load: {error}</div>;
-  }
-
-  const { instances } = data;
-
+function InstanceList({ instances }: Props): ReactElement {
   return (
     <div className={styles.instanceList}>
       <DataTable<GntInstance> columns={columns} data={instances}></DataTable>

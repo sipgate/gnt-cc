@@ -6,6 +6,7 @@ import { useApi } from "../../api";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import styles from "./NodeDetail.module.scss";
 import Hero from "../../components/Hero/Hero";
+import InstanceList from "../../components/InstanceList/InstanceList";
 
 interface NodeResponse {
   node: GntNode;
@@ -32,6 +33,16 @@ const NodeDetail = (): ReactElement => {
   return (
     <div className={styles.nodeDetail}>
       <Hero title={node.name}></Hero>
+
+      <div className={styles.instanceList}>
+        <p>Primary Instances on {nodeName}</p>
+        <InstanceList instances={node.primaryInstances} />
+      </div>
+
+      <div className={styles.instanceList}>
+        <p>Secondary Instances on {nodeName}</p>
+        <InstanceList instances={node.secondaryInstances} />
+      </div>
     </div>
   );
 };

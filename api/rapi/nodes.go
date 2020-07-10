@@ -5,7 +5,18 @@ import (
 	"fmt"
 	"gnt-cc/config"
 	"gnt-cc/model"
+	"gnt-cc/utils"
 )
+
+func filterInstances(arr []model.GntInstance, cond func(model.GntInstance) bool) []model.GntInstance {
+	result := []model.GntInstance{}
+	for i := range arr {
+		if cond(arr[i]) {
+			result = append(result, arr[i])
+		}
+	}
+	return result
+}
 
 func GetNodes(clusterConfig config.ClusterConfig) ([]model.GntNode, error) {
 	response, err := Get(clusterConfig, "/2/nodes?bulk=1")
@@ -37,6 +48,12 @@ func GetNode(clusterConfig config.ClusterConfig, nodeName string) (model.GntNode
 		return model.GntNode{}, err
 	}
 
+	clusterInstances, err := GetInstances(clusterConfig)
+
+	if err != nil {
+		return model.GntNode{}, err
+	}
+
 	var nodeData Node
 	err = json.Unmarshal([]byte(response), &nodeData)
 
@@ -48,5 +65,11 @@ func GetNode(clusterConfig config.ClusterConfig, nodeName string) (model.GntNode
 		Name:        nodeData.Name,
 		MemoryTotal: nodeData.Mtotal,
 		MemoryFree:  nodeData.Mfree,
+		PrimaryInstances: filterInstances(clusterInstances, func(instance model.GntInstance) bool {
+			return instance.PrimaryNode == nodeName
+		}),
+		SecondaryInstances: filterInstances(clusterInstances, func(instance model.GntInstance) bool {
+			return utils.IsInSlice(nodeName, instance.SecondaryNodes)
+		}),
 	}, nil
 }

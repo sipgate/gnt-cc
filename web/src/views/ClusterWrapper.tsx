@@ -6,11 +6,11 @@ import { Switch, useParams, Redirect, useRouteMatch } from "react-router-dom";
 import { AuthenticatedRoute } from "../App";
 import InstanceDetail from "./InstanceDetail/InstanceDetail";
 import Dashboard from "./Dashboard/Dashboard";
-import InstanceList from "./InstanceList/InstanceList";
 import NodeList from "./NodeList/NodeList";
 import Navbar from "../components/Navbar/Navbar";
 import ClusterNotFound from "../components/ClusterNotFound/ClusterNotFound";
 import NodeDetail from "./NodeDetail/NodeDetail";
+import Instances from "./Instances/Instances";
 
 interface ClusterResponse {
   clusters: GntCluster[];
@@ -54,7 +54,7 @@ const ClusterWrapper = (): ReactElement => {
                 />
                 <AuthenticatedRoute
                   path={`${path}/instances`}
-                  component={InstanceList}
+                  component={Instances}
                 />
                 <AuthenticatedRoute
                   path={`${path}/nodes/:nodeName`}

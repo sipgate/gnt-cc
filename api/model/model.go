@@ -28,9 +28,11 @@ type GntJob struct {
 }
 
 type GntNode struct {
-	Name        string `json:"name"`
-	MemoryTotal int    `json:"memoryTotal"`
-	MemoryFree  int    `json:"memoryFree"`
+	Name               string        `json:"name"`
+	MemoryTotal        int           `json:"memoryTotal"`
+	MemoryFree         int           `json:"memoryFree"`
+	PrimaryInstances   []GntInstance `json:"primaryInstances"`
+	SecondaryInstances []GntInstance `json:"secondaryInstances"`
 }
 
 type JobStatusCount struct {

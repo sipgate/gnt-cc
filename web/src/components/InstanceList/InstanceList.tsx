@@ -1,10 +1,9 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import styles from "./InstanceList.module.scss";
 import { GntInstance } from "../../api/models";
 import DataTable, { IDataTableColumn } from "react-data-table-component";
 import Tag from "../Tag/Tag";
 import PrefixLink from "../PrefixLink";
-import Input from "../Input/Input";
 
 const columns: IDataTableColumn<GntInstance>[] = [
   {

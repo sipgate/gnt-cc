@@ -3,11 +3,12 @@ package rapi
 import (
 	"encoding/json"
 	"fmt"
+	"gnt-cc/config"
 	"gnt-cc/model"
 )
 
-func GetNodes(clusterName string) ([]model.GntNode, error) {
-	response, err := Get(clusterName, "/2/nodes?bulk=1")
+func GetNodes(clusterConfig config.ClusterConfig) ([]model.GntNode, error) {
+	response, err := Get(clusterConfig, "/2/nodes?bulk=1")
 
 	if err != nil {
 		return nil, err
@@ -29,8 +30,8 @@ func GetNodes(clusterName string) ([]model.GntNode, error) {
 	return nodes, nil
 }
 
-func GetNode(clusterName string, nodeName string) (model.GntNode, error) {
-	response, err := Get(clusterName, fmt.Sprintf("/2/node/%s", nodeName))
+func GetNode(clusterConfig config.ClusterConfig, nodeName string) (model.GntNode, error) {
+	response, err := Get(clusterConfig, fmt.Sprintf("/2/node/%s", nodeName))
 
 	if err != nil {
 		return model.GntNode{}, err

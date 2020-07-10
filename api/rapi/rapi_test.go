@@ -25,12 +25,21 @@ func TestNewGanetiInstance(t *testing.T) {
 }
 
 func TestGetRapiConnection(t *testing.T) {
-	config.Parse("../testfiles/config.default.test.yaml")
-
-	url, _ := getRapiConnection("test")
+	url, _ := getRapiConnection(config.ClusterConfig{
+		Username: "test",
+		SSL:      true,
+		Password: "supersecret",
+		Hostname: "test-cluster.example.com",
+		Port:     5080,
+	})
 	assert.Equal(t, url, "https://test:supersecret@test-cluster.example.com:5080")
 
-	assert.Panics(t, func() {
-		getRapiConnection("test2")
+	url, _ = getRapiConnection(config.ClusterConfig{
+		Username: "test",
+		SSL:      false,
+		Password: "supersecret",
+		Hostname: "test-cluster.example.com",
+		Port:     5090,
 	})
+	assert.Equal(t, url, "http://test:supersecret@test-cluster.example.com:5090")
 }

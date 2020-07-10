@@ -1,29 +1,27 @@
 package handlers
 
 import (
-	"errors"
-	"fmt"
 	"gnt-cc/config"
 	"gnt-cc/dummy"
-	"gnt-cc/httputil"
 	"gnt-cc/model"
 	"gnt-cc/rapi"
 
 	"github.com/gin-gonic/gin"
 )
 
-// FindAllNodes godoc
+// GetAllNodes godoc
 // @Summary Find all nodes
 // @Description ...
 // @Produce json
 // @Success 200 {object} model.AllNodesResponse
-// @Failure 404 {object} httputil.HTTPError404
-// @Failure 502 {object} httputil.HTTPError502
+// @Failure 404 {object}
+// @Failure 500 {object}
 // @Router /clusters/{cluster}/nodes [get]
-func FindAllNodes(context *gin.Context) {
-	clusterName := context.Param("cluster")
-	if !config.ClusterExists(clusterName) {
-		httputil.NewError(context, 404, errors.New("cluster not found"))
+func GetAllNodes(c *gin.Context) {
+	clusterConfig, clusterErr := config.GetClusterConfig(c.Param("cluster"))
+
+	if clusterErr != nil {
+		c.AbortWithError(404, clusterErr)
 		return
 	}
 
@@ -33,29 +31,30 @@ func FindAllNodes(context *gin.Context) {
 		nodes = dummy.GetNodes(20)
 	} else {
 		var err error
-		nodes, err = rapi.GetNodes(clusterName)
+		nodes, err = rapi.GetNodes(clusterConfig)
 
 		if err != nil {
-			httputil.NewError(context, 500, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
+			c.AbortWithError(500, err)
 			return
 		}
 	}
 
-	context.JSON(200, model.AllNodesResponse{
-		Cluster:       clusterName,
+	c.JSON(200, model.AllNodesResponse{
+		Cluster:       clusterConfig.Name,
 		NumberOfNodes: len(nodes),
 		Nodes:         nodes,
 	})
 }
 
-func FindNode(context *gin.Context) {
-	clusterName := context.Param("cluster")
-	nodeName := context.Param("node")
+func GetNode(c *gin.Context) {
+	clusterConfig, clusterErr := config.GetClusterConfig(c.Param("cluster"))
 
-	if !config.ClusterExists(clusterName) {
-		httputil.NewError(context, 404, errors.New("cluster not found"))
+	if clusterErr != nil {
+		c.AbortWithError(404, clusterErr)
 		return
 	}
+
+	nodeName := c.Param("node")
 
 	var node model.GntNode
 
@@ -63,16 +62,16 @@ func FindNode(context *gin.Context) {
 		node = dummy.GetNode(nodeName)
 	} else {
 		var err error
-		node, err = rapi.GetNode(clusterName, nodeName)
+		node, err = rapi.GetNode(clusterConfig, nodeName)
 
 		if err != nil {
-			httputil.NewError(context, 500, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
+			c.AbortWithError(500, err)
 			return
 		}
 	}
 
-	context.JSON(200, model.NodeResponse{
-		Cluster: clusterName,
+	c.JSON(200, model.NodeResponse{
+		Cluster: clusterConfig.Name,
 		Node:    node,
 	})
 }

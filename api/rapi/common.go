@@ -14,8 +14,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func Get(clusterName string, resource string) (string, error) {
-	url, netClient := getRapiConnection(clusterName)
+func Get(clusterConfig config.ClusterConfig, resource string) (string, error) {
+	url, netClient := getRapiConnection(clusterConfig)
 
 	log.Infof("RAPI GET %s", resource)
 	response, err := netClient.Get(url + resource)
@@ -39,8 +39,8 @@ func Get(clusterName string, resource string) (string, error) {
 	return string(body), err
 }
 
-func Post(clusterName string, resource string, postData interface{}) (string, error) {
-	url, netClient := getRapiConnection(clusterName)
+func Post(clusterConfig config.ClusterConfig, resource string, postData interface{}) (string, error) {
+	url, netClient := getRapiConnection(clusterConfig)
 
 	jsonData, err := json.Marshal(postData)
 	if err != nil {
@@ -70,22 +70,17 @@ func Post(clusterName string, resource string, postData interface{}) (string, er
 	return string(body), err
 }
 
-func getRapiConnection(clusterName string) (string, *http.Client) {
-	cluster, err := config.GetClusterConfig(clusterName)
-
-	if err != nil {
-		panic(fmt.Sprintf("Cannot get cluster config for '%s'", clusterName))
-	}
-
-	var url string
-	if cluster.SSL {
-		url = "https://"
+func getRapiConnection(clusterConfig config.ClusterConfig) (string, *http.Client) {
+	var protocol string
+	if clusterConfig.SSL {
+		protocol = "https"
 	} else {
-		url = "http://"
+		protocol = "http"
 	}
-	url = url + fmt.Sprintf("%s:%s@%s:%d", cluster.Username, cluster.Password, cluster.Hostname, cluster.Port)
 
-	var tr = &http.Transport{
+	url := fmt.Sprintf("%s://%s:%s@%s:%d", protocol, clusterConfig.Username, clusterConfig.Password, clusterConfig.Hostname, clusterConfig.Port)
+
+	var transport = &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		Dial: (&net.Dialer{
 			Timeout: 5 * time.Second,
@@ -95,7 +90,7 @@ func getRapiConnection(clusterName string) (string, *http.Client) {
 
 	var netClient = &http.Client{
 		Timeout:   time.Second * 10,
-		Transport: tr,
+		Transport: transport,
 	}
 
 	return url, netClient

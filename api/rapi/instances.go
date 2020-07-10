@@ -3,6 +3,7 @@ package rapi
 import (
 	"encoding/json"
 	"fmt"
+	"gnt-cc/config"
 	"gnt-cc/model"
 )
 
@@ -48,8 +49,8 @@ func NewGanetiInstance(instanceDetails CreateInstanceParameters) InstanceCreate 
 	return inst
 }
 
-func GetInstances(clusterName string) ([]model.GntInstance, error) {
-	response, err := Get(clusterName, "/2/instances?bulk=1")
+func GetInstances(clusterConfig config.ClusterConfig) ([]model.GntInstance, error) {
+	response, err := Get(clusterConfig, "/2/instances?bulk=1")
 
 	if err != nil {
 		return nil, err
@@ -78,8 +79,8 @@ func GetInstances(clusterName string) ([]model.GntInstance, error) {
 	return instances, nil
 }
 
-func GetInstance(clusterName string, instanceName string) (model.GntInstance, error) {
-	response, err := Get(clusterName, fmt.Sprintf("/2/instances/%s", instanceName))
+func GetInstance(clusterConfig config.ClusterConfig, instanceName string) (model.GntInstance, error) {
+	response, err := Get(clusterConfig, fmt.Sprintf("/2/instances/%s", instanceName))
 
 	if err != nil {
 		return model.GntInstance{}, err
@@ -101,4 +102,3 @@ func GetInstance(clusterName string, instanceName string) (model.GntInstance, er
 		MemoryTotal:    instanceData.BeParams.Memory,
 	}, nil
 }
-

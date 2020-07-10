@@ -2,10 +2,8 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"gnt-cc/config"
-	"gnt-cc/httputil"
 	"gnt-cc/model"
 	"gnt-cc/rapi"
 	"strconv"
@@ -14,72 +12,82 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// FindAllJobs godoc
+// GetAllJobs godoc
 // @Summary Find all jobs
 // @Description ...
 // @Produce json
 // @Success 200 {object} model.AllJobsResponse
-// @Failure 404 {object} httputil.HTTPError404
-// @Failure 502 {object} httputil.HTTPError502
+// @Failure 404 {object}
+// @Failure 500 {object}
 // @Router /clusters/{cluster}/jobs [get]
-func FindAllJobs(c *gin.Context) {
-	name := c.Param("cluster")
-	if !config.ClusterExists(name) {
-		httputil.NewError(c, 404, errors.New("cluster not found"))
-	} else {
-		content, err := rapi.Get(name, "/2/jobs?bulk=1")
-		if err != nil {
-			httputil.NewError(c, 502, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
-			return
-		}
-		var jobsData rapi.JobsBulk
-		json.Unmarshal([]byte(content), &jobsData)
+func GetAllJobs(c *gin.Context) {
+	clusterConfig, clusterErr := config.GetClusterConfig(c.Param("cluster"))
 
-		gntJobs := make([]model.GntJob, len(jobsData))
-		for _, job := range jobsData {
-			gntJobs = append(gntJobs, model.GntJob{
-				ID:     job.ID,
-				Status: job.Status,
-			})
-		}
+	if clusterErr != nil {
+		c.AbortWithError(404, clusterErr)
+		return
+	}
 
-		var jobsCount model.JobStatusCount
+	content, err := rapi.Get(clusterConfig, "/2/jobs?bulk=1")
+	if err != nil {
+		c.AbortWithError(404, err)
+		return
+	}
 
-		for _, job := range jobsData {
-			switch job.Status {
-			case "canceled":
-				jobsCount.Canceled++
-			case "error":
-				jobsCount.Error++
-			case "pending":
-				jobsCount.Pending++
-			case "queued":
-				jobsCount.Queued++
-			case "success":
-				jobsCount.Success++
-			case "waiting":
-				jobsCount.Waiting++
-			}
-		}
-		c.JSON(200, model.AllJobsResponse{
-			Cluster:              name,
-			NumberOfJobs:         len(jobsData),
-			NumberOfJobsByStatus: jobsCount,
-			Jobs:                 gntJobs,
+	var jobsData rapi.JobsBulk
+	json.Unmarshal([]byte(content), &jobsData)
+
+	gntJobs := make([]model.GntJob, len(jobsData))
+	for _, job := range jobsData {
+		gntJobs = append(gntJobs, model.GntJob{
+			ID:     job.ID,
+			Status: job.Status,
 		})
 	}
+
+	var jobsCount model.JobStatusCount
+
+	for _, job := range jobsData {
+		switch job.Status {
+		case "canceled":
+			jobsCount.Canceled++
+		case "error":
+			jobsCount.Error++
+		case "pending":
+			jobsCount.Pending++
+		case "queued":
+			jobsCount.Queued++
+		case "success":
+			jobsCount.Success++
+		case "waiting":
+			jobsCount.Waiting++
+		}
+	}
+	c.JSON(200, model.AllJobsResponse{
+		Cluster:              clusterConfig.Name,
+		NumberOfJobs:         len(jobsData),
+		NumberOfJobsByStatus: jobsCount,
+		Jobs:                 gntJobs,
+	})
+
 }
 
-// FindJob godoc
+// GetJob godoc
 // @Summary Find single job
 // @Description ...
 // @Produce json
 // @Success 200 {object} model.JobResponse
-// @Failure 404 {object} httputil.HTTPError404
-// @Failure 502 {object} httputil.HTTPError502
+// @Failure 404 {object}
+// @Failure 500 {object}
 // @Router /clusters/{cluster}/job/{jobId} [get]
-func FindJob(c *gin.Context) {
-	name := c.Param("cluster")
+func GetJob(c *gin.Context) {
+	clusterConfig, clusterErr := config.GetClusterConfig(c.Param("cluster"))
+
+	if clusterErr != nil {
+		c.AbortWithError(404, clusterErr)
+		return
+	}
+
 	jobID := c.Param("jobId")
 
 	waitForFinish := false
@@ -92,38 +100,38 @@ func FindJob(c *gin.Context) {
 		}
 	}
 
-	if !config.ClusterExists(name) {
-		httputil.NewError(c, 404, errors.New("cluster not found"))
-	} else {
-		content, err := rapi.Get(name, "/2/jobs/"+jobID)
-		if err != nil {
-			httputil.NewError(c, 502, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
-			return
-		}
-		var jobData rapi.Job
-		json.Unmarshal([]byte(content), &jobData)
-		if waitForFinish {
-			sanityCounter := 0
-			for range time.Tick(time.Second) {
-				if sanityCounter > 300 {
-					httputil.NewError(c, 502, errors.New(fmt.Sprintf("Timed out waiting for jobId %s to finish/fail (300 seconds).", jobID)))
+	content, err := rapi.Get(clusterConfig, "/2/jobs/"+jobID)
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
+	}
+
+	var jobData rapi.Job
+	json.Unmarshal([]byte(content), &jobData)
+
+	if waitForFinish {
+		sanityCounter := 0
+
+		for range time.Tick(time.Second) {
+			if sanityCounter > 300 {
+				c.AbortWithError(500, fmt.Errorf("timed out waiting for jobId %s to finish/fail (300 seconds)", jobID))
+				return
+			} else if jobData.Status != "success" && jobData.Status != "finished" {
+				content, err := rapi.Get(clusterConfig, "/2/jobs/"+jobID)
+				if err != nil {
+					c.AbortWithError(500, err)
 					return
-				} else if jobData.Status != "success" && jobData.Status != "finished" {
-					content, err := rapi.Get(name, "/2/jobs/"+jobID)
-					if err != nil {
-						httputil.NewError(c, 502, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
-						return
-					}
-					json.Unmarshal([]byte(content), &jobData)
-					sanityCounter++
-				} else {
-					break
 				}
+				json.Unmarshal([]byte(content), &jobData)
+				sanityCounter++
+			} else {
+				break
 			}
 		}
-		c.JSON(200, gin.H{
-			"cluster": name,
-			"job":     jobData,
-		})
 	}
+
+	c.JSON(200, gin.H{
+		"cluster": clusterConfig.Name,
+		"job":     jobData,
+	})
 }

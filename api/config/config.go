@@ -114,14 +114,22 @@ func Parse(configPath string) {
 	c = config
 }
 
-func GetClusterConfig(clusterName string) (ClusterConfig, error) {
+type clusterNotFoundError struct {
+	clusterName string
+}
+
+func (e *clusterNotFoundError) Error() string {
+	return fmt.Sprintf("Cluster '%s' not found", e.clusterName)
+}
+
+func GetClusterConfig(clusterName string) (ClusterConfig, *clusterNotFoundError) {
 	for _, cluster := range c.Clusters {
 		if cluster.Name == clusterName {
 			return cluster, nil
 		}
 	}
 
-	return ClusterConfig{}, errors.New(fmt.Sprintf("Cluster '%s' does not exist", clusterName))
+	return ClusterConfig{}, &clusterNotFoundError{clusterName: clusterName}
 }
 
 func validateConfig(config *Config) error {

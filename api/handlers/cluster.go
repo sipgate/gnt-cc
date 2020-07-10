@@ -7,13 +7,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// FindAllClusters godoc
+// GetAllClusters godoc
 // @Summary Get all clusters
 // @Description get all clusters
 // @Produce  json
 // @Success 200 {object} model.AllClustersResponse
 // @Router /clusters [get]
-func FindAllClusters(context *gin.Context) {
+func GetAllClusters(c *gin.Context) {
 	configClusters := config.Get().Clusters
 	clusters := make([]model.GntCluster, len(configClusters))
 
@@ -26,7 +26,7 @@ func FindAllClusters(context *gin.Context) {
 		}
 	}
 
-	context.JSON(200, model.AllClustersResponse{
+	c.JSON(200, model.AllClustersResponse{
 		Clusters: clusters,
 	})
 }

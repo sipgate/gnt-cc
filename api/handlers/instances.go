@@ -1,73 +1,68 @@
 package handlers
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
 	"gnt-cc/config"
 	"gnt-cc/dummy"
-	"gnt-cc/httputil"
 	"gnt-cc/model"
 	"gnt-cc/rapi"
-	"gnt-cc/websocket"
-	"net/http"
-	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 )
 
-// FindAllInstances godoc
+// GetAllInstances godoc
 // @Summary Get all instances in a given cluster
 // @Description ...
 // @Produce  json
 // @Success 200 {object} model.AllInstancesResponse
-// @Failure 404 {object} httputil.HTTPError
-// @Failure 502 {object} httputil.HTTPError
+// @Failure 404 {object}
+// @Failure 500 {object}
 // @Router /clusters/{cluster}/instances [get]
-func FindAllInstances(context *gin.Context) {
-	clusterName := context.Param("cluster")
-	if !config.ClusterExists(clusterName) {
-		httputil.NewError(context, 404, errors.New("cluster not found"))
-	} else {
-		var instances []model.GntInstance
+func GetAllInstances(c *gin.Context) {
+	clusterConfig, clusterErr := config.GetClusterConfig(c.Param("cluster"))
 
-		if config.Get().DummyMode {
-			instances = dummy.GetInstances(20)
-		} else {
-			var err error
-			instances, err = rapi.GetInstances(clusterName)
-
-			if err != nil {
-				httputil.NewError(context, 500, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
-				return
-			}
-		}
-
-		context.JSON(200, model.AllInstancesResponse{
-			Cluster:           clusterName,
-			NumberOfInstances: len(instances),
-			Instances:         instances,
-		})
+	if clusterErr != nil {
+		c.AbortWithError(404, clusterErr)
+		return
 	}
+
+	var instances []model.GntInstance
+
+	if config.Get().DummyMode {
+		instances = dummy.GetInstances(20)
+	} else {
+		var err error
+		instances, err = rapi.GetInstances(clusterConfig)
+
+		if err != nil {
+			c.AbortWithError(500, err)
+			return
+		}
+	}
+
+	c.JSON(200, model.AllInstancesResponse{
+		Cluster:           clusterConfig.Name,
+		NumberOfInstances: len(instances),
+		Instances:         instances,
+	})
 }
 
-// FindInstance godoc
+// GetInstance godoc
 // @Summary Get an instance in a given cluster with the given name
 // @Description ...
 // @Produce  json
 // @Success 200 {object} model.InstanceResponse
-// @Failure 404 {object} httputil.HTTPError404
-// @Failure 502 {object} httputil.HTTPError502
+// @Failure 404 {object}
+// @Failure 500 {object}
 // @Router /clusters/{cluster}/instances/{instance} [get]
-func FindInstance(context *gin.Context) {
-	clusterName := context.Param("cluster")
-	instanceName := context.Param("instance")
-	if !config.ClusterExists(clusterName) {
-		context.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Cluster not found"})
+func GetInstance(c *gin.Context) {
+	clusterConfig, clusterErr := config.GetClusterConfig(c.Param("cluster"))
+
+	if clusterErr != nil {
+		c.AbortWithError(404, clusterErr)
 		return
 	}
+
+	instanceName := c.Param("instance")
 
 	var instance model.GntInstance
 
@@ -75,16 +70,16 @@ func FindInstance(context *gin.Context) {
 		instance = dummy.GetInstance(instanceName)
 	} else {
 		var err error
-		instance, err = rapi.GetInstance(clusterName, instanceName)
+		instance, err = rapi.GetInstance(clusterConfig, instanceName)
 
 		if err != nil {
-			httputil.NewError(context, 500, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
+			c.AbortWithError(500, err)
 			return
 		}
 	}
 
-	context.JSON(200, model.InstanceResponse{
-		Cluster:  clusterName,
+	c.JSON(200, model.InstanceResponse{
+		Cluster:  clusterConfig.Name,
 		Instance: instance,
 	})
 }
@@ -96,40 +91,44 @@ func FindInstance(context *gin.Context) {
 // @Failure 404 {object} httputil.HTTPError404
 // @Failure 502 {object} httputil.HTTPError502
 // @Router /clusters/{cluster}/console/{instance} [get]
-func OpenInstanceConsole(context *gin.Context) {
-	name := context.Param("cluster")
-	instanceName := context.Param("instance")
-	if !config.ClusterExists(name) {
-		httputil.NewError(context, 404, errors.New("cluster not found"))
-	} else {
-		content, err := rapi.Get(name, "/2/instances/"+instanceName)
-		if err != nil {
-			log.Errorf("RAPI Backend Error: %s", err)
+// func OpenInstanceConsole(context *gin.Context) {
+// 	clusterConfig, err := config.GetClusterConfig(context.Param("cluster"))
 
-			httputil.NewError(context, 502, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
-			return
-		}
-		var instanceData rapi.Instance
-		err = json.Unmarshal([]byte(content), &instanceData)
-		if err != nil {
-			log.Errorf("Could not parse JSON result into RapiInstance struct: %s", err)
+// 	if err != nil {
+// 		context.AbortWithError(404, err)
+// 		return
+// 	}
 
-			httputil.NewError(context, 502, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
-			return
-		}
-		// overwrite host/port for the websocket proxy "backend" for debugging:
-		//instanceData.Pnode = "127.0.0.1"
-		//instanceData.NetworkPort = 3333
-		if instanceData.OperState && instanceData.NetworkPort > 0 {
-			err = websocket.Handler(context.Writer, context.Request, instanceData.Pnode, instanceData.NetworkPort)
-			return
-		}
-		log.Infof("Cannot request console for shutdown instance '%s'", instanceData.Name)
+// 	instanceName := context.Param("instance")
 
-		httputil.NewError(context, 400, errors.New(fmt.Sprintf("Cannot request console for shutdown instance '%s'", instanceData.Name)))
-		return
-	}
-}
+// 	content, err := rapi.Get(name, "/2/instances/"+instanceName)
+// 	if err != nil {
+// 		log.Errorf("RAPI Backend Error: %s", err)
+
+// 		httputil.NewError(context, 502, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
+// 		return
+// 	}
+// 	var instanceData rapi.Instance
+// 	err = json.Unmarshal([]byte(content), &instanceData)
+// 	if err != nil {
+// 		log.Errorf("Could not parse JSON result into RapiInstance struct: %s", err)
+
+// 		httputil.NewError(context, 502, errors.New(fmt.Sprintf("RAPI Backend Error: %s", err)))
+// 		return
+// 	}
+// 	// overwrite host/port for the websocket proxy "backend" for debugging:
+// 	//instanceData.Pnode = "127.0.0.1"
+// 	//instanceData.NetworkPort = 3333
+// 	if instanceData.OperState && instanceData.NetworkPort > 0 {
+// 		err = websocket.Handler(context.Writer, context.Request, instanceData.Pnode, instanceData.NetworkPort)
+// 		return
+// 	}
+// 	log.Infof("Cannot request console for shutdown instance '%s'", instanceData.Name)
+
+// 	httputil.NewError(context, 400, errors.New(fmt.Sprintf("Cannot request console for shutdown instance '%s'", instanceData.Name)))
+// 	return
+
+// }
 
 // CreateInstance godoc
 // @Summary Create an instance on a given cluster
@@ -142,60 +141,60 @@ func OpenInstanceConsole(context *gin.Context) {
 // @Failure 404 {object} httputil.HTTPError404
 // @Failure 502 {object} httputil.HTTPError502
 // @Router /clusters/{cluster}/instance [post]
-func CreateInstance(context *gin.Context) {
-	name := context.Param("cluster")
-	if !config.ClusterExists(name) {
-		httputil.NewError(context, 404, errors.New("cluster not found"))
-	} else {
-		var json model.CreateInstanceRequest
+// func CreateInstance(context *gin.Context) {
+// 	name := context.Param("cluster")
+// 	if !config.ClusterExists(name) {
+// 		httputil.NewError(context, 404, errors.New("cluster not found"))
+// 	} else {
+// 		var json model.CreateInstanceRequest
 
-		if err := context.ShouldBindJSON(&json); err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+// 		if err := context.ShouldBindJSON(&json); err != nil {
+// 			context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 			return
+// 		}
 
-		_, err := rapi.Get(name, "/2/instances/"+json.Name)
-		if err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Cannot create instance '%s', it already exists", json.Name)})
-			return
-		}
+// 		_, err := rapi.Get(name, "/2/instances/"+json.Name)
+// 		if err != nil {
+// 			context.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Cannot create instance '%s', it already exists", json.Name)})
+// 			return
+// 		}
 
-		rapiParams := rapi.CreateInstanceParameters{
-			InstanceName:      json.Name,
-			DiskTemplate:      "", // TODO
-			Vcpus:             json.VCpuCores,
-			MemoryInMegabytes: json.MemoryMegaBytes,
-			Nics:              nil, // TODO
-			Disks:             nil, // TODO
-		}
+// 		rapiParams := rapi.CreateInstanceParameters{
+// 			InstanceName:      json.Name,
+// 			DiskTemplate:      "", // TODO
+// 			Vcpus:             json.VCpuCores,
+// 			MemoryInMegabytes: json.MemoryMegaBytes,
+// 			Nics:              nil, // TODO
+// 			Disks:             nil, // TODO
+// 		}
 
-		newInstance := rapi.NewGanetiInstance(rapiParams)
+// 		newInstance := rapi.NewGanetiInstance(rapiParams)
 
-		status, err := rapi.Post(name, "/2/instances", newInstance)
-		if err != nil {
-			log.Errorf("RAPI Backend Error: %s", err)
+// 		status, err := rapi.Post(name, "/2/instances", newInstance)
+// 		if err != nil {
+// 			log.Errorf("RAPI Backend Error: %s", err)
 
-			context.JSON(http.StatusBadGateway, gin.H{"error": "RAPI Error"})
-			return
-		}
+// 			context.JSON(http.StatusBadGateway, gin.H{"error": "RAPI Error"})
+// 			return
+// 		}
 
-		gntJobID, err := strconv.Atoi(strings.TrimSpace(status))
-		if err != nil {
-			log.Errorf("Could not parse/understand RAPI JobID: %s", err)
+// 		gntJobID, err := strconv.Atoi(strings.TrimSpace(status))
+// 		if err != nil {
+// 			log.Errorf("Could not parse/understand RAPI JobID: %s", err)
 
-			context.JSON(http.StatusBadGateway, gin.H{"error": "RAPI Error"})
-			return
-		}
+// 			context.JSON(http.StatusBadGateway, gin.H{"error": "RAPI Error"})
+// 			return
+// 		}
 
-		context.JSON(200, model.CreateInstanceResponse{
-			Cluster:  name,
-			Instance: newInstance.InstanceName,
-			Status:   "jobSubmitted",
-			JobId:    gntJobID,
-		})
-	}
-}
+// 		context.JSON(200, model.CreateInstanceResponse{
+// 			Cluster:  name,
+// 			Instance: newInstance.InstanceName,
+// 			Status:   "jobSubmitted",
+// 			JobId:    gntJobID,
+// 		})
+// 	}
+// }
 
-func CreateMultipleInstancesHandler(c *gin.Context) {
-	// TODO
-}
+// func CreateMultipleInstancesHandler(c *gin.Context) {
+// 	// TODO
+// }

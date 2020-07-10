@@ -5,6 +5,7 @@ import { GntNode } from "../../api/models";
 import { useApi } from "../../api";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import styles from "./NodeDetail.module.scss";
+import Hero from "../../components/Hero/Hero";
 
 interface NodeResponse {
   node: GntNode;
@@ -30,9 +31,7 @@ const NodeDetail = (): ReactElement => {
 
   return (
     <div className={styles.nodeDetail}>
-      <div className={styles.hero}>
-        <h1 className={styles.title}>{node.name}</h1>
-      </div>
+      <Hero title={node.name}></Hero>
     </div>
   );
 };

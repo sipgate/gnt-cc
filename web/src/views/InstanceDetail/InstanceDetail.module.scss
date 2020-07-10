@@ -1,29 +1,16 @@
 .instanceDetail {
-  .hero {
+  .actions {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2rem 1rem;
-    background: var(--backgroundSecondary);
-    color: var(--foregroundPrimary);
 
-    .title {
-      font-size: 1.5rem;
-    }
+    .action {
+      margin: 0 0.25rem;
 
-    .actions {
-      display: flex;
+      &:first-child {
+        margin-left: 0;
+      }
 
-      .action {
-        margin: 0 0.25rem;
-
-        &:first-child {
-          margin-left: 0;
-        }
-
-        &:last-child {
-          margin-right: 0;
-        }
+      &:last-child {
+        margin-right: 0;
       }
     }
   }

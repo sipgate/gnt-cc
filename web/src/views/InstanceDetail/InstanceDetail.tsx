@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import styles from "./InstanceDetail.module.scss";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { GntInstance } from "../../api/models";
 import { useApi } from "../../api";
 import Button from "../../components/Button/Button";
@@ -11,6 +11,7 @@ import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator
 import { useClusterName } from "../../helpers/hooks";
 import PrefixLink from "../../components/PrefixLink";
 import InstanceConfigurator from "../../components/InstanceConfigurator/InstanceConfigurator";
+import Hero from "../../components/Hero/Hero";
 
 interface InstanceResponse {
   instance: GntInstance;
@@ -38,8 +39,7 @@ const InstanceDetail = (): ReactElement => {
     <div className={styles.instanceDetail}>
       {instance && (
         <div>
-          <div className={styles.hero}>
-            <h1 className={styles.title}>{instance.name}</h1>
+          <Hero title={instance.name}>
             <div className={styles.actions}>
               <Button className={styles.action} label="Migrate" primary />
               <Button className={styles.action} label="Failover" primary />
@@ -51,7 +51,8 @@ const InstanceDetail = (): ReactElement => {
                 danger
               />
             </div>
-          </div>
+          </Hero>
+
           <InstanceConfigurator instance={instance} />
           <div className={styles.details}>
             <Card

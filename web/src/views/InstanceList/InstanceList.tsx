@@ -18,17 +18,18 @@ const columns: IDataTableColumn<GntInstance>[] = [
   {
     name: "Name",
     sortable: true,
+    selector: (row) => row.name,
     // eslint-disable-next-line react/display-name
     cell: (row) => (
       <PrefixLink className={styles.link} to={`/instances/${row.name}`}>
         {row.name}
       </PrefixLink>
     ),
-    //sortFunction: (rowA, rowB) => rowA.name.localeCompare(rowB.name),
   },
   {
     name: "Primary Node",
     sortable: true,
+    selector: (row) => row.primaryNode,
     // eslint-disable-next-line react/display-name
     cell: (row) => (
       <PrefixLink className={styles.link} to={`/nodes/${row.primaryNode}`}>
@@ -38,7 +39,6 @@ const columns: IDataTableColumn<GntInstance>[] = [
   },
   {
     name: "Secondary Nodes",
-    sortable: true,
     // eslint-disable-next-line react/display-name
     cell: (row) => (
       <div>
@@ -56,14 +56,17 @@ const columns: IDataTableColumn<GntInstance>[] = [
   },
   {
     name: "vCPUs",
-    cell: (row) => row.cpuCount,
     width: "60px",
+    selector: (row) => row.cpuCount,
+    sortable: true,
     right: true,
   },
   {
     name: "Memory",
     cell: (row) => `${row.memoryTotal} MB`,
     width: "90px",
+    sortable: true,
+    selector: (row) => row.memoryTotal,
   },
 ];
 

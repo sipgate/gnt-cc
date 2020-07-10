@@ -29,6 +29,7 @@ const Instances = (): ReactElement => {
 
   return (
     <div className={styles.instances}>
+      <p>Instances in {clusterName} cluster</p>
       <InstanceList instances={data.instances} />
     </div>
   );

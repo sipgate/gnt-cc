@@ -60,14 +60,19 @@ const InstanceDetail = (): ReactElement => {
             >
               <ul className={styles.nodeList}>
                 <li className={styles.nodeListNode}>
-                  <PrefixLink to={`/nodes/${instance.primaryNode}`}>
+                  <PrefixLink
+                    className={styles.link}
+                    to={`/nodes/${instance.primaryNode}`}
+                  >
                     {instance.primaryNode}
                   </PrefixLink>
                   <Tag label="primary" />
                 </li>
                 {instance.secondaryNodes.map((node) => (
                   <li key={node} className={styles.nodeListNode}>
-                    <Link to={`/nodes/${node}`}>{node}</Link>
+                    <PrefixLink className={styles.link} to={`/nodes/${node}`}>
+                      {node}
+                    </PrefixLink>
                   </li>
                 ))}
               </ul>

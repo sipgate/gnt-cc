@@ -1,6 +1,5 @@
 import React, { ReactElement } from "react";
 import styles from "./NodeList.module.scss";
-import { Link } from "react-router-dom";
 import DataTable, { IDataTableColumn } from "react-data-table-component";
 import { GntNode } from "../../api/models";
 import { useApi } from "../../api";
@@ -8,6 +7,7 @@ import { convertMBToGB } from "../../helpers";
 import MemoryUtilisation from "../../components/MemoryUtilisation/MemoryUtilisation";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import { useClusterName } from "../../helpers/hooks";
+import PrefixLink from "../../components/PrefixLink";
 
 interface NodesResponse {
   nodes: GntNode[];
@@ -20,7 +20,11 @@ const columns: IDataTableColumn<GntNode>[] = [
     name: "Name",
     sortable: true,
     // eslint-disable-next-line react/display-name
-    cell: (row) => <Link to={`/nodes/${row.name}`}>{row.name}</Link>,
+    cell: (row) => (
+      <PrefixLink className={styles.link} to={`/nodes/${row.name}`}>
+        {row.name}
+      </PrefixLink>
+    ),
   },
   {
     name: "Memory",

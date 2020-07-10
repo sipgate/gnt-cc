@@ -9,8 +9,8 @@ import Dashboard from "./Dashboard/Dashboard";
 import InstanceList from "./InstanceList/InstanceList";
 import NodeList from "./NodeList/NodeList";
 import Navbar from "../components/Navbar/Navbar";
-import ClusterSelector from "../components/ClusterSelector/ClusterSelector";
 import ClusterNotFound from "../components/ClusterNotFound/ClusterNotFound";
+import NodeDetail from "./NodeDetail/NodeDetail";
 
 interface ClusterResponse {
   clusters: GntCluster[];
@@ -52,11 +52,15 @@ const ClusterWrapper = (): ReactElement => {
                   path={`${path}/instances/:instanceName`}
                   component={InstanceDetail}
                 />
-
                 <AuthenticatedRoute
                   path={`${path}/instances`}
                   component={InstanceList}
                 />
+                <AuthenticatedRoute
+                  path={`${path}/nodes/:nodeName`}
+                  component={NodeDetail}
+                />
+                s
                 <AuthenticatedRoute
                   path={`${path}/nodes`}
                   component={NodeList}

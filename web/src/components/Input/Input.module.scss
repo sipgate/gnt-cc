@@ -15,7 +15,7 @@ $transitionDuration: 0.1s;
     padding: 2*$padding $padding;
     transition: transform $transitionDuration;
     background-color: var(--backgroundPrimary);
-    color: var(--foregroundPrimary)
+    color: var(--foregroundPrimary);
   }
 
   .label,
@@ -34,7 +34,7 @@ $transitionDuration: 0.1s;
   }
 
   .error {
-    color: var(--errorForeground);
+    color: var(--colorDanger);
     top: 0.3rem;
   }
 
@@ -44,7 +44,7 @@ $transitionDuration: 0.1s;
 
   &.hasError,
   &.hasError.isFocused {
-    border-color: var(--errorForeground);
+    border-color: var(--colorDanger);
   }
 
   &.hasContent {

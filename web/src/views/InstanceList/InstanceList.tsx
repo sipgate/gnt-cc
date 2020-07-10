@@ -20,7 +20,9 @@ const columns: IDataTableColumn<GntInstance>[] = [
     sortable: true,
     // eslint-disable-next-line react/display-name
     cell: (row) => (
-      <PrefixLink to={`/instances/${row.name}`}>{row.name}</PrefixLink>
+      <PrefixLink className={styles.link} to={`/instances/${row.name}`}>
+        {row.name}
+      </PrefixLink>
     ),
     //sortFunction: (rowA, rowB) => rowA.name.localeCompare(rowB.name),
   },
@@ -29,7 +31,7 @@ const columns: IDataTableColumn<GntInstance>[] = [
     sortable: true,
     // eslint-disable-next-line react/display-name
     cell: (row) => (
-      <PrefixLink to={`/nodes/${row.primaryNode}`}>
+      <PrefixLink className={styles.link} to={`/nodes/${row.primaryNode}`}>
         {row.primaryNode}
       </PrefixLink>
     ),
@@ -40,7 +42,10 @@ const columns: IDataTableColumn<GntInstance>[] = [
     // eslint-disable-next-line react/display-name
     cell: (row) => (
       <div>
-        <PrefixLink to={`/nodes/${row.secondaryNodes[0]}`}>
+        <PrefixLink
+          className={styles.link}
+          to={`/nodes/${row.secondaryNodes[0]}`}
+        >
           {row.secondaryNodes[0]}
         </PrefixLink>
         {row.secondaryNodes.length > 1 && (

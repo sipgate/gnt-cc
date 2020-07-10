@@ -4,9 +4,12 @@
   justify-content: space-between;
   border-radius: 3px;
   padding: 0 30px;
-  border: 1px solid #eaedf3;
+  border: 1px solid var(--backgroundPrimary);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
-  background: #fff;
+  background: var(--backgroundSecondary);
+  color: var(--foregroundPrimary);
+  min-width: 250px;
+  max-width: 350px;
 
   &.noHorizontalPadding {
     padding: 0;

@@ -4,8 +4,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 2rem 1rem;
-    background: #555;
-    color: #fff;
+    background: var(--backgroundSecondary);
+    color: var(--foregroundPrimary);
 
     .title {
       font-size: 1.5rem;
@@ -29,10 +29,13 @@
   }
 
   .details {
+    padding: 1rem;
+
     .nodeList {
       list-style: none;
       font-size: 1rem;
       margin: 0.5rem 0;
+      padding: 0;
 
       .nodeListNode {
         display: flex;
@@ -40,6 +43,10 @@
         align-items: center;
         padding: 0.75rem;
         border-bottom: 1px solid rgba(#000, 0.1);
+
+        .link {
+          color: var(--foregroundPrimary);
+        }
       }
     }
   }

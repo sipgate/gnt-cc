@@ -31,7 +31,7 @@ func GetNodes(clusterConfig config.ClusterConfig) ([]model.GntNode, error) {
 }
 
 func GetNode(clusterConfig config.ClusterConfig, nodeName string) (model.GntNode, error) {
-	response, err := Get(clusterConfig, fmt.Sprintf("/2/node/%s", nodeName))
+	response, err := Get(clusterConfig, fmt.Sprintf("/2/nodes/%s", nodeName))
 
 	if err != nil {
 		return model.GntNode{}, err

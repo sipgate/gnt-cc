@@ -4,9 +4,10 @@ import { useClusterName } from "../../helpers/hooks";
 import { GntNode } from "../../api/models";
 import { useApi } from "../../api";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
-import styles from "./NodeDetail.module.scss";
 import Hero from "../../components/Hero/Hero";
 import InstanceList from "../../components/InstanceList/InstanceList";
+import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
+import Button from "../../components/Button/Button";
 
 interface NodeResponse {
   node: GntNode;
@@ -31,19 +32,23 @@ const NodeDetail = (): ReactElement => {
   const { node } = data;
 
   return (
-    <div className={styles.nodeDetail}>
-      <Hero title={node.name}></Hero>
+    <>
+      <Hero title={node.name}>
+        <Button label="Empty Node" danger />
+      </Hero>
 
-      <div className={styles.instanceList}>
-        <p>Primary Instances on {nodeName}</p>
-        <InstanceList instances={node.primaryInstances} />
-      </div>
+      <ContentWrapper>
+        <div>
+          <p>Primary Instances on {nodeName}</p>
+          <InstanceList instances={node.primaryInstances} />
+        </div>
 
-      <div className={styles.instanceList}>
-        <p>Secondary Instances on {nodeName}</p>
-        <InstanceList instances={node.secondaryInstances} />
-      </div>
-    </div>
+        <div>
+          <p>Secondary Instances on {nodeName}</p>
+          <InstanceList instances={node.secondaryInstances} />
+        </div>
+      </ContentWrapper>
+    </>
   );
 };
 

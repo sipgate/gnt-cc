@@ -12,6 +12,7 @@ import { useClusterName } from "../../helpers/hooks";
 import PrefixLink from "../../components/PrefixLink";
 import InstanceConfigurator from "../../components/InstanceConfigurator/InstanceConfigurator";
 import Hero from "../../components/Hero/Hero";
+import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 
 interface InstanceResponse {
   instance: GntInstance;
@@ -36,7 +37,7 @@ const InstanceDetail = (): ReactElement => {
   const { instance } = data;
 
   return (
-    <div className={styles.instanceDetail}>
+    <>
       {instance && (
         <div>
           <Hero title={instance.name}>
@@ -52,37 +53,38 @@ const InstanceDetail = (): ReactElement => {
               />
             </div>
           </Hero>
-
-          <InstanceConfigurator instance={instance} />
-          <div className={styles.details}>
-            <Card
-              title="Nodes"
-              subtitle={`Total: ${instance.secondaryNodes.length + 1}`}
-            >
-              <ul className={styles.nodeList}>
-                <li className={styles.nodeListNode}>
-                  <PrefixLink
-                    className={styles.link}
-                    to={`/nodes/${instance.primaryNode}`}
-                  >
-                    {instance.primaryNode}
-                  </PrefixLink>
-                  <Tag label="primary" />
-                </li>
-                {instance.secondaryNodes.map((node) => (
-                  <li key={node} className={styles.nodeListNode}>
-                    <PrefixLink className={styles.link} to={`/nodes/${node}`}>
-                      {node}
+          <ContentWrapper>
+            <InstanceConfigurator instance={instance} />
+            <div className={styles.details}>
+              <Card
+                title="Nodes"
+                subtitle={`Total: ${instance.secondaryNodes.length + 1}`}
+              >
+                <ul className={styles.nodeList}>
+                  <li className={styles.nodeListNode}>
+                    <PrefixLink
+                      className={styles.link}
+                      to={`/nodes/${instance.primaryNode}`}
+                    >
+                      {instance.primaryNode}
                     </PrefixLink>
+                    <Tag label="primary" />
                   </li>
-                ))}
-              </ul>
-            </Card>
-          </div>
+                  {instance.secondaryNodes.map((node) => (
+                    <li key={node} className={styles.nodeListNode}>
+                      <PrefixLink className={styles.link} to={`/nodes/${node}`}>
+                        {node}
+                      </PrefixLink>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            </div>
+          </ContentWrapper>
         </div>
       )}
       {!instance && <div>Instance not found</div>}
-    </div>
+    </>
   );
 };
 

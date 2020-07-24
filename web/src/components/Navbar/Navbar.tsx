@@ -12,7 +12,7 @@ import { GntCluster } from "../../api/models";
 const links = [
   {
     to: "/",
-    label: "Statistics",
+    label: "Dashboard",
     exactActive: true,
   },
   {

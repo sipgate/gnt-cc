@@ -8,6 +8,8 @@ import MemoryUtilisation from "../../components/MemoryUtilisation/MemoryUtilisat
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import { useClusterName } from "../../helpers/hooks";
 import PrefixLink from "../../components/PrefixLink";
+import Hero from "../../components/Hero/Hero";
+import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 
 interface NodesResponse {
   nodes: GntNode[];
@@ -58,9 +60,18 @@ function NodeList(): ReactElement {
   const { nodes } = data;
 
   return (
-    <div className={styles.nodeList}>
-      <DataTable columns={columns} data={nodes} />
-    </div>
+    <>
+      <Hero title={`Nodes on ${clusterName} cluster`} />
+      <ContentWrapper>
+        <DataTable
+          columns={columns}
+          data={nodes}
+          pagination
+          paginationPerPage={20}
+          noHeader
+        />
+      </ContentWrapper>
+    </>
   );
 }
 

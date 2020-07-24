@@ -1,18 +1,14 @@
-.dashboard {
-  .statistics {
-    padding: 2rem;
-    display: grid;
-    grid-gap: 1rem;
-    grid-template-columns: repeat(6, minmax(200px, 1fr));
-    grid-template-rows: auto;
+.statistics {
+  display: grid;
+  grid-gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 
-    .stat {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 3rem;
-      color: #a9a9a9;
-      font-weight: 800;
-    }
+  .stat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color: #a9a9a9;
+    font-weight: 800;
   }
 }

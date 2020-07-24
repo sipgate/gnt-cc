@@ -23,6 +23,20 @@ export function AuthenticatedRoute(props: RouteProps): ReactElement {
   );
 }
 
+interface JwtPayload {
+  id: string;
+  exp: number;
+  orig_iat: number;
+}
+
+const parseJwtPayload = (token: string | null): JwtPayload | null => {
+  if (!token) {
+    return null;
+  }
+
+  return JSON.parse(atob(token.split(".")[1]));
+};
+
 function App(): ReactElement {
   const storedAuthToken = localStorage.getItem(STORAGE_TOKEN_KEY);
   const [authToken, setAuthToken] = useState(storedAuthToken);
@@ -35,11 +49,14 @@ function App(): ReactElement {
     }
   }, [authToken]);
 
+  const tokenPayload = parseJwtPayload(authToken);
+
   return (
     <div className="App">
       <AuthContext.Provider
         value={{
           setToken: setAuthToken,
+          username: tokenPayload ? tokenPayload.id : null,
           authToken,
         }}
       >

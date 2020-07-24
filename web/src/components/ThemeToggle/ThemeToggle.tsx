@@ -33,10 +33,10 @@ export const ThemeToggle = (): ReactElement => {
       onClick={() => setIsDark(!isDark)}
     >
       <span className={styles.knob} />
-      <span className={styles.light}>
+      <span>
         <FontAwesomeIcon icon={faSun} />
       </span>
-      <span className={styles.dark}>
+      <span>
         <FontAwesomeIcon icon={faMoon} />
       </span>
     </div>

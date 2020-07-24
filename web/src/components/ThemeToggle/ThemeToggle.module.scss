@@ -19,6 +19,7 @@ $knobSize: $height - ($padding * 2);
   justify-content: space-around;
   align-items: center;
   box-sizing: content-box;
+  background: var(--backgroundPrimary);
 
   .knob {
     position: absolute;
@@ -30,10 +31,6 @@ $knobSize: $height - ($padding * 2);
     top: $padding;
     bottom: $padding;
     transition: transform $transitionDuration;
-  }
-
-  .light {
-    color: #fff;
   }
 
   &.isDark {

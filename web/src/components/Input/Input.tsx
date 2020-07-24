@@ -12,6 +12,7 @@ interface Props {
   error?: string | false;
   onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
 }
 
 const Input = ({
@@ -22,6 +23,7 @@ const Input = ({
   onBlur,
   onChange,
   value,
+  className,
 }: Props): ReactElement => {
   const [focused, setFocused] = useState(false);
 
@@ -42,6 +44,7 @@ const Input = ({
       [styles.isFocused]: !!focused,
       [styles.hasContent]: !!value,
     },
+    className || null,
   ]);
 
   return (

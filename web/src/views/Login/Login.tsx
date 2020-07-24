@@ -105,6 +105,7 @@ function Login({ history }: RouteComponentProps): ReactElement {
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             error={formik.touched.username && formik.errors.username}
+            className={styles.input}
           />
 
           <Input
@@ -115,6 +116,7 @@ function Login({ history }: RouteComponentProps): ReactElement {
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             error={formik.touched.password && formik.errors.password}
+            className={styles.input}
           />
 
           <Button type="submit" disabled={formik.isSubmitting} label="Login" />

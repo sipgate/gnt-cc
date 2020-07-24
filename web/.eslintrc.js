@@ -14,7 +14,8 @@ module.exports = {
     }
   },
   plugins: [
-    "react"
+    "react",
+    "react-hooks"
   ],
   extends: [
     "plugin:react/recommended",

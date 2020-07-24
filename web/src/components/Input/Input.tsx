@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState, ReactElement } from "react";
 import styles from "./Input.module.scss";
 import { classNameHelper } from "../../helpers";
 
-type InputType = "text" | "email" | "password";
+type InputType = "text" | "email" | "password" | "search";
 
 interface Props {
   type: InputType;
@@ -10,8 +10,8 @@ interface Props {
   value: string;
   name: string;
   error?: string | false;
-  onBlur?: (event: ChangeEvent<Element>) => void;
-  onChange?: (event: ChangeEvent<Element>) => void;
+  onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Input = ({
@@ -27,7 +27,7 @@ const Input = ({
 
   const handleInputFocus = () => setFocused(true);
 
-  const handleInputBlur = (event: ChangeEvent<Element>) => {
+  const handleInputBlur = (event: ChangeEvent<HTMLInputElement>) => {
     setFocused(false);
 
     if (onBlur) {

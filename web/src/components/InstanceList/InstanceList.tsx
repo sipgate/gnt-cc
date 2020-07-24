@@ -1,9 +1,10 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState, ChangeEvent, useEffect } from "react";
 import styles from "./InstanceList.module.scss";
 import { GntInstance } from "../../api/models";
 import DataTable, { IDataTableColumn } from "react-data-table-component";
 import Tag from "../Tag/Tag";
 import PrefixLink from "../PrefixLink";
+import Input from "../Input/Input";
 
 const columns: IDataTableColumn<GntInstance>[] = [
   {
@@ -62,13 +63,59 @@ interface Props {
   instances: GntInstance[];
 }
 
+const filterInstances = (
+  instances: GntInstance[],
+  filter: string
+): GntInstance[] => {
+  if (filter === "") {
+    return instances;
+  }
+
+  return instances.filter((instance) => {
+    if (instance.name.includes(filter)) {
+      return true;
+    }
+
+    if (instance.primaryNode.includes(filter)) {
+      return true;
+    }
+
+    for (const node of instance.secondaryNodes) {
+      if (node.includes(filter)) {
+        return true;
+      }
+    }
+
+    return false;
+  });
+};
+
 function InstanceList({ instances }: Props): ReactElement {
+  const [filter, setFilter] = useState("");
+  const [filteredInstances, setFilteredInstances] = useState(instances);
+
+  useEffect(() => setFilteredInstances(filterInstances(instances, filter)), [
+    filter,
+    instances,
+  ]);
+
   return (
     <div className={styles.instanceList}>
+      <Input
+        name="instance-filter"
+        type="search"
+        label="Filter"
+        value={filter}
+        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+          setFilter(event.target.value)
+        }
+      />
       <DataTable<GntInstance>
         columns={columns}
-        data={instances}
+        data={filteredInstances}
         keyField="name"
+        pagination
+        paginationPerPage={20}
         noHeader
       />
     </div>

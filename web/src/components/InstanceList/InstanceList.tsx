@@ -10,7 +10,6 @@ const columns: IDataTableColumn<GntInstance>[] = [
     name: "Name",
     sortable: true,
     selector: (row) => row.name,
-    // eslint-disable-next-line react/display-name
     cell: (row) => (
       <PrefixLink className={styles.link} to={`/instances/${row.name}`}>
         {row.name}
@@ -21,7 +20,6 @@ const columns: IDataTableColumn<GntInstance>[] = [
     name: "Primary Node",
     sortable: true,
     selector: (row) => row.primaryNode,
-    // eslint-disable-next-line react/display-name
     cell: (row) => (
       <PrefixLink className={styles.link} to={`/nodes/${row.primaryNode}`}>
         {row.primaryNode}
@@ -30,7 +28,6 @@ const columns: IDataTableColumn<GntInstance>[] = [
   },
   {
     name: "Secondary Nodes",
-    // eslint-disable-next-line react/display-name
     cell: (row) => (
       <div>
         <PrefixLink

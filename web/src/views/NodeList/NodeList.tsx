@@ -20,7 +20,6 @@ const columns: IDataTableColumn<GntNode>[] = [
     name: "Name",
     sortable: true,
     selector: (row) => row.name,
-    // eslint-disable-next-line react/display-name
     cell: (row) => (
       <PrefixLink className={styles.link} to={`/nodes/${row.name}`}>
         {row.name}
@@ -31,7 +30,6 @@ const columns: IDataTableColumn<GntNode>[] = [
     name: "Memory",
     sortable: true,
     selector: (row) => row.memoryTotal - row.memoryFree,
-    // eslint-disable-next-line react/display-name
     cell: (row) => (
       <MemoryUtilisation
         memoryInUse={convertMBToGB(row.memoryTotal - row.memoryFree)}

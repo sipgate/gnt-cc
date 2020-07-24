@@ -4,17 +4,17 @@ $transitionDuration: 0.1s;
 .inputWrapper {
   position: relative;
   overflow: hidden;
-  border: 1px solid var(--foregroundSecondary);
   border-radius: 3px;
+  background-color: var(--colorElevationMedium);
 
   .input {
     border: 0;
     outline: 0;
     font-size: 1rem;
-    padding: 2*$padding $padding;
+    padding: 2 * $padding $padding;
     transition: transform $transitionDuration;
-    background-color: var(--backgroundPrimary);
-    color: var(--foregroundPrimary);
+    background: transparent;
+    color: var(--colorEmphasisHigh);
   }
 
   .label,
@@ -27,7 +27,7 @@ $transitionDuration: 0.1s;
   .label {
     top: -0.2rem;
     left: $padding;
-    color: var(--foregroundSecondary);
+    color: var(--colorEmphasisHigh);
     opacity: 0;
     transition: opacity $transitionDuration, transform $transitionDuration;
   }
@@ -38,7 +38,7 @@ $transitionDuration: 0.1s;
   }
 
   &.isFocused {
-    border-color: var(--activeColorForeground);
+    background-color: var(--colorElevationHigh);
   }
 
   &.hasError,

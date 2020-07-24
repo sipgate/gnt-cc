@@ -10,7 +10,7 @@ $knobSize: $height - ($padding * 2);
   z-index: 10;
   left: $outerSpacing;
   bottom: $outerSpacing;
-  border: 1px solid var(--foregroundPrimary);
+  border: 1px solid var(--colorEmphasisHigh);
   border-radius: $height / 2;
   height: $height;
   width: $width;
@@ -19,14 +19,14 @@ $knobSize: $height - ($padding * 2);
   justify-content: space-around;
   align-items: center;
   box-sizing: content-box;
-  background: var(--backgroundPrimary);
+  background: var(--colorElevationLow);
 
   .knob {
     position: absolute;
     width: $knobSize;
     height: $knobSize;
     border-radius: $knobSize / 2;
-    background: var(--foregroundPrimary);
+    background: var(--colorEmphasisHigh);
     left: $padding;
     top: $padding;
     bottom: $padding;

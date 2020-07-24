@@ -6,12 +6,11 @@
   .inUse {
     padding: 0 0.1rem;
     font-weight: bold;
-    color: var(--foregroundPrimary);
   }
 
   .separator,
   .unit {
-    color: var(--foregroundSecondary);
+    color: var(--colorEmphasisMedium);
     font-weight: bold;
   }
 
@@ -22,6 +21,7 @@
     bottom: 0;
     height: 3px;
     opacity: 0.5;
+    background-color: var(--colorEmphasisLow);
 
     .progress {
       position: absolute;

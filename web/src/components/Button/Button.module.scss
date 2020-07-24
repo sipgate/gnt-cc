@@ -2,17 +2,23 @@ $size: 48px;
 $sizeSmall: 28px;
 
 .button {
-  transition: transform 0.2s, opacity 0.2s;
+  transition: transform 0.2s, background-color 0.2s;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 0.75rem;
   height: 48px;
-  background: var(--backgroundSecondary);
-  color: var(--foregroundPrimary);
+  background: var(--colorElevationMedium);
+  color: var(--colorEmphasisHigh);
   border-radius: 2px;
-  border: 1px solid #a6a6a6;
+  border: 0;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+
+  &:hover {
+    background: var(--colorElevationHigh);
+  }
 
   &.danger {
     color: #fff;
@@ -21,7 +27,7 @@ $sizeSmall: 28px;
   }
 
   &.primary {
-    background: var(--activeColorForeground);
+    background: var(--colorPrimary);
     color: #fff;
     border-color: transparent;
   }

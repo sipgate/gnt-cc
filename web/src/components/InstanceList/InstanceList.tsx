@@ -1,10 +1,13 @@
-import React, { ReactElement, useState, ChangeEvent, useEffect } from "react";
+import React, { ReactElement, ChangeEvent, useMemo } from "react";
 import styles from "./InstanceList.module.scss";
 import { GntInstance } from "../../api/models";
 import DataTable, { IDataTableColumn } from "react-data-table-component";
 import Tag from "../Tag/Tag";
 import PrefixLink from "../PrefixLink";
 import Input from "../Input/Input";
+import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
+import Button from "../Button/Button";
+import { useFilter, filterInstances } from "./filters";
 
 const columns: IDataTableColumn<GntInstance>[] = [
   {
@@ -28,7 +31,7 @@ const columns: IDataTableColumn<GntInstance>[] = [
     ),
   },
   {
-    name: "Secondary Nodes",
+    name: "Secondary Node(s)",
     cell: (row) => (
       <div>
         <PrefixLink
@@ -63,53 +66,82 @@ interface Props {
   instances: GntInstance[];
 }
 
-const filterInstances = (
-  instances: GntInstance[],
-  filter: string
-): GntInstance[] => {
-  if (filter === "") {
-    return instances;
-  }
-
-  return instances.filter((instance) => {
-    if (instance.name.includes(filter)) {
-      return true;
-    }
-
-    if (instance.primaryNode.includes(filter)) {
-      return true;
-    }
-
-    for (const node of instance.secondaryNodes) {
-      if (node.includes(filter)) {
-        return true;
-      }
-    }
-
-    return false;
-  });
-};
-
 function InstanceList({ instances }: Props): ReactElement {
-  const [filter, setFilter] = useState("");
-  const [filteredInstances, setFilteredInstances] = useState(instances);
+  const [
+    { filter, filterFields },
+    { setFilter, setFilterFields, reset },
+  ] = useFilter();
 
-  useEffect(() => setFilteredInstances(filterInstances(instances, filter)), [
-    filter,
-    instances,
-  ]);
+  const filteredInstances = useMemo(
+    () => filterInstances(instances, filter, filterFields),
+    [instances, filter, filterFields]
+  );
 
   return (
     <div className={styles.instanceList}>
-      <Input
-        name="instance-filter"
-        type="search"
-        label="Filter"
-        value={filter}
-        onChange={(event: ChangeEvent<HTMLInputElement>) =>
-          setFilter(event.target.value)
-        }
-      />
+      <div className={styles.filterSettings}>
+        <Input
+          name="instance-filter"
+          type="search"
+          label="Filter"
+          value={filter}
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            setFilter(event.target.value)
+          }
+        />
+        <span className={styles.filterListLabel}>Filter by</span>
+        <div className={styles.filterList}>
+          <FilterCheckbox
+            className={styles.filterCheckbox}
+            label="Name"
+            checked={filterFields.name}
+            onChange={(checked) =>
+              setFilterFields({
+                ...filterFields,
+                name: checked,
+              })
+            }
+          />
+          <FilterCheckbox
+            className={styles.filterCheckbox}
+            label="Primary Node"
+            checked={filterFields.primaryNode}
+            onChange={(checked) =>
+              setFilterFields({
+                ...filterFields,
+                primaryNode: checked,
+              })
+            }
+          />
+          <FilterCheckbox
+            className={styles.filterCheckbox}
+            label="Secondary Node(s)"
+            checked={filterFields.secondaryNodes}
+            onChange={(checked) =>
+              setFilterFields({
+                ...filterFields,
+                secondaryNodes: checked,
+              })
+            }
+          />
+        </div>
+        <Button
+          className={styles.filterResetButton}
+          label="Reset filters"
+          onClick={reset}
+        />
+      </div>
+
+      <div className={styles.filterResults}>
+        Showing
+        <span className={styles.filterResultCount}>
+          {filteredInstances.length}
+        </span>
+        of
+        <span className={styles.filterResultCount}>{instances.length}</span>
+        instances
+      </div>
+
       <DataTable<GntInstance>
         columns={columns}
         data={filteredInstances}

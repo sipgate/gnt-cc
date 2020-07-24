@@ -2,4 +2,40 @@
   .link {
     color: var(--foregroundPrimary);
   }
+
+  .filterSettings {
+    display: flex;
+    align-items: center;
+
+    .filterListLabel {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin: 0 1rem;
+      color: var(--foregroundSecondary);
+    }
+
+    .filterList {
+      display: flex;
+      align-items: center;
+
+      .filterCheckbox:not(:last-child) {
+        margin-right: 0.5rem;
+      }
+    }
+
+    .filterResetButton {
+      margin-left: auto;
+    }
+  }
+
+  .filterResults {
+    padding: 1rem;
+
+    .filterResultCount {
+      font-weight: bold;
+      color: var(--foregroundSecondary);
+      padding: 0 0.3rem;
+    }
+  }
 }

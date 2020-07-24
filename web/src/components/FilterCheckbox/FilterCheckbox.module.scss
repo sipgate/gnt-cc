@@ -1,0 +1,17 @@
+.filterCheckbox {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border: 1px solid var(--backgroundSecondary);
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: var(--backgroundPrimary);
+
+  &:hover {
+    background-color: var(--backgroundSecondary);
+  }
+
+  .label {
+    margin-right: 0.5rem;
+  }
+}

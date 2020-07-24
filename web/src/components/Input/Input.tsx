@@ -51,6 +51,7 @@ const Input = ({
         id={name}
         name={name}
         type={type}
+        value={value}
         onChange={onChange}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}

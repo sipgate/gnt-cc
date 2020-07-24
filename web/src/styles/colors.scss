@@ -38,7 +38,7 @@ body {
 
   @include whenDark {
     --foregroundPrimary: #{$white};
-    --foregroundSecondary: #{$outlineColor};
+    --foregroundSecondary: #{$darkerWhite};
     --backgroundPrimary: #{$dark};
     --backgroundSecondary: #{$darkGrey};
     --activeColorForeground: #{$activeColor};

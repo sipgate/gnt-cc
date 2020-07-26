@@ -18,8 +18,10 @@ func GetNodes(count int) []model.GntNode {
 
 func GetNode(name string) model.GntNode {
 	return model.GntNode{
-		Name:        name,
-		MemoryTotal: 2000,
-		MemoryFree:  rand.Intn(2000),
+		Name:               name,
+		MemoryTotal:        2000,
+		MemoryFree:         rand.Intn(2000),
+		SecondaryInstances: GetInstances(10),
+		PrimaryInstances:   GetInstances(10),
 	}
 }

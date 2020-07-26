@@ -1,3 +1,5 @@
+@import "../../styles/mixins.scss";
+
 $size: 48px;
 $sizeSmall: 28px;
 
@@ -10,31 +12,14 @@ $sizeSmall: 28px;
   justify-content: center;
   padding: 0 1.5rem;
   height: 48px;
-  background: var(--colorElevationMedium);
+  background: var(--colorInteractionBackground);
   color: var(--colorEmphasisHigh);
   border-radius: 2px;
   border: 0;
   text-transform: uppercase;
   font-size: 0.85rem;
 
-  // hover overlay
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-    background: var(--overlay);
-    transition: opacity 0.1s;
-    pointer-events: none;
-    border-radius: inherit;
-  }
-
-  &:hover::after {
-    opacity: 1;
-  }
+  @include hoverOverlay();
 
   &.danger {
     color: #fff;

@@ -17,12 +17,12 @@ createTheme("default", {
     text: "var(--colorEmphasisHigh)",
   },
   divider: {
-    default: "var(--colorEmphasisLow)",
+    default: "var(--colorSeparator)",
   },
   action: {
     button: "var(--colorEmphasisMedium)",
     hover: "var(--colorEmphasisHigh)",
-    disabled: "var(--colorEmphasisLow)",
+    disabled: "var(--colorSeparator)",
   },
 });
 

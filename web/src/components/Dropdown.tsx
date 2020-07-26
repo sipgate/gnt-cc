@@ -53,7 +53,7 @@ const Current = styled(HoverOverlay)`
   align-items: center;
   z-index: 1;
   padding: 0 ${spacingOuter};
-  border: 1px solid var(--colorEmphasisLow);
+  border: 1px solid var(--colorSeparator);
   border-radius: 24px;
   width: 100%;
   height: 100%;

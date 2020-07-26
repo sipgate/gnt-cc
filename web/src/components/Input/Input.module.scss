@@ -5,7 +5,7 @@ $transitionDuration: 0.1s;
   position: relative;
   overflow: hidden;
   border-radius: 3px;
-  background-color: var(--colorElevationMedium);
+  background-color: var(--colorInteractionBackground);
 
   // focus overlay
   &::after {

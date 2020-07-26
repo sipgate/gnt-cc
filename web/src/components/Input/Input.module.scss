@@ -7,6 +7,25 @@ $transitionDuration: 0.1s;
   border-radius: 3px;
   background-color: var(--colorElevationMedium);
 
+  // focus overlay
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    background: var(--overlay);
+    transition: opacity 0.1s;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  &.isFocused::after {
+    opacity: 1;
+  }
+
   .input {
     border: 0;
     outline: 0;
@@ -27,7 +46,7 @@ $transitionDuration: 0.1s;
   .label {
     top: -0.2rem;
     left: $padding;
-    color: var(--colorEmphasisHigh);
+    color: var(--colorEmphasisMedium);
     opacity: 0;
     transition: opacity $transitionDuration, transform $transitionDuration;
   }
@@ -35,10 +54,6 @@ $transitionDuration: 0.1s;
   .error {
     color: var(--colorDanger);
     top: 0.3rem;
-  }
-
-  &.isFocused {
-    background-color: var(--colorElevationHigh);
   }
 
   &.hasError,

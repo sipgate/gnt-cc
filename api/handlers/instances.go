@@ -14,8 +14,7 @@ import (
 // @Description ...
 // @Produce  json
 // @Success 200 {object} model.AllInstancesResponse
-// @Failure 404 {object}
-// @Failure 500 {object}
+// @Failure 404 {object} httputil.HTTPError404
 // @Router /clusters/{cluster}/instances [get]
 func GetAllInstances(c *gin.Context) {
 	clusterConfig, clusterErr := config.GetClusterConfig(c.Param("cluster"))
@@ -51,8 +50,7 @@ func GetAllInstances(c *gin.Context) {
 // @Description ...
 // @Produce  json
 // @Success 200 {object} model.InstanceResponse
-// @Failure 404 {object}
-// @Failure 500 {object}
+// @Failure 404 {object} httputil.HTTPError404
 // @Router /clusters/{cluster}/instances/{instance} [get]
 func GetInstance(c *gin.Context) {
 	clusterConfig, clusterErr := config.GetClusterConfig(c.Param("cluster"))

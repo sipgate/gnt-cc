@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import styles from "./ClusterSelector.module.scss";
-import Dropdown from "../Dropdown";
+import Dropdown from "../Dropdown/Dropdown";
 import { faServer } from "@fortawesome/free-solid-svg-icons";
 import { GntCluster } from "../../api/models";
 import { useHistory } from "react-router-dom";

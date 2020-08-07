@@ -49,28 +49,32 @@ function NodeList(): ReactElement {
     `clusters/${clusterName}/nodes`
   );
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
+  const renderContent = (): ReactElement => {
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
 
-  if (!data) {
-    return <div>Failed to load: {error}</div>;
-  }
+    if (!data) {
+      return <div>Failed to load: {error}</div>;
+    }
 
-  const { nodes } = data;
+    const { nodes } = data;
+
+    return (
+      <DataTable
+        columns={columns}
+        data={nodes}
+        pagination
+        paginationPerPage={20}
+        noHeader
+      />
+    );
+  };
 
   return (
     <>
       <Hero title={`Nodes on ${clusterName} cluster`} />
-      <ContentWrapper>
-        <DataTable
-          columns={columns}
-          data={nodes}
-          pagination
-          paginationPerPage={20}
-          noHeader
-        />
-      </ContentWrapper>
+      <ContentWrapper>{renderContent()}</ContentWrapper>
     </>
   );
 }

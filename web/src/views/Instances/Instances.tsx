@@ -20,20 +20,22 @@ const Instances = (): ReactElement => {
     `clusters/${clusterName}/instances`
   );
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
+  const renderContent = (): ReactElement => {
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
 
-  if (!data) {
-    return <div>Failed to load: {error}</div>;
-  }
+    if (!data) {
+      return <div>Failed to load: {error}</div>;
+    }
+
+    return <InstanceList instances={data.instances} />;
+  };
 
   return (
     <div>
       <Hero title={`Instances on ${clusterName} cluster`} />
-      <ContentWrapper>
-        <InstanceList instances={data.instances} />
-      </ContentWrapper>
+      <ContentWrapper>{renderContent()}</ContentWrapper>
     </div>
   );
 };

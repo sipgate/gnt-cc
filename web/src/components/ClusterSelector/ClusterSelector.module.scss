@@ -15,13 +15,14 @@
       font-weight: bold;
     }
 
-    .host,
+    .hostname,
     .description {
       font-size: 0.8rem;
     }
 
-    .host {
+    .hostname {
       font-family: monospace;
+      white-space: nowrap;
     }
 
     .description {

@@ -7,16 +7,6 @@ import { classNameHelper } from "../../helpers";
 const DARK_CLASS = "dark";
 
 export const ThemeToggle = (): ReactElement => {
-  /*const systemPrefersDark = useMediaQuery(
-    {
-      query: "(prefers-color-scheme: dark)",
-    },
-    undefined,
-    (prefersDark) => {
-      setIsDark(prefersDark);
-    }
-  );*/
-
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -26,6 +16,18 @@ export const ThemeToggle = (): ReactElement => {
       document.documentElement.classList.remove(DARK_CLASS);
     }
   }, [isDark]);
+
+  useEffect(() => {
+    const setPreferredMode = (prefersDark: boolean) => {
+      setIsDark(prefersDark);
+    };
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setPreferredMode(mediaQuery.matches);
+    mediaQuery.addListener(({ matches: prefersDark }) =>
+      setPreferredMode(prefersDark)
+    );
+  }, []);
 
   return (
     <div

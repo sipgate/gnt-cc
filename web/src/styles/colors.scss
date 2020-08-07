@@ -2,13 +2,6 @@
   html.dark & {
     @content;
   }
-
-  // Ensure dark mode still works if JS is disabled (e.g. if you are pre-rendering your site)
-  // @media (prefers-color-scheme: dark) {
-  //   & {
-  //     @content;
-  //   }
-  // }
 }
 
 body {

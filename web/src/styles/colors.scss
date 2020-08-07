@@ -7,6 +7,7 @@
 body {
   --colorEmphasisHigh: #000;
   --colorEmphasisMedium: #333;
+  --colorEmphasisLow: rgba(1, 1, 1, 0.2);
   --colorSeparator: #e3e3e3;
   --colorInteractionBackground: rgb(235, 235, 235);
   --colorElevationLow: #fff;
@@ -25,6 +26,7 @@ body {
   @include whenDark {
     --colorEmphasisHigh: #f5f5f5;
     --colorEmphasisMedium: #a4aa9d;
+    --colorEmphasisLow: #464646;
     --colorSeparator: #464646;
     --colorInteractionBackground: #303030;
     --colorElevationLow: #262626;

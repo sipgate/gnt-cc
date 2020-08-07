@@ -19,6 +19,12 @@ createTheme("default", {
   divider: {
     default: "var(--colorSeparator)",
   },
+  button: {
+    default: "var(--colorEmphasisMedium)",
+    focus: "var(--colorInteractionBackground)",
+    hover: "var(--colorInteractionBackground)",
+    disabled: "var(--colorEmphasisLow)",
+  },
   action: {
     button: "var(--colorEmphasisMedium)",
     hover: "var(--colorEmphasisHigh)",

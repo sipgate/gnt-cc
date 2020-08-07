@@ -5,7 +5,22 @@ import (
 	"fmt"
 	"gnt-cc/config"
 	"gnt-cc/model"
+	"gnt-cc/utils"
 )
+
+type rapiInstance struct {
+	Name     string
+	Pnode    string
+	Snodes   []string
+	BeParams struct {
+		AutoBalance    bool
+		SpindleUse     int
+		VCPUs          int
+		MinMem         int
+		MaxMem         int
+		AlwaysFailover bool
+	}
+}
 
 func NewGanetiInstance(instanceDetails CreateInstanceParameters) InstanceCreate {
 	var inst InstanceCreate
@@ -50,29 +65,36 @@ func NewGanetiInstance(instanceDetails CreateInstanceParameters) InstanceCreate 
 }
 
 func GetInstances(clusterConfig config.ClusterConfig) ([]model.GntInstance, error) {
-	response, err := Get(clusterConfig, "/2/instances?bulk=1")
+	fields := []string{
+		"name",
+		"pnode",
+		"snodes",
+		"beparams",
+	}
+
+	response, err := GetQuery(clusterConfig, "instance", fields)
 
 	if err != nil {
 		return nil, err
 	}
 
-	var instanceData []Instance
-	err = json.Unmarshal([]byte(response), &instanceData)
+	var tmpInstance rapiInstance
+	instances := make([]model.GntInstance, len(response))
 
-	if err != nil {
-		return nil, err
-	}
+	for i, entry := range response {
+		err := utils.ConvertMapToStruct(entry, &tmpInstance)
 
-	instances := make([]model.GntInstance, len(instanceData))
+		if err != nil {
+			return nil, err
+		}
 
-	for i, instance := range instanceData {
 		instances[i] = model.GntInstance{
-			Name:           instance.Name,
-			PrimaryNode:    instance.Pnode,
-			SecondaryNodes: instance.Snodes,
+			Name:           tmpInstance.Name,
+			PrimaryNode:    tmpInstance.Pnode,
+			SecondaryNodes: tmpInstance.Snodes,
 			Disks:          nil,
-			CpuCount:       instance.BeParams.Vcpus,
-			MemoryTotal:    instance.BeParams.Memory,
+			CpuCount:       tmpInstance.BeParams.VCPUs,
+			MemoryTotal:    tmpInstance.BeParams.MaxMem, // MaxMem correct?
 		}
 	}
 

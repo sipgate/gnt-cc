@@ -17,8 +17,7 @@ import (
 // @Description ...
 // @Produce json
 // @Success 200 {object} model.AllJobsResponse
-// @Failure 404 {object}
-// @Failure 500 {object}
+// @Failure 404 {object} httputil.HTTPError404
 // @Router /clusters/{cluster}/jobs [get]
 func GetAllJobs(c *gin.Context) {
 	clusterConfig, clusterErr := config.GetClusterConfig(c.Param("cluster"))
@@ -77,8 +76,7 @@ func GetAllJobs(c *gin.Context) {
 // @Description ...
 // @Produce json
 // @Success 200 {object} model.JobResponse
-// @Failure 404 {object}
-// @Failure 500 {object}
+// @Failure 404 {object} httputil.HTTPError404
 // @Router /clusters/{cluster}/job/{jobId} [get]
 func GetJob(c *gin.Context) {
 	clusterConfig, clusterErr := config.GetClusterConfig(c.Param("cluster"))

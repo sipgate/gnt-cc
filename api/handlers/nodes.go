@@ -14,8 +14,7 @@ import (
 // @Description ...
 // @Produce json
 // @Success 200 {object} model.AllNodesResponse
-// @Failure 404 {object}
-// @Failure 500 {object}
+// @Failure 404 {object} httputil.HTTPError404
 // @Router /clusters/{cluster}/nodes [get]
 func GetAllNodes(c *gin.Context) {
 	clusterConfig, clusterErr := config.GetClusterConfig(c.Param("cluster"))

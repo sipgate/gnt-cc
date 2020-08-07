@@ -3,9 +3,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 1rem;
-  background: var(--backgroundPrimary);
+  background: var(--colorElevationMedium);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
-  border-bottom: 1px solid var(--backgroundSecondary);
 
   .begin {
     display: flex;
@@ -30,11 +29,11 @@
       .item {
         display: block;
         font-weight: bold;
-        color: var(--inactiveForeground);
+        color: var(--colorEmphasisHigh);
         padding: 1rem;
 
         &.active {
-          color: var(--activeColorForeground);
+          color: var(--colorPrimary);
         }
       }
     }

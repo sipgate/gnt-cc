@@ -1,6 +1,6 @@
 .instanceList {
   .link {
-    color: var(--foregroundPrimary);
+    color: var(--colorEmphasisHigh);
   }
 
   .filterSettings {
@@ -12,7 +12,7 @@
       font-size: 0.75rem;
       font-weight: bold;
       margin: 0 1rem;
-      color: var(--foregroundSecondary);
+      color: var(--colorEmphasisMedium);
     }
 
     .filterList {
@@ -34,7 +34,7 @@
 
     .filterResultCount {
       font-weight: bold;
-      color: var(--foregroundSecondary);
+      color: var(--colorEmphasisMedium);
       padding: 0 0.3rem;
     }
   }

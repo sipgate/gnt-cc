@@ -6,39 +6,32 @@
     text-decoration: none;
     padding: 1rem;
     min-width: 260px;
-    color: #000;
+    color: var(--colorEmphasisMedium);
     opacity: 0.8;
-    transition: opacity 0.2s;
+    transition: color 0.2s;
     border-left: 6px solid transparent;
 
     .name {
       font-weight: bold;
     }
 
-    .host,
+    .hostname,
     .description {
       font-size: 0.8rem;
     }
 
-    .host {
+    .hostname {
       font-family: monospace;
+      white-space: nowrap;
     }
 
     .description {
       white-space: initial;
     }
 
-    &.active {
-      opacity: 0.5;
-    }
-
     &:hover {
-      border-color: var(--activeColorForeground);
-      opacity: 1;
-
-      .name {
-        color: var(--activeColorForeground);
-      }
+      border-color: var(--colorPrimary);
+      color: var(--colorEmphasisHigh);
     }
   }
 }

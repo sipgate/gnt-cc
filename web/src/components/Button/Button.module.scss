@@ -1,18 +1,24 @@
+@import "../../styles/mixins.scss";
+
 $size: 48px;
 $sizeSmall: 28px;
 
 .button {
-  transition: transform 0.2s, opacity 0.2s;
+  position: relative;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 0.75rem;
+  padding: 0 1.5rem;
   height: 48px;
-  background: var(--backgroundSecondary);
-  color: var(--foregroundPrimary);
+  background: var(--colorInteractionBackground);
+  color: var(--colorEmphasisHigh);
   border-radius: 2px;
-  border: 1px solid #a6a6a6;
+  border: 0;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+
+  @include hoverOverlay();
 
   &.danger {
     color: #fff;
@@ -21,7 +27,7 @@ $sizeSmall: 28px;
   }
 
   &.primary {
-    background: var(--activeColorForeground);
+    background: var(--colorPrimary);
     color: #fff;
     border-color: transparent;
   }
@@ -45,10 +51,6 @@ $sizeSmall: 28px;
     &.isSmall {
       border-radius: $sizeSmall / 2;
     }
-  }
-
-  &:hover {
-    opacity: 1;
   }
 
   &.hasSpacing {

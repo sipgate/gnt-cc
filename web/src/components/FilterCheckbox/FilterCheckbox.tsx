@@ -1,5 +1,6 @@
 import React, { ChangeEvent, ReactElement } from "react";
 import styles from "./FilterCheckbox.module.scss";
+import Checkbox from "../Checkbox";
 
 interface FilterCheckboxProps {
   label: string;
@@ -17,8 +18,7 @@ function FilterCheckbox({
   return (
     <label className={[styles.filterCheckbox, className].join(" ")}>
       <span className={styles.label}>{label}</span>
-      <input
-        type="checkbox"
+      <Checkbox
         checked={checked}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           onChange(event.target.checked)

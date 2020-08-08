@@ -7,41 +7,66 @@ import (
 	"strings"
 )
 
-type QueryField struct {
+type ResourceTransformCallback func(ResourceFieldValueMap) error
+
+type ResourceFieldValueMap map[string]interface{}
+
+func queryAndTransformResources(config queryRequestConfig, transformCallback ResourceTransformCallback) error {
+	queryUrl := buildQueryUrl(config.resourceType, config.fields)
+	queryResponse, err := performAndParseQueryRequest(config.clusterConfig, queryUrl)
+
+	if err != nil {
+		return err
+	}
+
+	var resourceFieldValueMap = make(ResourceFieldValueMap)
+
+	for _, resource := range queryResponse.Data {
+		for fieldIndex, field := range queryResponse.Fields {
+			resourceFieldValueMap[field.Name] = resource[fieldIndex][1]
+		}
+
+		err = transformCallback(resourceFieldValueMap)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+type queryField struct {
 	Doc   string `json:"doc"`
 	Kind  string `json:"kind"`
 	Name  string `json:"name"`
 	Title string `json:"title"`
 }
 
-type QueryResponse struct {
-	Fields []QueryField      `json:"fields"`
+type queryResponse struct {
+	Fields []queryField      `json:"fields"`
 	Data   [][][]interface{} `json:"data"`
 }
 
-type QueryMap map[string]interface{}
+type queryRequestConfig struct {
+	clusterConfig config.ClusterConfig
+	resourceType  string
+	fields        []string
+}
 
-func GetQuery(clusterConfig config.ClusterConfig, resource string, fields []string) ([]QueryMap, error) {
-	queryString := fmt.Sprintf("/2/query/%s?fields=%s", resource, strings.Join(fields, ","))
+func buildQueryUrl(resourceType string, fields []string) string {
+	return fmt.Sprintf("/2/query/%s?fields=%s", resourceType, strings.Join(fields, ","))
+}
 
-	httpResponse, err := Get(clusterConfig, queryString)
+func performAndParseQueryRequest(clusterConfig config.ClusterConfig, queryUrl string) (queryResponse, error) {
+	jsonResponse, err := Get(clusterConfig, queryUrl)
 
 	if err != nil {
-		return nil, err
+		return queryResponse{}, err
 	}
 
-	var queryResponse QueryResponse
-	err = json.Unmarshal([]byte(httpResponse), &queryResponse)
+	var response queryResponse
+	err = json.Unmarshal([]byte(jsonResponse), &response)
 
-	var queryEntries = make([]QueryMap, len(queryResponse.Data))
-
-	for index, entry := range queryResponse.Data {
-		queryEntries[index] = make(QueryMap)
-
-		for fieldIndex, field := range queryResponse.Fields {
-			queryEntries[index][field.Name] = entry[fieldIndex][1]
-		}
-	}
-
-	return queryEntries, nil
+	return response, err
 }

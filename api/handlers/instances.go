@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"gnt-cc/config"
-	"gnt-cc/dummy"
 	"gnt-cc/model"
 	"gnt-cc/rapi"
 
@@ -24,18 +23,11 @@ func GetAllInstances(c *gin.Context) {
 		return
 	}
 
-	var instances []model.GntInstance
+	instances, err := rapi.GetInstances(clusterConfig)
 
-	if config.Get().DummyMode {
-		instances = dummy.GetInstances(20)
-	} else {
-		var err error
-		instances, err = rapi.GetInstances(clusterConfig)
-
-		if err != nil {
-			c.AbortWithError(500, err)
-			return
-		}
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
 	}
 
 	c.JSON(200, model.AllInstancesResponse{
@@ -62,18 +54,11 @@ func GetInstance(c *gin.Context) {
 
 	instanceName := c.Param("instance")
 
-	var instance model.GntInstance
+	instance, err := rapi.GetInstance(clusterConfig, instanceName)
 
-	if config.Get().DummyMode {
-		instance = dummy.GetInstance(instanceName)
-	} else {
-		var err error
-		instance, err = rapi.GetInstance(clusterConfig, instanceName)
-
-		if err != nil {
-			c.AbortWithError(500, err)
-			return
-		}
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
 	}
 
 	c.JSON(200, model.InstanceResponse{

@@ -50,3 +50,9 @@ Please use the provided `config.yaml.example` as a template. The service expects
 ### Authentication Backends
 
 Currently gnt-cc supports `builtin` or `ldap` as authentication backends. `builtin` uses a static and plaintext user/passwort list defined in `config.yaml` and should only be used for development. For production environments, use of the `ldap` backend is recommended. The `config.yaml.example` file contains templates for local users as well as LDAP configurations.
+
+## Development
+
+### Ganeti Dummy Cluster
+
+Use [this project](https://github.com/sipgate/ganeti-docker) to setup a fake ganeti cluster on your local machine.

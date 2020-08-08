@@ -43,7 +43,6 @@ type Config struct {
 	JwtExpire            time.Duration
 	AuthenticationMethod string
 	Loglevel             string
-	DummyMode            bool
 	Users                []UserConfig
 	Clusters             []ClusterConfig
 	LDAPConfig           LDAPConfig

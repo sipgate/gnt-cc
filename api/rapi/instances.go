@@ -5,22 +5,7 @@ import (
 	"fmt"
 	"gnt-cc/config"
 	"gnt-cc/model"
-	"gnt-cc/utils"
 )
-
-type rapiInstance struct {
-	Name     string
-	Pnode    string
-	Snodes   []string
-	BeParams struct {
-		AutoBalance    bool
-		SpindleUse     int
-		VCPUs          int
-		MinMem         int
-		MaxMem         int
-		AlwaysFailover bool
-	}
-}
 
 func NewGanetiInstance(instanceDetails CreateInstanceParameters) InstanceCreate {
 	var inst InstanceCreate
@@ -62,43 +47,6 @@ func NewGanetiInstance(instanceDetails CreateInstanceParameters) InstanceCreate 
 	inst.NoInstall = true
 	inst.WaitForSync = false
 	return inst
-}
-
-func GetInstances(clusterConfig config.ClusterConfig) ([]model.GntInstance, error) {
-	fields := []string{
-		"name",
-		"pnode",
-		"snodes",
-		"beparams",
-	}
-
-	response, err := GetQuery(clusterConfig, "instance", fields)
-
-	if err != nil {
-		return nil, err
-	}
-
-	var tmpInstance rapiInstance
-	instances := make([]model.GntInstance, len(response))
-
-	for i, entry := range response {
-		err := utils.ConvertMapToStruct(entry, &tmpInstance)
-
-		if err != nil {
-			return nil, err
-		}
-
-		instances[i] = model.GntInstance{
-			Name:           tmpInstance.Name,
-			PrimaryNode:    tmpInstance.Pnode,
-			SecondaryNodes: tmpInstance.Snodes,
-			Disks:          nil,
-			CpuCount:       tmpInstance.BeParams.VCPUs,
-			MemoryTotal:    tmpInstance.BeParams.MaxMem, // MaxMem correct?
-		}
-	}
-
-	return instances, nil
 }
 
 func GetInstance(clusterConfig config.ClusterConfig, instanceName string) (model.GntInstance, error) {

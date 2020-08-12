@@ -6,23 +6,29 @@ import App from "./App";
 
 createTheme("default", {
   text: {
-    primary: "var(--foregroundPrimary)",
-    secondary: "var(--foregroundSecondary)",
+    primary: "var(--colorEmphasisHigh)",
+    secondary: "var(--colorEmphasisMedium)",
   },
   background: {
-    default: "var(--backgroundPrimary)",
+    default: "var(--colorElevationLow)",
   },
   context: {
-    background: "var(--backgroundSecondary)",
-    text: "var(--foregroundPrimary)",
+    background: "var(--colorElevationMedium)",
+    text: "var(--colorEmphasisHigh)",
   },
   divider: {
-    default: "var(--backgroundSecondary)",
+    default: "var(--colorSeparator)",
+  },
+  button: {
+    default: "var(--colorEmphasisMedium)",
+    focus: "var(--colorInteractionBackground)",
+    hover: "var(--colorInteractionBackground)",
+    disabled: "var(--colorEmphasisLow)",
   },
   action: {
-    button: "rgba(0,0,0,.54)",
-    hover: "rgba(0,0,0,.08)",
-    disabled: "rgba(0,0,0,.12)",
+    button: "var(--colorEmphasisMedium)",
+    hover: "var(--colorEmphasisHigh)",
+    disabled: "var(--colorSeparator)",
   },
 });
 

@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"gnt-cc/config"
-	"gnt-cc/dummy"
 	"gnt-cc/model"
 	"gnt-cc/rapi"
 
@@ -24,18 +23,11 @@ func GetAllNodes(c *gin.Context) {
 		return
 	}
 
-	var nodes []model.GntNode
+	nodes, err := rapi.GetNodes(clusterConfig)
 
-	if config.Get().DummyMode {
-		nodes = dummy.GetNodes(20)
-	} else {
-		var err error
-		nodes, err = rapi.GetNodes(clusterConfig)
-
-		if err != nil {
-			c.AbortWithError(500, err)
-			return
-		}
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
 	}
 
 	c.JSON(200, model.AllNodesResponse{
@@ -55,18 +47,11 @@ func GetNode(c *gin.Context) {
 
 	nodeName := c.Param("node")
 
-	var node model.GntNode
+	node, err := rapi.GetNode(clusterConfig, nodeName)
 
-	if config.Get().DummyMode {
-		node = dummy.GetNode(nodeName)
-	} else {
-		var err error
-		node, err = rapi.GetNode(clusterConfig, nodeName)
-
-		if err != nil {
-			c.AbortWithError(500, err)
-			return
-		}
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
 	}
 
 	c.JSON(200, model.NodeResponse{

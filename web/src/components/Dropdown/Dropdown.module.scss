@@ -1,4 +1,6 @@
-$spacingOuter: 1rem;
+@import "../../styles/mixins.scss";
+
+$spacingOuter: 2rem;
 $spacingInner: 0.5rem;
 $transitionDuration: 0.2s;
 $width: 200px;
@@ -15,12 +17,12 @@ $borderRadius: 2px;
     align-items: center;
     z-index: 1;
     padding: 0 $spacingOuter;
-    background: var(--backgroundPrimary);
-    border-radius: $borderRadius;
-    color: var(--foregroundPrimary);
+    border: 1px solid var(--colorSeparator);
+    border-radius: 24px;
     width: 100%;
     height: 100%;
-    border: 1px solid var(--foregroundSecondary);
+
+    @include hoverOverlay();
 
     .label {
       width: 100%;
@@ -39,19 +41,19 @@ $borderRadius: 2px;
     top: calc(100% + 1rem);
     min-width: $width;
     border-top: 0;
-    background: #fff;
-    box-shadow: 0 0.25rem 1rem var(--shadow);
+    background: var(--colorElevationHigh);
+    box-shadow: var(--dropShadowElevationHigh);
     opacity: 0;
     border-radius: $borderRadius;
     transition: opacity $transitionDuration, visibility 0s $transitionDuration;
     z-index: 99;
 
     .triangle {
-      width: $spacingOuter;
-      height: $spacingOuter;
-      background: #fff;
+      width: 1rem;
+      height: 1rem;
+      background: var(--colorElevationHigh);
       position: absolute;
-      top: $spacingOuter * -0.5;
+      top: -0.5rem;
       right: $spacingOuter;
       transform: rotate(45deg);
     }

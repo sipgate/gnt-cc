@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useClusterName } from "../../helpers/hooks";
-import { GntNode } from "../../api/models";
+import {GntInstance, GntNode} from "../../api/models";
 import { useApi } from "../../api";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import Hero from "../../components/Hero/Hero";
@@ -11,6 +11,8 @@ import Button from "../../components/Button/Button";
 
 interface NodeResponse {
   node: GntNode;
+  primaryInstances: GntInstance[];
+  secondaryInstances: GntInstance[];
 }
 
 const NodeDetail = (): ReactElement => {
@@ -40,12 +42,12 @@ const NodeDetail = (): ReactElement => {
       <ContentWrapper>
         <div>
           <p>Primary Instances on {nodeName}</p>
-          <InstanceList instances={node.primaryInstances} />
+          <InstanceList instances={data.primaryInstances} />
         </div>
 
         <div>
           <p>Secondary Instances on {nodeName}</p>
-          <InstanceList instances={node.secondaryInstances} />
+          <InstanceList instances={data.secondaryInstances} />
         </div>
       </ContentWrapper>
     </>

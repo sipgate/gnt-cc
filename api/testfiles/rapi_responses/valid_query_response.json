@@ -1,0 +1,38 @@
+{
+  "fields": [
+    {
+      "doc": "Instance name",
+      "kind": "text",
+      "name": "name",
+      "title": "Instance"
+    },
+    {
+      "doc": "Primary node",
+      "kind": "text",
+      "name": "pnode",
+      "title": "Primary_node"
+    }
+  ],
+  "data": [
+    [
+      [
+        0,
+        "bart"
+      ],
+      [
+        0,
+        "node4"
+      ]
+    ],
+    [
+      [
+        0,
+        "smithers"
+      ],
+      [
+        0,
+        "node2"
+      ]
+    ]
+  ]
+}

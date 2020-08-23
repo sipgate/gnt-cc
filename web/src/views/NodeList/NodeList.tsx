@@ -13,7 +13,7 @@ import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 
 interface NodesResponse {
   nodes: GntNode[];
-  number_of_nodes: number;
+  numberOfNodes: number;
   cluster: string;
 }
 

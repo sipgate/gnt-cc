@@ -9,7 +9,7 @@ import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 
 interface InstancesResponse {
   cluster: string;
-  number_of_instances: number;
+  numberOfInstances: number;
   instances: GntInstance[];
 }
 

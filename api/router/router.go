@@ -1,8 +1,16 @@
 package router
 
 import (
+	"crypto/tls"
 	auth2 "gnt-cc/auth"
-	"gnt-cc/handlers"
+	"gnt-cc/config"
+	"gnt-cc/controllers"
+	"gnt-cc/middleware"
+	"gnt-cc/query"
+	"gnt-cc/rapi_client"
+	"gnt-cc/repository"
+	"net"
+	"net/http"
 	"time"
 
 	_ "gnt-cc/docs"
@@ -15,47 +23,85 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+func createHTTPClient() *http.Client {
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		Dial: (&net.Dialer{
+			Timeout: 5 * time.Second,
+		}).Dial,
+		TLSHandshakeTimeout: 5 * time.Second,
+	}
+
+	return &http.Client{
+		Timeout:   time.Second * 10,
+		Transport: transport,
+	}
+}
+
+func createRAPIClientFromConfig(configs []config.ClusterConfig) (rapi_client.Client, error) {
+	return rapi_client.New(createHTTPClient(), configs)
+}
+
+func createCORSConfig(url string) gin.HandlerFunc {
+	return cors.New(cors.Config{
+		AllowOrigins:     []string{"*", url},
+		AllowCredentials: true,
+		AllowWebSockets:  true,
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+		MaxAge:           12 * time.Hour,
+	})
+}
+
 func Routes(r *gin.Engine, developmentMode bool) {
+	rapiClient, err := createRAPIClientFromConfig(config.Get().Clusters)
+	if err != nil {
+		panic(err)
+	}
+
+	instanceRepository := repository.InstanceRepository{RAPIClient: rapiClient, QueryPerformer: &query.Performer{}}
+	nodeRepository := repository.NodeRepository{RAPIClient: rapiClient}
+
+	clusterController := controllers.ClusterController{}
+	instanceController := controllers.InstanceController{
+		Repository: &instanceRepository,
+	}
+	nodeController := controllers.NodeController{
+		Repository:         &nodeRepository,
+		InstanceRepository: &instanceRepository,
+	}
+
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
 	if developmentMode {
-		r.Use(cors.New(cors.Config{
-			AllowOrigins:     []string{"*", "http://localhost:8080"},
-			AllowCredentials: true,
-			AllowWebSockets:  true,
-			AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
-			MaxAge:           12 * time.Hour,
-		}))
+		r.Use(createCORSConfig("http://localhost:8080"))
 	}
 
 	authMiddleware := auth2.GetMiddleware()
-
-	r.POST("/v1/login", authMiddleware.LoginHandler)
 
 	r.NoRoute(authMiddleware.MiddlewareFunc(), func(c *gin.Context) {
 		claims := jwt.ExtractClaims(c)
 		log.Warningf("NoRoute claims: %#v\n", claims)
 		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
 	})
-
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	auth := r.Group("/v1")
-	// Refresh time can be longer than token timeout
-	auth.GET("/refresh_token", authMiddleware.RefreshHandler)
+	v1 := r.Group("/v1")
+	v1.POST("/login", authMiddleware.LoginHandler)
+
+	auth := v1.Group("")
 	auth.Use(authMiddleware.MiddlewareFunc())
 	{
-		auth.GET("/clusters", handlers.GetAllClusters)
-		// auth.GET("/clusters/:cluster", handlers.FindCluster)
-		auth.GET("/clusters/:cluster/nodes", handlers.GetAllNodes)
-		auth.GET("/clusters/:cluster/nodes/:node", handlers.GetNode)
-		auth.GET("/clusters/:cluster/instances", handlers.GetAllInstances)
-		auth.GET("/clusters/:cluster/instances/:instance", handlers.GetInstance)
-		// auth.POST("/clusters/:cluster/instance", handlers.CreateInstance)
-		// auth.POST("/clusters/:cluster/instances", handlers.CreateMultipleInstancesHandler)
-		// auth.GET("/clusters/:cluster/console/:instance", handlers.OpenInstanceConsole)
-		auth.GET("/clusters/:cluster/jobs", handlers.GetAllJobs)
-		auth.GET("/clusters/:cluster/job/:jobId", handlers.GetJob)
+		auth.GET("/refresh_token", authMiddleware.RefreshHandler)
+		auth.GET("/clusters", clusterController.GetAll)
+	}
+
+	withCluster := auth.Group("/clusters/:cluster")
+	withCluster.Use(middleware.RequireCluster())
+	{
+		withCluster.GET("/nodes", nodeController.GetAll)
+		withCluster.GET("/nodes/:node", nodeController.Get)
+		withCluster.GET("/instances", instanceController.GetAll)
+		withCluster.GET("/instances/:instance", instanceController.Get)
 	}
 }

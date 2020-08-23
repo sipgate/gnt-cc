@@ -10,8 +10,8 @@ export interface GntNode {
   name: string;
   memoryFree: number;
   memoryTotal: number;
-  primaryInstances: GntInstance[];
-  secondaryInstances: GntInstance[];
+  primaryInstances: string[];
+  secondaryInstances: string[];
 }
 
 export interface GntCluster {

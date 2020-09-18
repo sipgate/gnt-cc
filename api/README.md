@@ -22,7 +22,7 @@ go build
 
 - Test
 ```
-GNT_CC_CONFIG_DIR=../ go test gnt-cc/auth gnt-cc/config gnt-cc/handlers gnt-cc/rapi gnt-cc/utils gnt-cc/websocket -cover
+go test ./... -cover
 ```
 
 ## API Documentation

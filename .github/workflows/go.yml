@@ -42,4 +42,4 @@ jobs:
       run: |
         cd api/
         cp config.example.yaml config.yaml
-        GNT_CC_CONFIG_DIR=../ go test -v gnt-cc/auth gnt-cc/config gnt-cc/handlers gnt-cc/rapi gnt-cc/utils gnt-cc/websocket -cover
+        go test -v ./... -cover

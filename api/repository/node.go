@@ -38,6 +38,8 @@ func (repo *NodeRepository) Get(clusterName string, nodeName string) (model.Node
 			Name:               node.Name,
 			MemoryTotal:        node.Mtotal,
 			MemoryFree:         node.Mfree,
+			DiskTotal:          node.Dtotal,
+			CPUCount:           node.Ctotal,
 			PrimaryInstances:   node.PinstList,
 			SecondaryInstances: node.SinstList,
 		},
@@ -65,6 +67,8 @@ func (repo *NodeRepository) GetAll(clusterName string) ([]model.GntNode, error) 
 			Name:               node.Name,
 			MemoryTotal:        node.Mtotal,
 			MemoryFree:         node.Mfree,
+			DiskTotal:          node.Dtotal,
+			CPUCount:           node.Ctotal,
 			PrimaryInstances:   node.PinstList,
 			SecondaryInstances: node.SinstList,
 		}

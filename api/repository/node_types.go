@@ -6,8 +6,8 @@ type rapiNodeResponse struct {
 	SinstCnt        int         `json:"sinst_cnt"`
 	PinstList       []string    `json:"pinst_list"`
 	SinstList       []string    `json:"sinst_list"`
-	Dtotal          interface{} `json:"dtotal"`
-	Dfree           interface{} `json:"dfree"`
+	Dtotal          int         `json:"dtotal"`
+	Dfree           int         `json:"dfree"`
 	Ctotal          int         `json:"ctotal"`
 	Mtotal          int         `json:"mtotal"`
 	Mfree           int         `json:"mfree"`

@@ -19,6 +19,8 @@ type GntNode struct {
 	Name               string   `json:"name"`
 	MemoryTotal        int      `json:"memoryTotal"`
 	MemoryFree         int      `json:"memoryFree"`
+	DiskTotal          int      `json:"diskTotal"`
+	CPUCount           int      `json:"cpuCount"`
 	PrimaryInstances   []string `json:"primaryInstances"`
 	SecondaryInstances []string `json:"secondaryInstances"`
 }

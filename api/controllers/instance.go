@@ -11,14 +11,14 @@ type InstanceController struct {
 }
 
 // GetAll godoc
-// @Summary Get all instances in a given cluster
+// @Summary Get all nodes in a given cluster
 // @Description ...
 // @Produce json
 // @Success 200 {object} model.AllInstancesResponse
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 404 {object} model.ErrorResponse
 // @Failure 500 {object} model.ErrorResponse
-// @Router /clusters/{cluster}/instances [get]
+// @Router /clusters/{cluster}/nodes [get]
 func (controller *InstanceController) GetAll(c *gin.Context) {
 	clusterName := c.Param("cluster")
 	instances, err := controller.Repository.GetAll(clusterName)
@@ -43,7 +43,7 @@ func (controller *InstanceController) GetAll(c *gin.Context) {
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 404 {object} model.ErrorResponse
 // @Failure 500 {object} model.ErrorResponse
-// @Router /clusters/{cluster}/instances/{instance} [get]
+// @Router /clusters/{cluster}/nodes/{instance} [get]
 func (controller *InstanceController) Get(c *gin.Context) {
 	clusterName := c.Param("cluster")
 	instanceName := c.Param("instance")

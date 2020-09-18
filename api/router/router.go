@@ -69,6 +69,10 @@ func Routes(r *gin.Engine, developmentMode bool) {
 		Repository:         &nodeRepository,
 		InstanceRepository: &instanceRepository,
 	}
+	statisticsController := controllers.StatisticsController{
+		InstanceRepository: &instanceRepository,
+		NodeRepository:     &nodeRepository,
+	}
 
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
@@ -103,5 +107,6 @@ func Routes(r *gin.Engine, developmentMode bool) {
 		withCluster.GET("/nodes/:node", nodeController.Get)
 		withCluster.GET("/instances", instanceController.GetAll)
 		withCluster.GET("/instances/:instance", instanceController.Get)
+		withCluster.GET("/statistics", statisticsController.Get)
 	}
 }

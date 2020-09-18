@@ -1,9 +1,10 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
 	"gnt-cc/model"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type StatisticsController struct {
@@ -11,6 +12,12 @@ type StatisticsController struct {
 	NodeRepository     nodeRepository
 }
 
+// Get godoc
+// @Summary Get statistics for a given cluster
+// @Description Get statistics for a given cluster
+// @Produce json
+// @Success 200 {object} model.StatisticsResponse
+// @Router /clusters/{cluster}/statistics [get]
 func (controller *StatisticsController) Get(c *gin.Context) {
 	clusterName := c.Param("cluster")
 

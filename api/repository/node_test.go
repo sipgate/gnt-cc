@@ -76,12 +76,14 @@ func TestNodeRepoGetAllFuncReturnsNodes(t *testing.T) {
 		Name:               "node1",
 		MemoryTotal:        15709,
 		MemoryFree:         10230,
+		CPUCount:           8,
 		PrimaryInstances:   []string{"burns", "milhouse"},
 		SecondaryInstances: []string{},
 	}, {
 		Name:               "node2",
 		MemoryTotal:        15709,
 		MemoryFree:         10229,
+		CPUCount:           8,
 		PrimaryInstances:   []string{"marge"},
 		SecondaryInstances: []string{},
 	}}, nodes)
@@ -101,6 +103,7 @@ func TestNodeRepoGetFuncReturnsNode(t *testing.T) {
 		Name:               "node1",
 		MemoryTotal:        15709,
 		MemoryFree:         10244,
+		CPUCount:           8,
 		PrimaryInstances:   []string{"burns", "milhouse"},
 		SecondaryInstances: []string{},
 	}, result.Node)

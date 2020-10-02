@@ -102,7 +102,7 @@ func Parse(configPath string) {
 		panic(err)
 	}
 
-	log.SetLevel(parseLogLevel(c.Loglevel))
+	log.SetLevel(parseLogLevel(config.Loglevel))
 
 	err = validateConfig(&config)
 

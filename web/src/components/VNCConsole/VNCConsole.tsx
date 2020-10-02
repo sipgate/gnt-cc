@@ -1,4 +1,7 @@
-import RFB from "@novnc/novnc/core/rfb.js";
+import RFB, {
+  DisconnectCallback,
+  SecurityFailureCallback,
+} from "@novnc/novnc/core/rfb.js";
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import styles from "./VNCConsole.module.scss";
@@ -29,6 +32,20 @@ const VNCConsole = ({ url }: Props): ReactElement => {
   );
   const [connectionError, setConnectionError] = useState<string | null>(null);
 
+  const onConnect = () => setConnectionState(ConnectionState.CONNECTED);
+  const onSecurityFailure: SecurityFailureCallback = ({
+    detail: { reason },
+  }) => {
+    setConnectionError(`Error while connecting: ${reason}`);
+    setConnectionState(ConnectionState.DISCONNECTED);
+  };
+  const onDisconnect: DisconnectCallback = ({ detail: { clean } }) => {
+    if (!clean) {
+      setConnectionError("Unexpected disconnect");
+    }
+    setConnectionState(ConnectionState.DISCONNECTED);
+  };
+
   const attemptConnection = (): void => {
     if (vncContainer.current === null) {
       throw new Error("VNC render Container is null");
@@ -39,31 +56,19 @@ const VNCConsole = ({ url }: Props): ReactElement => {
 
     rfb = createRFB(vncContainer.current, url);
 
-    rfb.addEventListener("connect", () =>
-      setConnectionState(ConnectionState.CONNECTED)
-    );
-    rfb.addEventListener("securityfailure", ({ detail: { reason } }) => {
-      setConnectionError(`Error while connecting: ${reason}`);
-      setConnectionState(ConnectionState.DISCONNECTED);
-    });
-    rfb.addEventListener("disconnect", ({ detail: { clean } }) => {
-      if (!clean) {
-        setConnectionError("Unexpected disconnect");
-      }
-      setConnectionState(ConnectionState.DISCONNECTED);
-    });
+    rfb.addEventListener("connect", onConnect);
+    rfb.addEventListener("securityfailure", onSecurityFailure);
+    rfb.addEventListener("disconnect", onDisconnect);
   };
 
   useEffect(() => {
-    if (rfb) {
-      console.warn("RFB already initialized");
-      return;
-    }
-
     if (vncContainer.current !== null) {
       attemptConnection();
 
       return () => {
+        rfb?.removeEventListener("connect", onConnect);
+        rfb?.removeEventListener("securityfailure", onSecurityFailure);
+        rfb?.removeEventListener("disconnect", onDisconnect);
         rfb?.disconnect();
       };
     }

@@ -42,7 +42,7 @@ export const buildWSURL = (slug: string): string => {
 };
 
 export const getAPIURL = (): string => {
-  return process.env.API_URL || "http://localhost:8000";
+  return process.env.REACT_APP_API_URL || "http://localhost:8000";
 };
 
 const makeRequestInit = (

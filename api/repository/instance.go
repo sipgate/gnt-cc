@@ -41,7 +41,7 @@ func (repo *InstanceRepository) Get(clusterName string, instanceName string) (mo
 	}
 
 	return model.InstanceResult{
-		Found: true,
+		Found:       true,
 		NetworkPort: parsedInstance.NetworkPort,
 		Instance: model.GntInstance{
 			Name:           parsedInstance.Name,
@@ -50,6 +50,7 @@ func (repo *InstanceRepository) Get(clusterName string, instanceName string) (mo
 			CpuCount:       parsedInstance.BeParams.VCPUs,
 			MemoryTotal:    parsedInstance.BeParams.Memory,
 			IsRunning:      parsedInstance.OperState,
+			OffersVNC:      parsedInstance.CustomHvParams.VncBindAddress != "",
 		},
 	}, nil
 }
@@ -63,6 +64,8 @@ func (repo *InstanceRepository) GetAll(clusterName string) ([]model.GntInstance,
 			"pnode",
 			"snodes",
 			"beparams",
+			"oper_state",
+			"custom_hvparams",
 		},
 	})
 
@@ -102,6 +105,8 @@ func parseInstanceResource(resource query.Resource) (model.GntInstance, error) {
 		SecondaryNodes: parsed.Snodes,
 		CpuCount:       parsed.BeParams.VCPUs,
 		MemoryTotal:    parsed.BeParams.MaxMem,
+		IsRunning:      parsed.OperState,
+		OffersVNC:      parsed.CustomHvParams.VncBindAddress != "",
 	}, nil
 }
 

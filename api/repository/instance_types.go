@@ -1,10 +1,12 @@
 package repository
 
 type instanceQueryResource struct {
-	Name     string   `json:"name"`
-	Pnode    string   `json:"pnode"`
-	Snodes   []string `json:"snodes"`
-	BeParams beParams `json:"beparams"`
+	Name           string   `json:"name"`
+	Pnode          string   `json:"pnode"`
+	Snodes         []string `json:"snodes"`
+	BeParams       beParams `json:"beparams"`
+	CustomHvParams hvParams `json:"custom_hvparams"`
+	OperState      bool     `json:"oper_state"`
 }
 
 type ganetiNic struct {

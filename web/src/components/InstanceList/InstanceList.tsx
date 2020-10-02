@@ -8,6 +8,8 @@ import Input from "../Input/Input";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import Button from "../Button/Button";
 import { useFilter, filterInstances } from "./filters";
+import Icon from "../Icon/Icon";
+import { faTerminal } from "@fortawesome/free-solid-svg-icons";
 
 const columns: IDataTableColumn<GntInstance>[] = [
   {
@@ -59,6 +61,21 @@ const columns: IDataTableColumn<GntInstance>[] = [
     width: "90px",
     sortable: true,
     selector: (row) => row.memoryTotal,
+  },
+  {
+    name: "",
+    cell: (row) =>
+      row.offersVnc && (
+        <PrefixLink
+          className={styles.link}
+          title="Open Console"
+          to={`/instances/${row.name}/console`}
+        >
+          <Icon icon={faTerminal} />
+        </PrefixLink>
+      ),
+    width: "48px",
+    sortable: false,
   },
 ];
 

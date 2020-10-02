@@ -4,6 +4,8 @@ export interface GntInstance {
   secondaryNodes: string[];
   cpuCount: number;
   memoryTotal: number;
+  isRunning: boolean;
+  offersVnc: boolean;
 }
 
 export interface GntNode {

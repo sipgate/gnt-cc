@@ -10,7 +10,7 @@ import Login from "./views/Login/Login";
 import AuthContext from "./api/AuthContext";
 import ClusterWrapper from "./views/ClusterWrapper";
 import { ThemeToggle } from "./components/ThemeToggle/ThemeToggle";
-import VNCConsole from "./components/VNCConsole/VNCConsole";
+import VNCPage from "./views/VNCPage/VNCPage";
 
 const STORAGE_TOKEN_KEY = "gnt-cc-token";
 
@@ -66,7 +66,7 @@ function App(): ReactElement {
           <Switch>
             <Route exact path="/login" component={Login} />
 
-            <AuthenticatedRoute path="/vnc/:host?" component={VNCConsole} />
+            <AuthenticatedRoute path="/vnc/:host?" component={VNCPage} />
             <AuthenticatedRoute
               path="/:clusterName?"
               component={ClusterWrapper}

@@ -3,6 +3,7 @@ import RFB from "@novnc/novnc/core/rfb.js";
 import { useParams } from "react-router-dom";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 
 interface Credentials {
   username: string;
@@ -21,76 +22,122 @@ enum ConnectionResult {
   Error = "error",
 }
 
-const attemptConnection = (
+enum ConnectionState {
+  DISCONNECTED,
+  CONNECTING,
+  CONNECTED,
+  AUTHENTICATION_ERROR,
+  GENERIC_ERROR,
+}
+
+type Props = {
+  host: string;
+  port: number;
+};
+
+const createRFB = (
   element: HTMLElement,
   url: string,
   credentials: Credentials
-): Promise<ConnectionResult> => {
-  return new Promise<ConnectionResult>((resolve) => {
-    const rfb = new RFB(element, url, {
-      wsProtocols: ["binary", "base64"],
-      credentials,
-    });
-
-    rfb.addEventListener("connect", () => resolve(ConnectionResult.Connected));
-    rfb.addEventListener("credentialsrequired", () =>
-      resolve(ConnectionResult.AuthenticationFailed)
-    );
-    rfb.addEventListener("securityfailure", ({ detail: { reason } }) => {
-      if (reason === "Authentication failure") {
-        return resolve(ConnectionResult.AuthenticationFailed);
-      }
-
-      resolve(ConnectionResult.SecurityFailure);
-    });
-    rfb.addEventListener("disconnect", (ev) => {
-      if (!ev.detail.clean) {
-        resolve(ConnectionResult.Error);
-      }
-    });
+): RFB => {
+  return new RFB(element, url, {
+    wsProtocols: ["binary", "base64"],
+    credentials: {
+      username: credentials.username || undefined,
+      password: credentials.password || undefined,
+    },
   });
 };
 
-const VNCConsole = (): ReactElement => {
-  const { host } = useParams();
+let rfb: RFB | null = null;
 
+const VNCConsole = ({ host, port }: Props): ReactElement => {
+  const url = `ws://${host}:${port}/websockify`;
   const vncContainer = useRef<HTMLDivElement>(null);
 
-  const [showCredentialPrompt, setShowCredentialPrompt] = useState(false);
   const [credentials, setCredentials] = useState(emptyCredentials);
 
+  const [connectionState, setConnectionState] = useState(
+    ConnectionState.DISCONNECTED
+  );
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+
+  const attemptConnection = (): void => {
+    if (vncContainer.current === null) {
+      throw new Error("VNC render Container is null");
+    }
+
+    setConnectionError(null);
+    setConnectionState(ConnectionState.CONNECTING);
+
+    rfb = createRFB(vncContainer.current, url, credentials);
+
+    rfb.addEventListener("connect", () =>
+      setConnectionState(ConnectionState.CONNECTED)
+    );
+    rfb.addEventListener("credentialsrequired", () =>
+      setConnectionState(ConnectionState.AUTHENTICATION_ERROR)
+    );
+    rfb.addEventListener("securityfailure", ({ detail: { reason } }) => {
+      console.log("VNC: securityfailure");
+      if (reason.toLowerCase().includes("auth")) {
+        setConnectionState(ConnectionState.AUTHENTICATION_ERROR);
+      } else {
+        setConnectionError(`Error while connecting: ${reason}`);
+        setConnectionState(ConnectionState.DISCONNECTED);
+      }
+    });
+    rfb.addEventListener("disconnect", ({ detail: { clean } }) => {
+      console.log("VNC: disconnected");
+
+      if (connectionState === ConnectionState.AUTHENTICATION_ERROR) {
+        // Ignore disconnect event when authentication already failed
+        return;
+      }
+
+      if (!clean) {
+        setConnectionError("Unexpected disconnect");
+      }
+      setConnectionState(ConnectionState.DISCONNECTED);
+    });
+  };
+
   useEffect(() => {
-    if (showCredentialPrompt === true) {
+    if (rfb) {
+      console.warn("RFB already initialized");
       return;
     }
 
     if (vncContainer.current !== null) {
-      attemptConnection(
-        vncContainer.current,
-        `ws://${host}:6901/websockify`,
-        credentials
-      ).then((result) => {
-        console.log(result);
-        if (
-          result === ConnectionResult.AuthenticationFailed ||
-          result === ConnectionResult.SecurityFailure
-        ) {
-          setShowCredentialPrompt(true);
-        }
-      });
+      attemptConnection();
+
+      // return () => {
+      //   TODO
+      //   rfb?.disconnect();
+      // };
     }
-    return () => {
-      //TODO
-    };
-  }, [showCredentialPrompt]);
+  }, []);
 
   if (!host) {
     return <div>Please specify a hostname</div>;
   }
 
-  const renderPasswordPrompt = (): ReactElement => {
+  const renderCredentialPrompt = (): ReactElement => {
     return (
       <>
+        <span>Errow while authenticating. Please check your login...</span>
+        <Input
+          label="Enter Username"
+          name="username"
+          type="text"
+          value={credentials.username}
+          onChange={({ target: { value } }) =>
+            setCredentials({
+              ...credentials,
+              username: value,
+            })
+          }
+        />
         <Input
           label="Enter Password"
           name="password"
@@ -103,18 +150,43 @@ const VNCConsole = (): ReactElement => {
             })
           }
         />
-        <Button
-          label="Try again"
-          onClick={() => setShowCredentialPrompt(false)}
-        />
+        <Button label="Try again" onClick={() => attemptConnection()} />
       </>
     );
   };
 
+  const renderConnectionError = (): ReactElement => {
+    return (
+      <>
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            background: "red",
+            color: "white",
+          }}
+        >
+          {connectionError}
+        </div>
+      </>
+    );
+  };
+
+  if (connectionState === ConnectionState.CONNECTING) {
+  }
+
   return (
     <div>
-      {showCredentialPrompt && renderPasswordPrompt()}
-      <div ref={vncContainer} />
+      {connectionState === ConnectionState.CONNECTING ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          {connectionError && renderConnectionError()}
+          {connectionState === ConnectionState.AUTHENTICATION_ERROR &&
+            renderCredentialPrompt()}
+          <div ref={vncContainer} />
+        </>
+      )}
     </div>
   );
 };

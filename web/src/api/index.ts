@@ -25,8 +25,24 @@ export const buildApiUrl = (slug: string): string => {
     slug = slug.slice(1);
   }
 
-  // TODO: make API url configurable
-  return `http://localhost:8000/v1/${slug}`;
+  return `${getAPIURL()}/v1/${slug}`;
+};
+
+export const buildWSURL = (slug: string): string => {
+  const url = buildApiUrl(slug);
+
+  const parts = url.split("://");
+  const protocol = parts[0];
+
+  if (protocol === "http") {
+    return `ws://${parts[1]}`;
+  }
+
+  return `wss://${parts[1]}`;
+};
+
+export const getAPIURL = (): string => {
+  return process.env.API_URL || "http://localhost:8000";
 };
 
 const makeRequestInit = (

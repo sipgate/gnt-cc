@@ -1,61 +1,28 @@
-import React, {
-  ReactElement,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
 import RFB from "@novnc/novnc/core/rfb.js";
-import { useParams } from "react-router-dom";
-import Input from "../Input/Input";
-import Button from "../Button/Button";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
-import AuthContext from "../../api/AuthContext";
-import { useClusterName } from "../../helpers/hooks";
+import styles from "./VNCConsole.module.scss";
 
-interface Credentials {
-  username: string;
-  password: string;
-}
-
-const emptyCredentials: Credentials = {
-  username: "",
-  password: "",
+type Props = {
+  url: string;
 };
 
 enum ConnectionState {
   DISCONNECTED,
   CONNECTING,
   CONNECTED,
-  AUTHENTICATION_ERROR,
-  GENERIC_ERROR,
 }
 
-const createRFB = (
-  element: HTMLElement,
-  url: string,
-  credentials: Credentials
-): RFB => {
+const createRFB = (element: HTMLElement, url: string): RFB => {
   return new RFB(element, url, {
     wsProtocols: ["binary", "base64"],
-    credentials: {
-      username: credentials.username || undefined,
-      password: credentials.password || undefined,
-    },
   });
 };
 
 let rfb: RFB | null = null;
 
-const VNCConsole = (): ReactElement => {
+const VNCConsole = ({ url }: Props): ReactElement => {
   const vncContainer = useRef<HTMLDivElement>(null);
-  const context = useContext(AuthContext);
-
-  const clusterName = useClusterName();
-  const { instanceName } = useParams();
-  const url = `ws://localhost:8000/v1/clusters/${clusterName}/instances/${instanceName}/console?token=${context.authToken}`;
-
-  const [credentials, setCredentials] = useState(emptyCredentials);
 
   const [connectionState, setConnectionState] = useState(
     ConnectionState.DISCONNECTED
@@ -67,34 +34,19 @@ const VNCConsole = (): ReactElement => {
       throw new Error("VNC render Container is null");
     }
 
-    setConnectionError(null);
+    setConnectionError("");
     setConnectionState(ConnectionState.CONNECTING);
 
-    rfb = createRFB(vncContainer.current, url, credentials);
+    rfb = createRFB(vncContainer.current, url);
 
     rfb.addEventListener("connect", () =>
       setConnectionState(ConnectionState.CONNECTED)
     );
-    rfb.addEventListener("credentialsrequired", () =>
-      setConnectionState(ConnectionState.AUTHENTICATION_ERROR)
-    );
     rfb.addEventListener("securityfailure", ({ detail: { reason } }) => {
-      console.log("VNC: securityfailure");
-      if (reason.toLowerCase().includes("auth")) {
-        setConnectionState(ConnectionState.AUTHENTICATION_ERROR);
-      } else {
-        setConnectionError(`Error while connecting: ${reason}`);
-        setConnectionState(ConnectionState.DISCONNECTED);
-      }
+      setConnectionError(`Error while connecting: ${reason}`);
+      setConnectionState(ConnectionState.DISCONNECTED);
     });
     rfb.addEventListener("disconnect", ({ detail: { clean } }) => {
-      console.log("VNC: disconnected");
-
-      if (connectionState === ConnectionState.AUTHENTICATION_ERROR) {
-        // Ignore disconnect event when authentication already failed
-        return;
-      }
-
       if (!clean) {
         setConnectionError("Unexpected disconnect");
       }
@@ -111,75 +63,32 @@ const VNCConsole = (): ReactElement => {
     if (vncContainer.current !== null) {
       attemptConnection();
 
-      // return () => {
-      //   TODO
-      //   rfb?.disconnect();
-      // };
+      return () => {
+        rfb?.disconnect();
+      };
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url]);
 
-  const renderCredentialPrompt = (): ReactElement => {
-    return (
-      <>
-        <span>Errow while authenticating. Please check your login...</span>
-        <Input
-          label="Enter Username"
-          name="username"
-          type="text"
-          value={credentials.username}
-          onChange={({ target: { value } }) =>
-            setCredentials({
-              ...credentials,
-              username: value,
-            })
-          }
-        />
-        <Input
-          label="Enter Password"
-          name="password"
-          type="password"
-          value={credentials.password}
-          onChange={({ target: { value } }) =>
-            setCredentials({
-              ...credentials,
-              password: value,
-            })
-          }
-        />
-        <Button label="Try again" onClick={() => attemptConnection()} />
-      </>
-    );
-  };
+  const renderConnectionError = (): ReactElement => (
+    <div className={styles.error}>
+      <span>{connectionError}</span>
+    </div>
+  );
 
-  const renderConnectionError = (): ReactElement => {
-    return (
-      <>
-        <div
-          style={{
-            position: "fixed",
-            top: "0",
-            background: "red",
-            color: "white",
-          }}
-        >
-          {connectionError}
-        </div>
-      </>
-    );
-  };
-
-  if (connectionState === ConnectionState.CONNECTING) {
-  }
+  const renderLoadingIndicator = (): ReactElement => (
+    <div className={styles.loading}>
+      <LoadingIndicator />
+    </div>
+  );
 
   return (
-    <>
+    <div className={styles.vncConsole}>
       <div style={{ height: "100vh" }} ref={vncContainer} />
-      {connectionState === ConnectionState.CONNECTING && (
-        <div>
-          <LoadingIndicator />
-        </div>
-      )}
-    </>
+      {connectionState === ConnectionState.CONNECTING &&
+        renderLoadingIndicator()}
+      {connectionError && renderConnectionError()}
+    </div>
   );
 };
 

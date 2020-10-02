@@ -15,6 +15,7 @@ export interface ButtonProps {
   small?: boolean;
   primary?: boolean;
   danger?: boolean;
+  href?: string;
 }
 
 function Button({
@@ -28,6 +29,7 @@ function Button({
   small,
   primary,
   danger,
+  href,
 }: ButtonProps): ReactElement {
   const handleClick = (event: React.MouseEvent) => {
     if (!disabled && onClick) {
@@ -47,6 +49,15 @@ function Button({
       [styles.danger]: !!danger,
     },
   ]);
+
+  if (href) {
+    return (
+      <a href={href} onClick={handleClick} className={buttonClassNames}>
+        {icon && <Icon icon={icon} />}
+        {label && <span className={styles.label}>{label}</span>}
+      </a>
+    );
+  }
 
   return (
     <button

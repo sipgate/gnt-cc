@@ -10,7 +10,6 @@ import Login from "./views/Login/Login";
 import AuthContext from "./api/AuthContext";
 import ClusterWrapper from "./views/ClusterWrapper";
 import { ThemeToggle } from "./components/ThemeToggle/ThemeToggle";
-import VNCPage from "./views/VNCPage/VNCPage";
 
 const STORAGE_TOKEN_KEY = "gnt-cc-token";
 

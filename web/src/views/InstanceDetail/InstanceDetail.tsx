@@ -42,6 +42,16 @@ const InstanceDetail = (): ReactElement => {
         <div>
           <Hero title={instance.name}>
             <div className={styles.actions}>
+              <PrefixLink
+                className={styles.link}
+                to={`/instances/${instance.name}/console`}
+              >
+                <Button
+                  className={styles.action}
+                  label="Open Console"
+                  primary
+                />
+              </PrefixLink>
               <Button className={styles.action} label="Migrate" primary />
               <Button className={styles.action} label="Failover" primary />
               <Button className={styles.action} label="Shutdown" danger />

@@ -1,0 +1,29 @@
+.vncConsole {
+  position: relative;
+
+  .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(#000, 0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    background: var(--colorDanger);
+    color: #fff;
+    text-align: center;
+    display: inline-block;
+    padding: 0.5rem;
+    font-weight: bold;
+  }
+}

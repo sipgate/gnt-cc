@@ -17,6 +17,9 @@ declare module "@novnc/novnc/core/rfb.js" {
   };
 
   export default class RFB {
+    resizeSession: boolean;
+    scaleViewport: boolean;
+
     constructor(target: HTMLElement, url: string, options?: RFBOptions);
 
     disconnect(): void;

@@ -4,9 +4,9 @@ import VNCConsole from "../../components/VNCConsole/VNCConsole";
 
 const VNCPage = (): ReactElement => {
   return (
-    <div>
+      <>
       <VNCConsole />
-    </div>
+      </>
   );
 };
 

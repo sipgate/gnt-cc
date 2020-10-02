@@ -23,13 +23,6 @@ const emptyCredentials: Credentials = {
   password: "",
 };
 
-enum ConnectionResult {
-  AuthenticationFailed = "authentication-failed",
-  Connected = "connected",
-  SecurityFailure = "security-failure",
-  Error = "error",
-}
-
 enum ConnectionState {
   DISCONNECTED,
   CONNECTING,
@@ -179,18 +172,14 @@ const VNCConsole = (): ReactElement => {
   }
 
   return (
-    <div>
-      {connectionState === ConnectionState.CONNECTING ? (
-        <LoadingIndicator />
-      ) : (
-        <>
-          {connectionError && renderConnectionError()}
-          {connectionState === ConnectionState.AUTHENTICATION_ERROR &&
-            renderCredentialPrompt()}
-          <div ref={vncContainer} />
-        </>
+    <>
+      <div style={{ height: "100vh" }} ref={vncContainer} />
+      {connectionState === ConnectionState.CONNECTING && (
+        <div>
+          <LoadingIndicator />
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

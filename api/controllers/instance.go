@@ -6,7 +6,6 @@ import (
 	"gnt-cc/websocket"
 
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 )
 
 type InstanceController struct {
@@ -109,12 +108,10 @@ func (controller *InstanceController) OpenInstanceConsole(c *gin.Context) {
 		return
 	}
 
-	log.Error("Websockets 4 ALL")
-
 	primaryNode := instance.PrimaryNode
-	port := 11430 // TODO: get port from instance
+	port := result.NetworkPort
 
-	err = websocket.Handler(c.Writer, c.Request, primaryNode, port)
+	err = websocket.PassThrough(c.Writer, c.Request, primaryNode, port)
 
 	if err != nil {
 		abortWithInternalServerError(c, err)

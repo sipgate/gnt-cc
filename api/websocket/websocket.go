@@ -27,7 +27,7 @@ func checkAndLogMessage(msgType int) {
 	log.Debugf("Websocket: received message type '%s'", typeStr)
 }
 
-func Handler(w http.ResponseWriter, r *http.Request, host string, port int) error {
+func PassThrough(w http.ResponseWriter, r *http.Request, host string, port int) error {
 	log.Infoln("Upgrading connection to websocket")
 
 	var upgrader = websocket.Upgrader{

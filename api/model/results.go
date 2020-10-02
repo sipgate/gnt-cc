@@ -1,8 +1,9 @@
 package model
 
 type InstanceResult struct {
-	Found    bool
-	Instance GntInstance
+	Found       bool
+	NetworkPort int
+	Instance    GntInstance
 }
 
 type NodeResult struct {

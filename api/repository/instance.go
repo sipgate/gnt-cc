@@ -42,6 +42,7 @@ func (repo *InstanceRepository) Get(clusterName string, instanceName string) (mo
 
 	return model.InstanceResult{
 		Found: true,
+		NetworkPort: parsedInstance.NetworkPort,
 		Instance: model.GntInstance{
 			Name:           parsedInstance.Name,
 			PrimaryNode:    parsedInstance.Pnode,

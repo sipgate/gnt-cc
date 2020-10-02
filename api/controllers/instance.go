@@ -76,9 +76,9 @@ func (controller *InstanceController) Get(c *gin.Context) {
 // OpenInstanceConsole godoc
 // @Summary Open a websocket connection to a cluster instance console
 // @Description ...
-// @Failure 400 {object} httputil.ErrorResponse
-// @Failure 404 {object} httputil.ErrorResponse
-// @Failure 500 {object} httputil.ErrorResponse
+// @Failure 400 {object} model.ErrorResponse
+// @Failure 404 {object} model.ErrorResponse
+// @Failure 500 {object} model.ErrorResponse
 // @Router /clusters/{cluster}/instances/{instance}/console [get]
 func (controller *InstanceController) OpenInstanceConsole(c *gin.Context) {
 	clusterName := c.Param("cluster")

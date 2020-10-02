@@ -11,6 +11,7 @@ import Navbar from "../components/Navbar/Navbar";
 import ClusterNotFound from "../components/ClusterNotFound/ClusterNotFound";
 import NodeDetail from "./NodeDetail/NodeDetail";
 import Instances from "./Instances/Instances";
+import VNCPage from "./VNCPage/VNCPage";
 
 interface ClusterResponse {
   clusters: GntCluster[];
@@ -47,6 +48,10 @@ const ClusterWrapper = (): ReactElement => {
                   exact
                   path={`${path}/`}
                   component={Dashboard}
+                />
+                <AuthenticatedRoute
+                  path={`${path}/instances/:instanceName/console`}
+                  component={VNCPage}
                 />
                 <AuthenticatedRoute
                   path={`${path}/instances/:instanceName`}

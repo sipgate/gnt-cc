@@ -107,6 +107,7 @@ func Routes(r *gin.Engine, developmentMode bool) {
 		withCluster.GET("/nodes/:node", nodeController.Get)
 		withCluster.GET("/instances", instanceController.GetAll)
 		withCluster.GET("/instances/:instance", instanceController.Get)
+		withCluster.GET("/instances/:instance/console", instanceController.OpenInstanceConsole)
 		withCluster.GET("/statistics", statisticsController.Get)
 	}
 }

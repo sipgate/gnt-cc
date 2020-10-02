@@ -76,7 +76,7 @@ func GetMiddleware() (ginJWTMiddleware *jwt.GinJWTMiddleware) {
 		// - "query:<name>"
 		// - "cookie:<name>"
 		// - "param:<name>"
-		TokenLookup: "header: Authorization, query: token, cookie: jwt, param: token",
+		TokenLookup: "header:Authorization, query:token, cookie:jwt, param:token",
 		// TokenLookup: "query:token",
 		// TokenLookup: "cookie:token",
 

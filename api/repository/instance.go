@@ -48,6 +48,7 @@ func (repo *InstanceRepository) Get(clusterName string, instanceName string) (mo
 			SecondaryNodes: parsedInstance.Snodes,
 			CpuCount:       parsedInstance.BeParams.VCPUs,
 			MemoryTotal:    parsedInstance.BeParams.Memory,
+			IsRunning:      parsedInstance.OperState,
 		},
 	}, nil
 }

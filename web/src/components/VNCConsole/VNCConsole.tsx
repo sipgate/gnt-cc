@@ -1,9 +1,17 @@
-import React, { ReactElement, useEffect, useRef, useState } from "react";
+import React, {
+  ReactElement,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import RFB from "@novnc/novnc/core/rfb.js";
 import { useParams } from "react-router-dom";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
+import AuthContext from "../../api/AuthContext";
+import { useClusterName } from "../../helpers/hooks";
 
 interface Credentials {
   username: string;
@@ -30,11 +38,6 @@ enum ConnectionState {
   GENERIC_ERROR,
 }
 
-type Props = {
-  host: string;
-  port: number;
-};
-
 const createRFB = (
   element: HTMLElement,
   url: string,
@@ -51,9 +54,13 @@ const createRFB = (
 
 let rfb: RFB | null = null;
 
-const VNCConsole = ({ host, port }: Props): ReactElement => {
-  const url = `ws://${host}:${port}/websockify`;
+const VNCConsole = (): ReactElement => {
   const vncContainer = useRef<HTMLDivElement>(null);
+  const context = useContext(AuthContext);
+
+  const clusterName = useClusterName();
+  const { instanceName } = useParams();
+  const url = `ws://localhost:8000/v1/clusters/${clusterName}/instances/${instanceName}/console?token=${context.authToken}`;
 
   const [credentials, setCredentials] = useState(emptyCredentials);
 
@@ -117,10 +124,6 @@ const VNCConsole = ({ host, port }: Props): ReactElement => {
       // };
     }
   }, []);
-
-  if (!host) {
-    return <div>Please specify a hostname</div>;
-  }
 
   const renderCredentialPrompt = (): ReactElement => {
     return (

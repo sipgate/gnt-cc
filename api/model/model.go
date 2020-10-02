@@ -6,6 +6,7 @@ type GntInstance struct {
 	SecondaryNodes []string `json:"secondaryNodes"`
 	CpuCount       int      `json:"cpuCount"`
 	MemoryTotal    int      `json:"memoryTotal"`
+	IsRunning      bool     `json:"isRunning"`
 }
 
 type GntCluster struct {

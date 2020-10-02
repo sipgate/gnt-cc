@@ -66,7 +66,6 @@ function App(): ReactElement {
           <Switch>
             <Route exact path="/login" component={Login} />
 
-            <AuthenticatedRoute path="/vnc/:host?" component={VNCPage} />
             <AuthenticatedRoute
               path="/:clusterName?"
               component={ClusterWrapper}

@@ -48,58 +48,58 @@ func Handler(w http.ResponseWriter, r *http.Request, host string, port int) erro
 		return err
 	}
 
-	spiceSrv, err := net.Dial("tcp", host+":"+strconv.Itoa(port))
-	log.Infof("Connecting to spice target %s:%d", host, port)
+	remoteSrv, err := net.Dial("tcp", host+":"+strconv.Itoa(port))
+	log.Infof("Connecting to remote target %s:%d", host, port)
 	if err != nil {
-		log.Errorf("Failed to connect to spice target: %s", err)
+		log.Errorf("Failed to connect to remote target: %s", err)
 		conn.Close()
 		return err
 	}
 
 	go func() {
-		defer spiceSrv.Close()
+		defer remoteSrv.Close()
 		defer conn.Close()
 		counter := 0
 		for {
 			counter++
-			log.Debugf("Spice2Websocket: Loop #%d", counter)
+			log.Debugf("node->gnt-cc: Loop #%d", counter)
 			buf := make([]byte, 1024)
-			size, err := spiceSrv.Read(buf)
+			size, err := remoteSrv.Read(buf)
 			if err != nil {
-				log.Warningf("Spice2Websocket: failed to read from spice socket: %s", err)
+				log.Warningf("node->gnt-cc: failed to read from remote socket: %s", err)
 				return
 			}
 			data := buf[:size]
-			log.Debugf("Spice2Websocket: Writing %d Bytes to websocket", len(data))
+			log.Debugf("node->gnt-cc: Writing %d Bytes to websocket", len(data))
 			err = conn.WriteMessage(websocket.BinaryMessage, data)
 			if err != nil {
-				log.Warningf("Spice2Websocket: failed to write to websocket: %s", err)
+				log.Warningf("node->gnt-cc: failed to write to websocket: %s", err)
 				return
 			}
 		}
 	}()
 
 	go func() {
-		defer spiceSrv.Close()
+		defer remoteSrv.Close()
 		defer conn.Close()
 		counter := 0
 		for {
 			counter++
-			log.Debugf("Websocket2Spice: Loop #%d", counter)
+			log.Debugf("gnt-cc->node: Loop #%d", counter)
 			msgType, message, err := conn.ReadMessage()
 			if _, ok := err.(*websocket.CloseError); ok {
-				log.Debug("Websocket2Spice: closing websocket")
+				log.Debug("gnt-cc->node: closing websocket")
 				return
 			}
 			if err != nil {
-				log.Warningf("Websocket2Spice: failed to read websocket message: %s", err)
+				log.Warningf("gnt-cc->node: failed to read websocket message: %s", err)
 				return
 			}
 			checkAndLogMessage(msgType)
-			log.Debugf("Websocket2Spice: Writing %d Bytes to spice socket", len(message))
-			_, err = spiceSrv.Write(message)
+			log.Debugf("gnt-cc->node: Writing %d Bytes to remote socket", len(message))
+			_, err = remoteSrv.Write(message)
 			if err != nil {
-				log.Warningf("Websocket2Spice: failed to write to spice socket: %s", err)
+				log.Warningf("gnt-cc->node: failed to write to remote socket: %s", err)
 				return
 			}
 		}

@@ -120,5 +120,4 @@ func (controller *InstanceController) OpenInstanceConsole(c *gin.Context) {
 		abortWithInternalServerError(c, err)
 		return
 	}
-	c.JSON(200, struct{ Name string }{Name: "lala"})
 }

@@ -98,18 +98,26 @@ func TestInstanceRepoGetAllFuncCorrectlyReturnsInstances_WhenAValidRAPIResponseW
 	queryPerformer.On("Perform", mock.Anything, query.RequestConfig{
 		ClusterName:  "test1",
 		ResourceType: "instance",
-		Fields:       []string{"name", "pnode", "snodes", "beparams"},
+		Fields:       []string{"name", "pnode", "snodes", "beparams", "oper_state", "custom_hvparams"},
 	}).
 		Once().Return([]query.Resource{{
-		"name":     "bart",
-		"pnode":    "node4",
-		"snodes":   []string{"node1", "node2"},
-		"beparams": partialBeParams,
+		"name":       "bart",
+		"pnode":      "node4",
+		"snodes":     []string{"node1", "node2"},
+		"beparams":   partialBeParams,
+		"oper_state": false,
+		"custom_hvparams": map[string]interface{}{
+			"vnc_bind_address": "",
+		},
 	}, {
-		"name":     "smithers",
-		"pnode":    "node2",
-		"snodes":   []string{"node4"},
-		"beparams": partialBeParams,
+		"name":       "smithers",
+		"pnode":      "node2",
+		"snodes":     []string{"node4"},
+		"beparams":   partialBeParams,
+		"oper_state": true,
+		"custom_hvparams": map[string]interface{}{
+			"vnc_bind_address": "test",
+		},
 	}}, nil)
 
 	repo := repository.InstanceRepository{QueryPerformer: queryPerformer}
@@ -123,6 +131,8 @@ func TestInstanceRepoGetAllFuncCorrectlyReturnsInstances_WhenAValidRAPIResponseW
 			SecondaryNodes: []string{"node1", "node2"},
 			MemoryTotal:    1024,
 			CpuCount:       2,
+			OffersVNC:      false,
+			IsRunning:      false,
 		},
 		{
 			Name:           "smithers",
@@ -130,6 +140,8 @@ func TestInstanceRepoGetAllFuncCorrectlyReturnsInstances_WhenAValidRAPIResponseW
 			SecondaryNodes: []string{"node4"},
 			MemoryTotal:    1024,
 			CpuCount:       2,
+			OffersVNC:      true,
+			IsRunning:      true,
 		},
 	}, allInstances)
 }

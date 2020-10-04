@@ -5,7 +5,7 @@ import AuthContext from "../../api/AuthContext";
 import VNCConsole from "../../components/VNCConsole/VNCConsole";
 import { useClusterName } from "../../helpers/hooks";
 
-const VNCPage = (): ReactElement => {
+const InstanceConsole = (): ReactElement => {
   const clusterName = useClusterName();
   const { instanceName } = useParams<{ instanceName: string }>();
   const { authToken } = useContext(AuthContext);
@@ -17,4 +17,4 @@ const VNCPage = (): ReactElement => {
   return <VNCConsole url={url} />;
 };
 
-export default VNCPage;
+export default InstanceConsole;

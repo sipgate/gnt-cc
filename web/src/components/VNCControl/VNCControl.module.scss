@@ -1,0 +1,29 @@
+$width: 64px;
+
+.wrapper {
+  width: $width;
+  background: var(--colorElevationLow);
+  box-shadow: var(--dropShadowElevationLow);
+
+  &.connected {
+    .button {
+      color: var(--colorEmphasisHigh);
+      cursor: pointer;
+
+      &:hover {
+        background: var(--colorInteractionBackground);
+      }
+    }
+  }
+
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: $width;
+    height: $width;
+    border: 0;
+    background: transparent;
+    color: var(--colorEmphasisMedium);
+  }
+}

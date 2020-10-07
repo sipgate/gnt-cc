@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/websocket"
 	log "github.com/sirupsen/logrus"
@@ -66,6 +67,10 @@ func PassThrough(w http.ResponseWriter, r *http.Request, host string, port int) 
 			buf := make([]byte, 1024)
 			size, err := remoteSrv.Read(buf)
 			if err != nil {
+				if strings.HasSuffix(err.Error(), ": use of closed network connection") {
+					log.Debug("node->gnt-cc: the remote side has closed the connection")
+					return
+				}
 				log.Warningf("node->gnt-cc: failed to read from remote socket: %s", err)
 				return
 			}
@@ -73,6 +78,10 @@ func PassThrough(w http.ResponseWriter, r *http.Request, host string, port int) 
 			log.Debugf("node->gnt-cc: Writing %d Bytes to websocket", len(data))
 			err = conn.WriteMessage(websocket.BinaryMessage, data)
 			if err != nil {
+				if strings.HasSuffix(err.Error(), ": use of closed network connection") {
+					log.Debug("node->gnt-cc: the remote side has closed the connection")
+					return
+				}
 				log.Warningf("node->gnt-cc: failed to write to websocket: %s", err)
 				return
 			}
@@ -92,6 +101,10 @@ func PassThrough(w http.ResponseWriter, r *http.Request, host string, port int) 
 				return
 			}
 			if err != nil {
+				if strings.HasSuffix(err.Error(), ": use of closed network connection") {
+					log.Debug("node->gnt-cc: the remote side has closed the connection")
+					return
+				}
 				log.Warningf("gnt-cc->node: failed to read websocket message: %s", err)
 				return
 			}
@@ -99,6 +112,10 @@ func PassThrough(w http.ResponseWriter, r *http.Request, host string, port int) 
 			log.Debugf("gnt-cc->node: Writing %d Bytes to remote socket", len(message))
 			_, err = remoteSrv.Write(message)
 			if err != nil {
+				if strings.HasSuffix(err.Error(), ": use of closed network connection") {
+					log.Debug("node->gnt-cc: the remote side has closed the connection")
+					return
+				}
 				log.Warningf("gnt-cc->node: failed to write to remote socket: %s", err)
 				return
 			}

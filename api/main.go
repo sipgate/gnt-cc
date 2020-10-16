@@ -8,6 +8,7 @@ import (
 
 	_ "gnt-cc/docs"
 
+	rice "github.com/GeertJohan/go.rice"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -37,8 +38,12 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
+	appBox := rice.MustFindBox("../web/build")
+	staticBox := rice.MustFindBox("../web/build/static")
+
 	r := gin.New()
-	router.Routes(r, config.Get().DevelopmentMode)
+	router.InitTemplates(r, appBox)
+	router.APIRoutes(r, staticBox, config.Get().DevelopmentMode)
 
 	bindInfo := config.Get().Bind + ":" + strconv.Itoa(config.Get().Port)
 	log.Infof("Starting HTTP server on %s", bindInfo)

@@ -2,6 +2,7 @@ package router
 
 import (
 	"crypto/tls"
+	rice "github.com/GeertJohan/go.rice"
 	auth2 "gnt-cc/auth"
 	"gnt-cc/config"
 	"gnt-cc/controllers"
@@ -9,16 +10,16 @@ import (
 	"gnt-cc/query"
 	"gnt-cc/rapi_client"
 	"gnt-cc/repository"
+	"html/template"
 	"net"
 	"net/http"
+	"strings"
 	"time"
 
 	_ "gnt-cc/docs"
 
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -52,7 +53,23 @@ func createCORSConfig(url string) gin.HandlerFunc {
 	})
 }
 
-func Routes(r *gin.Engine, developmentMode bool) {
+func InitTemplates(r *gin.Engine, box *rice.Box) {
+	var err error
+	var tmpl string
+	var message *template.Template
+
+	if tmpl, err = box.String("index.html"); err != nil {
+		panic(err)
+	}
+
+	if message, err = template.New("index.html").Parse(tmpl); err != nil {
+		panic(err)
+	}
+
+	r.SetHTMLTemplate(message)
+}
+
+func APIRoutes(r *gin.Engine, staticBox *rice.Box, developmentMode bool) {
 	rapiClient, err := createRAPIClientFromConfig(config.Get().Clusters)
 	if err != nil {
 		panic(err)
@@ -83,15 +100,12 @@ func Routes(r *gin.Engine, developmentMode bool) {
 
 	authMiddleware := auth2.GetMiddleware()
 
-	r.NoRoute(authMiddleware.MiddlewareFunc(), func(c *gin.Context) {
-		claims := jwt.ExtractClaims(c)
-		log.Warningf("NoRoute claims: %#v\n", claims)
-		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
-	})
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	v1 := r.Group("/v1")
-	v1.POST("/login", authMiddleware.LoginHandler)
+	v1 := r.Group("/api/v1")
+	{
+		v1.POST("/login", authMiddleware.LoginHandler)
+	}
 
 	auth := v1.Group("")
 	auth.Use(authMiddleware.MiddlewareFunc())
@@ -110,4 +124,16 @@ func Routes(r *gin.Engine, developmentMode bool) {
 		withCluster.GET("/instances/:instance/console", instanceController.OpenInstanceConsole)
 		withCluster.GET("/statistics", statisticsController.Get)
 	}
+
+	r.StaticFS("/static", staticBox.HTTPBox())
+	r.NoRoute(func(c *gin.Context) {
+		path := c.Request.URL.Path
+
+		if strings.HasPrefix(path, "/api") {
+			c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
+			return
+		}
+
+		c.HTML(http.StatusOK, "index.html", gin.H{})
+	})
 }

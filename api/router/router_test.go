@@ -20,7 +20,7 @@ import (
 
 func login(username string, password string) (int, string) {
 	r := gin.New()
-	router.Routes(r, false)
+	router.APIRoutes(r, false)
 
 	recorder := httptest.NewRecorder()
 	login, _ := json.Marshal(auth.Credentials{

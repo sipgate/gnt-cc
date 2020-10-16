@@ -20,29 +20,25 @@ export interface RequestConfig {
   method?: HttpMethod;
 }
 
-export const buildApiUrl = (slug: string): string => {
+const stripLeadingSlug = (slug: string): string => {
   if (slug.length > 0 && slug[0] === "/") {
-    slug = slug.slice(1);
+    return slug.slice(1);
   }
 
-  return `${getAPIURL()}/v1/${slug}`;
+  return slug;
+};
+
+export const buildApiUrl = (slug: string): string => {
+  return `/api/v1/${stripLeadingSlug(slug)}`;
 };
 
 export const buildWSURL = (slug: string): string => {
-  const url = buildApiUrl(slug);
+  const { hostname, port, protocol } = window.location;
 
-  const parts = url.split("://");
-  const protocol = parts[0];
+  console.log(protocol);
 
-  if (protocol === "http") {
-    return `ws://${parts[1]}`;
-  }
-
-  return `wss://${parts[1]}`;
-};
-
-export const getAPIURL = (): string => {
-  return process.env.REACT_APP_API_URL || "http://localhost:8000";
+  const wsProtocol = protocol === "http:" ? "ws:" : "wss:";
+  return `${wsProtocol}//${hostname}:${port}/api/v1/${stripLeadingSlug(slug)}`;
 };
 
 const makeRequestInit = (

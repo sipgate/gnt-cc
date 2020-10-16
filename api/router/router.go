@@ -18,11 +18,50 @@ import (
 
 	_ "gnt-cc/docs"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+type router struct {
+	engine               *gin.Engine
+	clusterController    controllers.ClusterController
+	instanceController   controllers.InstanceController
+	statisticsController controllers.StatisticsController
+	nodeController       controllers.NodeController
+}
+
+func New(engine *gin.Engine) *router {
+	engine.Use(gin.Logger())
+	engine.Use(gin.Recovery())
+
+	rapiClient, err := createRAPIClientFromConfig(config.Get().Clusters)
+	if err != nil {
+		panic(err)
+	}
+
+	instanceRepository := repository.InstanceRepository{RAPIClient: rapiClient, QueryPerformer: &query.Performer{}}
+	nodeRepository := repository.NodeRepository{RAPIClient: rapiClient}
+
+	r := router{
+		engine: engine,
+	}
+
+	r.clusterController = controllers.ClusterController{}
+	r.instanceController = controllers.InstanceController{
+		Repository: &instanceRepository,
+	}
+	r.nodeController = controllers.NodeController{
+		Repository:         &nodeRepository,
+		InstanceRepository: &instanceRepository,
+	}
+	r.statisticsController = controllers.StatisticsController{
+		InstanceRepository: &instanceRepository,
+		NodeRepository:     &nodeRepository,
+	}
+
+	return &r
+}
 
 func createHTTPClient() *http.Client {
 	transport := &http.Transport{
@@ -43,17 +82,7 @@ func createRAPIClientFromConfig(configs []config.ClusterConfig) (rapi_client.Cli
 	return rapi_client.New(createHTTPClient(), configs)
 }
 
-func createCORSConfig(url string) gin.HandlerFunc {
-	return cors.New(cors.Config{
-		AllowOrigins:     []string{"*", url},
-		AllowCredentials: true,
-		AllowWebSockets:  true,
-		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
-		MaxAge:           12 * time.Hour,
-	})
-}
-
-func InitTemplates(r *gin.Engine, box *rice.Box) {
+func (r *router) InitTemplates(box *rice.Box) {
 	var err error
 	var tmpl string
 	var message *template.Template
@@ -66,43 +95,15 @@ func InitTemplates(r *gin.Engine, box *rice.Box) {
 		panic(err)
 	}
 
-	r.SetHTMLTemplate(message)
+	r.engine.SetHTMLTemplate(message)
 }
 
-func APIRoutes(r *gin.Engine, staticBox *rice.Box, developmentMode bool) {
-	rapiClient, err := createRAPIClientFromConfig(config.Get().Clusters)
-	if err != nil {
-		panic(err)
-	}
-
-	instanceRepository := repository.InstanceRepository{RAPIClient: rapiClient, QueryPerformer: &query.Performer{}}
-	nodeRepository := repository.NodeRepository{RAPIClient: rapiClient}
-
-	clusterController := controllers.ClusterController{}
-	instanceController := controllers.InstanceController{
-		Repository: &instanceRepository,
-	}
-	nodeController := controllers.NodeController{
-		Repository:         &nodeRepository,
-		InstanceRepository: &instanceRepository,
-	}
-	statisticsController := controllers.StatisticsController{
-		InstanceRepository: &instanceRepository,
-		NodeRepository:     &nodeRepository,
-	}
-
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
-
-	if developmentMode {
-		r.Use(createCORSConfig("http://localhost:8080"))
-	}
-
+func (r *router) SetupAPIRoutes(staticBox *rice.Box) {
 	authMiddleware := auth2.GetMiddleware()
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	v1 := r.Group("/api/v1")
+	v1 := r.engine.Group("/api/v1")
 	{
 		v1.POST("/login", authMiddleware.LoginHandler)
 	}
@@ -111,22 +112,22 @@ func APIRoutes(r *gin.Engine, staticBox *rice.Box, developmentMode bool) {
 	auth.Use(authMiddleware.MiddlewareFunc())
 	{
 		auth.GET("/refresh_token", authMiddleware.RefreshHandler)
-		auth.GET("/clusters", clusterController.GetAll)
+		auth.GET("/clusters", r.clusterController.GetAll)
 	}
 
 	withCluster := auth.Group("/clusters/:cluster")
 	withCluster.Use(middleware.RequireCluster())
 	{
-		withCluster.GET("/nodes", nodeController.GetAll)
-		withCluster.GET("/nodes/:node", nodeController.Get)
-		withCluster.GET("/instances", instanceController.GetAll)
-		withCluster.GET("/instances/:instance", instanceController.Get)
-		withCluster.GET("/instances/:instance/console", instanceController.OpenInstanceConsole)
-		withCluster.GET("/statistics", statisticsController.Get)
+		withCluster.GET("/nodes", r.nodeController.GetAll)
+		withCluster.GET("/nodes/:node", r.nodeController.Get)
+		withCluster.GET("/instances", r.instanceController.GetAll)
+		withCluster.GET("/instances/:instance", r.instanceController.Get)
+		withCluster.GET("/instances/:instance/console", r.instanceController.OpenInstanceConsole)
+		withCluster.GET("/statistics", r.statisticsController.Get)
 	}
 
-	r.StaticFS("/static", staticBox.HTTPBox())
-	r.NoRoute(func(c *gin.Context) {
+	r.engine.StaticFS("/static", staticBox.HTTPBox())
+	r.engine.NoRoute(func(c *gin.Context) {
 		path := c.Request.URL.Path
 
 		if strings.HasPrefix(path, "/api") {

@@ -41,13 +41,14 @@ func main() {
 	appBox := rice.MustFindBox("../web/build")
 	staticBox := rice.MustFindBox("../web/build/static")
 
-	r := gin.New()
-	router.InitTemplates(r, appBox)
-	router.APIRoutes(r, staticBox, config.Get().DevelopmentMode)
+	engine := gin.New()
+	r := router.New(engine)
+	r.InitTemplates(appBox)
+	r.SetupAPIRoutes(staticBox)
 
 	bindInfo := config.Get().Bind + ":" + strconv.Itoa(config.Get().Port)
 	log.Infof("Starting HTTP server on %s", bindInfo)
-	if err := http.ListenAndServe(bindInfo, r); err != nil {
+	if err := http.ListenAndServe(bindInfo, engine); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 # An example hook script to verify what is about to be pushed.  Called by "git
 # push" after it has checked the remote status, but before anything has been
 # pushed.  If this script exits with a non-zero status nothing will be pushed.
@@ -32,6 +34,3 @@ cd "$WORK_DIR/api" && go test ./...
 
 echo "Executing yarn linting..."
 cd "$WORK_DIR/web" && yarn lint
-
-echo "Executing yarn tests..."
-cd "$WORK_DIR/web" && yarn test

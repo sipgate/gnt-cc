@@ -4,8 +4,9 @@
 # Built documentation
 /docs/
 
-# Binaries
+# Binaries & built files
 /gnt-cc
+/dist
 
 # Rice stuff
 rice-box.go

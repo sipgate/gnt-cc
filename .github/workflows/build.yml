@@ -46,8 +46,19 @@ jobs:
           go test -v ./... -cover
 
       - name: Build
+        if: !startsWith(github.ref, 'refs/tags/v')
         run: |
           cd api/
           swag init
           rice embed-go
           go build -v .
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: goreleaser/goreleaser-action@v2
+          with:
+            version: latest
+            args: release --rm-dist
+            workdir: ./api
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -54,7 +54,7 @@ func TestStatisticsController_Get(t *testing.T) {
 		name string
 
 		instanceRepositoryReturns instanceReturnValues
-		nodeRepositoryReturns nodeReturnValues
+		nodeRepositoryReturns     nodeReturnValues
 
 		expectedReturnCode int
 		expectedData       interface{}
@@ -92,7 +92,7 @@ func TestStatisticsController_Get(t *testing.T) {
 			nodeRepositoryReturns: nodeReturnValues{},
 
 			expectedReturnCode: http.StatusInternalServerError,
-			expectedData: model.ErrorResponse{Message: "internal server error"},
+			expectedData:       model.ErrorResponse{Message: "internal server error"},
 		},
 		{
 			name: "Expect 500 when node repository returns error",
@@ -103,7 +103,7 @@ func TestStatisticsController_Get(t *testing.T) {
 			},
 
 			expectedReturnCode: http.StatusInternalServerError,
-			expectedData: model.ErrorResponse{Message: "internal server error"},
+			expectedData:       model.ErrorResponse{Message: "internal server error"},
 		},
 	}
 	for _, tt := range tests {

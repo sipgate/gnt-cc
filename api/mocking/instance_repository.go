@@ -24,4 +24,3 @@ func (mock *instanceRepository) GetAll(clusterName string) ([]model.GntInstance,
 
 	return args.Get(0).([]model.GntInstance), args.Error(1)
 }
-

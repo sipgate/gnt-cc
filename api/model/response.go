@@ -37,12 +37,12 @@ type ErrorResponse struct {
 }
 
 type StatisticsElement struct {
-	Count             int `json:"count"`
-	MemoryTotal       int `json:"memoryTotal"`
-	CPUCount          int `json:"cpuCount"`
+	Count       int `json:"count"`
+	MemoryTotal int `json:"memoryTotal"`
+	CPUCount    int `json:"cpuCount"`
 }
 
 type StatisticsResponse struct {
 	Instances StatisticsElement `json:"instances"`
-	Nodes StatisticsElement `json:"nodes"`
+	Nodes     StatisticsElement `json:"nodes"`
 }

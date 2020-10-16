@@ -1,4 +1,4 @@
-[*.{js,ts,vue}]
+[*.{sh,md,json}]
 indent_style = space
 indent_size = 2
 end_of_line = lf

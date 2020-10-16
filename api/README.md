@@ -6,7 +6,7 @@ An API wrapper with local/ldap authentication around one or more Ganeti RAPI bac
 
 - Init your swag
 ```
-go get -u github.com/swaggo/swag/cmd/swag
+go get github.com/swaggo/swag/cmd/swag
 swag init
 ```
 

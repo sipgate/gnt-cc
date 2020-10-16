@@ -2,8 +2,8 @@ before:
   hooks:
     - cp ../README.md ./README.md
     - cp ../LICENSE ./LICENSE
-    - go get -u github.com/swaggo/swag/cmd/swag
-    - go get -u github.com/GeertJohan/go.rice/rice
+    - go get github.com/swaggo/swag/cmd/swag
+    - go get github.com/GeertJohan/go.rice/rice
     - go mod download
     - swag init
     - rice embed-go

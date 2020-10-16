@@ -1,5 +1,6 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import RFB, {
+  CredentialsRequiredCallback,
   DisconnectCallback,
   SecurityFailureCallback,
 } from "@novnc/novnc/core/rfb.js";
@@ -8,7 +9,10 @@ import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 import VNCControl from "../VNCControl/VNCControl";
+import VNCCredentialsPrompt from "../VNCCredentialsPrompt/VNCCredentialsPrompt";
 import styles from "./VNCConsole.module.scss";
+
+const supportsPasting = () => navigator.clipboard.readText !== undefined;
 
 type Props = {
   url: string;
@@ -16,13 +20,37 @@ type Props = {
 
 enum ConnectionState {
   DISCONNECTED,
+  AUTHENTICATION_FAILED,
   CONNECTING,
   CONNECTED,
 }
 
-const createRFB = (element: HTMLElement, url: string): RFB => {
+type Credentials = {
+  username: string;
+  password: string;
+};
+
+const emptyCredentials: Credentials = {
+  username: "",
+  password: "vncpassword",
+};
+
+const toVNCCredentials = ({
+  username,
+  password,
+}: Credentials): { username?: string; password?: string } => ({
+  username: username || undefined,
+  password: password || undefined,
+});
+
+const createRFB = (
+  element: HTMLElement,
+  url: string,
+  credentials: Credentials
+): RFB => {
   return new RFB(element, url, {
-    wsProtocols: ["binary", "base64"],
+    wsProtocols: ["binary"],
+    credentials: toVNCCredentials(credentials),
   });
 };
 
@@ -35,23 +63,32 @@ const VNCConsole = ({ url }: Props): ReactElement => {
     ConnectionState.DISCONNECTED
   );
   const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [credentials, setCredentials] = useState<Credentials>(emptyCredentials);
 
   const onConnect = () => setConnectionState(ConnectionState.CONNECTED);
-  const onSecurityFailure: SecurityFailureCallback = ({
-    detail: { reason },
-  }) => {
-    setConnectionError(`Error while connecting: ${reason}`);
-    setConnectionState(ConnectionState.DISCONNECTED);
-  };
+  const onSecurityFailure: SecurityFailureCallback = () =>
+    setConnectionState(ConnectionState.AUTHENTICATION_FAILED);
   const onDisconnect: DisconnectCallback = ({ detail: { clean } }) => {
     if (!clean) {
-      setConnectionError(
-        connectionState === ConnectionState.CONNECTED
-          ? "Unexpected disconnect"
-          : "Cannot establish connection"
-      );
+      setConnectionError("Unexpected disconnect");
     }
     setConnectionState(ConnectionState.DISCONNECTED);
+  };
+  const onCredentialsRequired: CredentialsRequiredCallback = () => {
+    setConnectionState(ConnectionState.AUTHENTICATION_FAILED);
+  };
+
+  const disconnect = () => {
+    if (!rfb) {
+      return;
+    }
+
+    setCredentials(emptyCredentials);
+    rfb.removeEventListener("connect", onConnect);
+    rfb.removeEventListener("securityfailure", onSecurityFailure);
+    rfb.removeEventListener("disconnect", onDisconnect);
+    rfb.removeEventListener("credentialsrequired", onCredentialsRequired);
+    rfb.disconnect();
   };
 
   const attemptConnection = (): void => {
@@ -59,29 +96,32 @@ const VNCConsole = ({ url }: Props): ReactElement => {
       throw new Error("VNC render Container is null");
     }
 
-    setConnectionError("");
+    setConnectionError(null);
     setConnectionState(ConnectionState.CONNECTING);
 
-    rfb = createRFB(vncContainer.current, url);
+    rfb = createRFB(vncContainer.current, url, credentials);
 
     rfb.addEventListener("connect", onConnect);
     rfb.addEventListener("securityfailure", onSecurityFailure);
     rfb.addEventListener("disconnect", onDisconnect);
+    rfb.addEventListener("credentialsrequired", onCredentialsRequired);
   };
 
   useEffect(() => {
     if (vncContainer.current !== null) {
       attemptConnection();
-
-      return () => {
-        rfb?.removeEventListener("connect", onConnect);
-        rfb?.removeEventListener("securityfailure", onSecurityFailure);
-        rfb?.removeEventListener("disconnect", onDisconnect);
-        rfb?.disconnect();
-      };
     }
+
+    return () => disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
+
+  useEffect(() => {
+    if (rfb && connectionState === ConnectionState.AUTHENTICATION_FAILED) {
+      rfb.sendCredentials(toVNCCredentials(credentials));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [credentials]);
 
   const renderConnectionError = (): ReactElement => (
     <div className={styles.error}>
@@ -96,28 +136,49 @@ const VNCConsole = ({ url }: Props): ReactElement => {
   );
 
   const renderConnecting = (): ReactElement => (
-    <div className={styles.connecting}>
+    <div className={styles.overlay}>
       <LoadingIndicator />
     </div>
   );
 
   const renderDisconnected = (): ReactElement => (
-    <div className={styles.disconnected}>
+    <div className={styles.overlay}>
+      <span>Disconnected</span>
       <Button label="Reconnect" round onClick={() => attemptConnection()} />
+    </div>
+  );
+
+  const renderPasswordPrompt = (): ReactElement => (
+    <div className={styles.overlay}>
+      <VNCCredentialsPrompt
+        initialValue={credentials}
+        onConfirm={setCredentials}
+      />
     </div>
   );
 
   return (
     <div className={styles.vncConsole}>
-      <VNCControl isConnected={connectionState === ConnectionState.CONNECTED} />
-      <div className={styles.viewer}>
-        <div ref={vncContainer} />
-        {connectionState === ConnectionState.CONNECTING && renderConnecting()}
-        {connectionError && renderConnectionError()}
-        {(connectionError ||
-          connectionState === ConnectionState.DISCONNECTED) &&
-          renderDisconnected()}
-      </div>
+      <div ref={vncContainer} />
+      {connectionState === ConnectionState.CONNECTING && renderConnecting()}
+      {connectionError !== null && renderConnectionError()}
+      {connectionState === ConnectionState.DISCONNECTED && renderDisconnected()}
+      {connectionState === ConnectionState.AUTHENTICATION_FAILED &&
+        renderPasswordPrompt()}
+      <VNCControl
+        isConnected={connectionState === ConnectionState.CONNECTED}
+        enablePowerControl={rfb?.capabilities.power || false}
+        enablePasting={supportsPasting()}
+        onDisconnect={() => disconnect()}
+        onCtrlAltDel={() => rfb?.sendCtrlAltDel()}
+        onClipboardPaste={() =>
+          navigator.clipboard
+            .readText()
+            .then(rfb?.clipboardPasteFrom)
+            .catch(console.error)
+        }
+        className={styles.control}
+      />
     </div>
   );
 };

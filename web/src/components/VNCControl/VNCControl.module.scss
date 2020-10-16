@@ -1,29 +1,68 @@
-$width: 64px;
+$toggleButtonRadius: 24px;
+$containerPadding: 4px;
 
 .wrapper {
-  width: $width;
-  background: var(--colorElevationLow);
-  box-shadow: var(--dropShadowElevationLow);
+  position: relative;
+}
 
-  &.connected {
-    .button {
-      color: var(--colorEmphasisHigh);
-      cursor: pointer;
+.toggleButton {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: $toggleButtonRadius * 2;
+  height: $toggleButtonRadius * 2;
+  border-radius: $toggleButtonRadius;
+  background: var(--colorElevationHigh);
+  box-shadow: var(--dropShadowElevationHigh);
+  cursor: pointer;
+  z-index: 1;
+}
 
-      &:hover {
-        background: var(--colorInteractionBackground);
-      }
-    }
+.container {
+  position: absolute;
+  bottom: calc(100% + 16px);
+  right: 0;
+  border-radius: 4px;
+  background: var(--colorElevationHigh);
+  box-shadow: var(--dropShadowElevationHigh);
+
+  &::before {
+    position: absolute;
+    content: "";
+    background: inherit;
+    width: 16px;
+    height: 16px;
+    bottom: -8px;
+    right: $toggleButtonRadius - 8px;
+    transform: rotate(45deg);
   }
 
-  .button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: $width;
-    height: $width;
-    border: 0;
-    background: transparent;
-    color: var(--colorEmphasisMedium);
+  .actions {
+    position: relative;
+    background: inherit;
+
+    .action {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      cursor: pointer;
+      padding: 1rem;
+
+      &:hover {
+        background: var(--colorInteractionBackground)
+      }
+
+      .actionAside {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 1rem;
+      }
+
+      .actionLabel {
+        white-space: nowrap;
+      }
+    }
   }
 }

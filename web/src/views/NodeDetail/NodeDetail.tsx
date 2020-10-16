@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useClusterName } from "../../helpers/hooks";
-import {GntInstance, GntNode} from "../../api/models";
+import { GntInstance, GntNode } from "../../api/models";
 import { useApi } from "../../api";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import Hero from "../../components/Hero/Hero";

@@ -46,7 +46,7 @@ jobs:
           go test -v ./... -cover
 
       - name: Build
-        if: !startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') != true
         run: |
           cd api/
           swag init

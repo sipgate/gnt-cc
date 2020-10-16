@@ -18,11 +18,17 @@ declare module "@novnc/novnc/core/rfb.js" {
   };
 
   export type DisconnectCallback = (ev: RFBEvent<{ clean: boolean }>) => void;
-  export type CredentialsRequiredCallback = (ev: RFBEvent<{ types: string[] }>) => void;
-  export type SecurityFailureCallback = (ev: RFBEvent<{ status: number; reason: string }>) => void;
+  export type CredentialsRequiredCallback = (
+    ev: RFBEvent<{ types: string[] }>
+  ) => void;
+  export type SecurityFailureCallback = (
+    ev: RFBEvent<{ status: number; reason: string }>
+  ) => void;
   export type ClipboardCallback = (ev: RFBEvent<{ text: string }>) => void;
   export type DesktopNameCallback = (ev: RFBEvent<{ name: string }>) => void;
-  export type CapabilitiesCallback = (ev: RFBEvent<{ capabilities: RFBCapabilities }>) => void;
+  export type CapabilitiesCallback = (
+    ev: RFBEvent<{ capabilities: RFBCapabilities }>
+  ) => void;
 
   export default class RFB {
     viewOnly: boolean;
@@ -61,8 +67,14 @@ declare module "@novnc/novnc/core/rfb.js" {
 
     addEventListener(event: "connect", cb: () => void): void;
     addEventListener(event: "disconnect", cb: DisconnectCallback): void;
-    addEventListener(event: "credentialsrequired", cb: CredentialsRequiredCallback): void;
-    addEventListener(event: "securityfailure", cb: SecurityFailureCallback): void;
+    addEventListener(
+      event: "credentialsrequired",
+      cb: CredentialsRequiredCallback
+    ): void;
+    addEventListener(
+      event: "securityfailure",
+      cb: SecurityFailureCallback
+    ): void;
     addEventListener(event: "clipboard", cb: ClipboardCallback): void;
     addEventListener(event: "bell", cb: () => void): void;
     addEventListener(event: "desktopname", cb: DesktopNameCallback): void;
@@ -70,8 +82,14 @@ declare module "@novnc/novnc/core/rfb.js" {
 
     removeEventListener(event: "connect", cb: () => void): void;
     removeEventListener(event: "disconnect", cb: DisconnectCallback): void;
-    removeEventListener(event: "credentialsrequired", cb: CredentialsRequiredCallback): void;
-    removeEventListener(event: "securityfailure", cb: SecurityFailureCallback): void;
+    removeEventListener(
+      event: "credentialsrequired",
+      cb: CredentialsRequiredCallback
+    ): void;
+    removeEventListener(
+      event: "securityfailure",
+      cb: SecurityFailureCallback
+    ): void;
     removeEventListener(event: "clipboard", cb: ClipboardCallback): void;
     removeEventListener(event: "bell", cb: () => void): void;
     removeEventListener(event: "desktopname", cb: DesktopNameCallback): void;

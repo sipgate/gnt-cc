@@ -111,7 +111,11 @@ export const useApi = <TData>(
 
     const response = await fetch(
       buildApiUrl((requestConfig as RequestConfig).slug),
-      makeRequestInit(auth.authToken, requestConfig as RequestConfig, options as RequestOptions)
+      makeRequestInit(
+        auth.authToken,
+        requestConfig as RequestConfig,
+        options as RequestOptions
+      )
     );
 
     if (response.status === 401) {

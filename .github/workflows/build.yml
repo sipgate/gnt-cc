@@ -1,0 +1,53 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build App
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build web
+        run: |
+          cd web
+          yarn install
+          yarn build
+
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.13
+        id: go
+
+      - name: Get dependencies
+        run: |
+          cd api/
+          go get -u github.com/swaggo/swag/cmd/swag
+          go get -u github.com/GeertJohan/go.rice/rice
+          go get -v -t -d ./...
+          if [ -f Gopkg.toml ]; then
+              curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+              dep ensure
+          fi
+
+      - name: Test
+        run: |
+          cd api/
+          swag init
+          cp config.example.yaml config.yaml
+          go test -v ./... -cover
+
+      - name: Build
+        run: |
+          cd api/
+          swag init
+          rice embed-go
+          go build -v .

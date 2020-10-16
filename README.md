@@ -1,5 +1,7 @@
 # gnt-cc
 
+![](https://github.com/sipgate/gnt-cc/workflows/Build/badge.svg)
+
 This is gnt-cc, an API + web frontend for one to many Ganeti virtualisation clusters.
 
 # Development
@@ -21,7 +23,3 @@ To remove the hooks use:
 # Installation
 
 TODO
-
-Build Status Backend: ![](https://github.com/sipgate/gnt-cc/workflows/Go/badge.svg)
-
-Build Status Frontend: ![](https://github.com/sipgate/gnt-cc/workflows/Web/badge.svg)

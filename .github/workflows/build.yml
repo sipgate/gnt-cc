@@ -2,9 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
   create:
     tags:
 
@@ -29,27 +27,15 @@ jobs:
           go-version: ^1.14
         id: go
 
-      - name: Install CLI tools
-        env:
-          GO111MODULE: off
-        run: |
-          go get github.com/swaggo/swag/cmd/swag
-          go get github.com/GeertJohan/go.rice/rice
-
-      - name: Test
-        run: |
-          cd api/
-          swag init
-          cp config.example.yaml config.yaml
-          go test -v ./... -cover
-
       - name: Build
         if: "!startsWith(github.ref, 'refs/tags/v')"
-        run: |
-          cd api/
-          swag init
-          rice embed-go
-          go build -v .
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          version: latest
+          args: build --snapshot
+          workdir: ./api
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Release
         if: startsWith(github.ref, 'refs/tags/v')

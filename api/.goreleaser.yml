@@ -32,3 +32,12 @@ release:
 
 changelog:
   sort: asc
+
+nfpms:
+  - package_name: gnt-cc
+    vendor: sipgate
+    homepage: https://github.com/sipgate/gnt-cc
+    description: API + web frontend for multiple Ganeti virtualisation clusters
+    license: Apache 2.0
+    formats:
+      - deb

@@ -22,3 +22,12 @@ export interface GntCluster {
   description: string;
   port: number;
 }
+
+export interface GntJob {
+  id: number;
+  summary: string;
+  receivedAt: number;
+  startedAt: number;
+  endedAt: number;
+  status: string;
+}

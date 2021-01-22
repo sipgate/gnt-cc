@@ -29,6 +29,7 @@ type router struct {
 	instanceController   controllers.InstanceController
 	statisticsController controllers.StatisticsController
 	nodeController       controllers.NodeController
+	jobController        controllers.JobController
 }
 
 func New(engine *gin.Engine) *router {
@@ -42,6 +43,7 @@ func New(engine *gin.Engine) *router {
 
 	instanceRepository := repository.InstanceRepository{RAPIClient: rapiClient, QueryPerformer: &query.Performer{}}
 	nodeRepository := repository.NodeRepository{RAPIClient: rapiClient}
+	jobRepository := repository.JobRepository{RAPIClient: rapiClient}
 
 	r := router{
 		engine: engine,
@@ -58,6 +60,9 @@ func New(engine *gin.Engine) *router {
 	r.statisticsController = controllers.StatisticsController{
 		InstanceRepository: &instanceRepository,
 		NodeRepository:     &nodeRepository,
+	}
+	r.jobController = controllers.JobController{
+		Repository: &jobRepository,
 	}
 
 	return &r
@@ -124,6 +129,7 @@ func (r *router) SetupAPIRoutes(staticBox *rice.Box) {
 		withCluster.GET("/instances/:instance", r.instanceController.Get)
 		withCluster.GET("/instances/:instance/console", r.instanceController.OpenInstanceConsole)
 		withCluster.GET("/statistics", r.statisticsController.Get)
+		withCluster.GET("/jobs", r.jobController.GetAll)
 	}
 
 	r.engine.StaticFS("/static", staticBox.HTTPBox())

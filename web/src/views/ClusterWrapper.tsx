@@ -12,6 +12,7 @@ import ClusterNotFound from "../components/ClusterNotFound/ClusterNotFound";
 import NodeDetail from "./NodeDetail/NodeDetail";
 import Instances from "./Instances/Instances";
 import InstanceConsole from "./InstanceConsole/InstanceConsole";
+import Jobs from "./Jobs/Jobs";
 
 interface ClusterResponse {
   clusters: GntCluster[];
@@ -70,6 +71,7 @@ const ClusterWrapper = (): ReactElement => {
                   path={`${path}/nodes`}
                   component={NodeList}
                 />
+                <AuthenticatedRoute path={`${path}/jobs`} component={Jobs} />
               </Switch>
             </>
           )}

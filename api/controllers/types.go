@@ -12,4 +12,8 @@ type (
 		Get(clusterName string, instanceName string) (model.InstanceResult, error)
 		GetAll(clusterName string) ([]model.GntInstance, error)
 	}
+
+	jobRepository interface {
+		GetAll(clusterName string) ([]model.GntJob, error)
+	}
 )

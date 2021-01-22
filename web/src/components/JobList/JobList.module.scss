@@ -1,0 +1,41 @@
+.jobList {
+  .link {
+    color: var(--colorEmphasisHigh);
+  }
+
+  .filterSettings {
+    display: flex;
+    align-items: center;
+
+    .filterListLabel {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin: 0 1rem;
+      color: var(--colorEmphasisMedium);
+    }
+
+    .filterList {
+      display: flex;
+      align-items: center;
+
+      .filterCheckbox:not(:last-child) {
+        margin-right: 0.5rem;
+      }
+    }
+
+    .filterResetButton {
+      margin-left: auto;
+    }
+  }
+
+  .filterResults {
+    padding: 1rem 0;
+
+    .filterResultCount {
+      font-weight: bold;
+      color: var(--colorEmphasisMedium);
+      padding: 0 0.3rem;
+    }
+  }
+}

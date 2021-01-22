@@ -23,6 +23,10 @@ const links = [
     to: "/nodes",
     label: "Nodes",
   },
+  {
+    to: "/jobs",
+    label: "Jobs",
+  },
 ];
 
 interface Props {

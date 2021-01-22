@@ -32,6 +32,12 @@ type NodeResponse struct {
 	SecondaryInstances []GntInstance `json:"secondaryInstances"`
 }
 
+type AllJobsResponse struct {
+	Cluster      string   `json:"cluster"`
+	NumberOfJobs int      `json:"numberOfJobs"`
+	Jobs         []GntJob `json:"jobs"`
+}
+
 type ErrorResponse struct {
 	Message string `json:"message"`
 }

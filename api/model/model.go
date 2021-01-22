@@ -26,3 +26,12 @@ type GntNode struct {
 	PrimaryInstances   []string `json:"primaryInstances"`
 	SecondaryInstances []string `json:"secondaryInstances"`
 }
+
+type GntJob struct {
+	ID         int    `json:"id"`
+	Summary    string `json:"summary"`
+	ReceivedAt int    `json:"receivedAt"`
+	StartedAt  int    `json:"startedAt"`
+	EndedAt    int    `json:"endedAt"`
+	Status     string `json:"status"`
+}

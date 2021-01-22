@@ -7,7 +7,6 @@ import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator
 import Hero from "../../components/Hero/Hero";
 import InstanceList from "../../components/InstanceList/InstanceList";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
-import Button from "../../components/Button/Button";
 import styles from "./NodeDetail.module.scss";
 
 interface NodeResponse {

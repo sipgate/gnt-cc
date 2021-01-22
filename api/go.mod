@@ -3,7 +3,7 @@ module gnt-cc
 go 1.13
 
 require (
-	github.com/GeertJohan/go.rice v1.0.0
+	github.com/GeertJohan/go.rice v1.0.2
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/appleboy/gin-jwt/v2 v2.6.4
 	github.com/daaku/go.zipexe v1.0.1 // indirect

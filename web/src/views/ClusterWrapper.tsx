@@ -22,7 +22,7 @@ const ClusterWrapper = (): ReactElement => {
     { data: clusterData, isLoading: clustersLoading, error: clusterLoadError },
   ] = useApi<ClusterResponse>("clusters");
 
-  const { clusterName } = useParams();
+  const { clusterName } = useParams<{ clusterName: string }>();
   const { path } = useRouteMatch();
 
   const clusterExists =

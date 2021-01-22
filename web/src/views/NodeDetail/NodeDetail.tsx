@@ -16,7 +16,7 @@ interface NodeResponse {
 }
 
 const NodeDetail = (): ReactElement => {
-  const { nodeName } = useParams();
+  const { nodeName } = useParams<{ nodeName: string }>();
   const clusterName = useClusterName();
 
   const [{ data, isLoading, error }] = useApi<NodeResponse>(

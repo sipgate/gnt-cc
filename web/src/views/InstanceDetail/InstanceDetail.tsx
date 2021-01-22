@@ -19,7 +19,7 @@ interface InstanceResponse {
 }
 
 const InstanceDetail = (): ReactElement => {
-  const { instanceName } = useParams();
+  const { instanceName } = useParams<{ instanceName: string }>();
   const clusterName = useClusterName();
 
   const [{ data, isLoading, error }] = useApi<InstanceResponse>(

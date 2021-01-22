@@ -8,6 +8,7 @@ import Hero from "../../components/Hero/Hero";
 import InstanceList from "../../components/InstanceList/InstanceList";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import Button from "../../components/Button/Button";
+import styles from "./NodeDetail.module.scss";
 
 interface NodeResponse {
   node: GntNode;
@@ -35,19 +36,19 @@ const NodeDetail = (): ReactElement => {
 
   return (
     <>
-      <Hero title={node.name}>
-        <Button label="Empty Node" danger />
-      </Hero>
+      <Hero title={node.name} />
 
       <ContentWrapper>
-        <div>
-          <p>Primary Instances on {nodeName}</p>
-          <InstanceList instances={data.primaryInstances} />
-        </div>
+        <div className={styles.wrapper}>
+          <div>
+            <h2>Primary Instances</h2>
+            <InstanceList instances={data.primaryInstances} />
+          </div>
 
-        <div>
-          <p>Secondary Instances on {nodeName}</p>
-          <InstanceList instances={data.secondaryInstances} />
+          <div>
+            <h2>Secondary Instances</h2>
+            <InstanceList instances={data.secondaryInstances} />
+          </div>
         </div>
       </ContentWrapper>
     </>

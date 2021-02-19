@@ -23,7 +23,10 @@ const columns: IDataTableColumn<GntNode>[] = [
     sortable: true,
     selector: (row) => row.name,
     cell: (row) => (
-      <PrefixLink className={styles.link} to={`/nodes/${row.name}`}>
+      <PrefixLink
+        className={`${styles.link} ${styles.name}`}
+        to={`/nodes/${row.name}`}
+      >
         {row.name}
       </PrefixLink>
     ),

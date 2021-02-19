@@ -17,7 +17,10 @@ const columns: IDataTableColumn<GntInstance>[] = [
     sortable: true,
     selector: (row) => row.name,
     cell: (row) => (
-      <PrefixLink className={styles.link} to={`/instances/${row.name}`}>
+      <PrefixLink
+        className={`${styles.link} ${styles.name}`}
+        to={`/instances/${row.name}`}
+      >
         {row.name}
       </PrefixLink>
     ),

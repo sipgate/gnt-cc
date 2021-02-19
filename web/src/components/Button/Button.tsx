@@ -41,7 +41,6 @@ function Button({
     className || null,
     {
       [styles.button]: true,
-      [styles.hasSpacing]: !!icon && !!label,
       [styles.hasLabel]: !!label,
       [styles.isRound]: !!round,
       [styles.isSmall]: !!small,
@@ -66,8 +65,8 @@ function Button({
       className={buttonClassNames}
       disabled={disabled}
     >
-      {icon && <Icon icon={icon} />}
       {label && <span className={styles.label}>{label}</span>}
+      {icon && <Icon icon={icon} />}
     </button>
   );
 }

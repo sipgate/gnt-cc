@@ -18,10 +18,12 @@ function prettifySummary(summary: string): ReactElement {
   const jobDetails = matches[2] || "";
 
   return (
-    <>
-      <span>{jobType}</span>
+    <span>
+      <span className={styles.jobType}>
+        {jobType.toLowerCase().replace(/_/g, " ")}
+      </span>
       <span className={styles.jobDetails}>{jobDetails}</span>
-    </>
+    </span>
   );
 }
 

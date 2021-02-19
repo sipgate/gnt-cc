@@ -39,8 +39,15 @@
     }
   }
 
+  .jobType {
+    display: block;
+    line-height: 1.5;
+    text-transform: capitalize;
+    font-weight: bold;
+  }
+
   .jobDetails {
-    margin-left: 1rem;
+    display: block;
     opacity: 0.75;
   }
 }

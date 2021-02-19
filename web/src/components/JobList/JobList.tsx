@@ -5,6 +5,26 @@ import { durationHumanReadable, unixToDate } from "../../helpers/time";
 import Badge, { BadgeStatus } from "../Badge/Badge";
 import styles from "./JobList.module.scss";
 
+function prettifySummary(summary: string): ReactElement {
+  const regex = /([A-Z_]+)(?:\((.*)\))?/;
+
+  const matches = summary.match(regex);
+
+  if (!matches) {
+    return <></>;
+  }
+
+  const jobType = matches[1] || "";
+  const jobDetails = matches[2] || "";
+
+  return (
+    <>
+      <span>{jobType}</span>
+      <span className={styles.jobDetails}>{jobDetails}</span>
+    </>
+  );
+}
+
 const columns: IDataTableColumn<GntJob>[] = [
   {
     name: "ID",
@@ -26,6 +46,7 @@ const columns: IDataTableColumn<GntJob>[] = [
     name: "Summary",
     sortable: true,
     selector: (row) => row.summary,
+    cell: (row) => prettifySummary(row.summary),
   },
   {
     name: "Start",

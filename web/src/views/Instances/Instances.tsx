@@ -4,7 +4,6 @@ import { useClusterName } from "../../helpers/hooks";
 import { useApi } from "../../api";
 import { GntInstance } from "../../api/models";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
-import Hero from "../../components/Hero/Hero";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 
 interface InstancesResponse {
@@ -32,12 +31,7 @@ const Instances = (): ReactElement => {
     return <InstanceList instances={data.instances} />;
   };
 
-  return (
-    <div>
-      <Hero title={`Instances on ${clusterName} cluster`} />
-      <ContentWrapper>{renderContent()}</ContentWrapper>
-    </div>
-  );
+  return <ContentWrapper>{renderContent()}</ContentWrapper>;
 };
 
 export default Instances;

@@ -1,18 +1,17 @@
-import React, { ReactElement } from "react";
-import styles from "./InstanceDetail.module.scss";
-import { useParams } from "react-router-dom";
-import { GntInstance } from "../../api/models";
-import { useApi } from "../../api";
-import Button from "../../components/Button/Button";
 import { faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
+import React, { ReactElement } from "react";
+import { useParams } from "react-router-dom";
+import { useApi } from "../../api";
+import { GntInstance } from "../../api/models";
+import Button from "../../components/Button/Button";
 import Card from "../../components/cards/Card/Card";
-import Tag from "../../components/Tag/Tag";
-import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
-import { useClusterName } from "../../helpers/hooks";
-import PrefixLink from "../../components/PrefixLink";
-import InstanceConfigurator from "../../components/InstanceConfigurator/InstanceConfigurator";
-import Hero from "../../components/Hero/Hero";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
+import InstanceConfigurator from "../../components/InstanceConfigurator/InstanceConfigurator";
+import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
+import PrefixLink from "../../components/PrefixLink";
+import Tag from "../../components/Tag/Tag";
+import { useClusterName } from "../../helpers/hooks";
+import styles from "./InstanceDetail.module.scss";
 
 interface InstanceResponse {
   instance: GntInstance;
@@ -40,31 +39,29 @@ const InstanceDetail = (): ReactElement => {
     <>
       {instance && (
         <div>
-          <Hero title={instance.name}>
-            <div className={styles.actions}>
-              {instance.offersVnc && (
-                <PrefixLink
-                  className={styles.link}
-                  to={`/instances/${instance.name}/console`}
-                >
-                  <Button
-                    className={styles.action}
-                    label="Open Console"
-                    primary
-                  />
-                </PrefixLink>
-              )}
-              <Button className={styles.action} label="Migrate" primary />
-              <Button className={styles.action} label="Failover" primary />
-              <Button className={styles.action} label="Shutdown" danger />
-              <Button
-                className={styles.action}
-                label="Kill"
-                icon={faSkullCrossbones}
-                danger
-              />
-            </div>
-          </Hero>
+          <div className={styles.actions}>
+            {instance.offersVnc && (
+              <PrefixLink
+                className={styles.link}
+                to={`/instances/${instance.name}/console`}
+              >
+                <Button
+                  className={styles.action}
+                  label="Open Console"
+                  primary
+                />
+              </PrefixLink>
+            )}
+            <Button className={styles.action} label="Migrate" primary />
+            <Button className={styles.action} label="Failover" primary />
+            <Button className={styles.action} label="Shutdown" danger />
+            <Button
+              className={styles.action}
+              label="Kill"
+              icon={faSkullCrossbones}
+              danger
+            />
+          </div>
           <ContentWrapper>
             <InstanceConfigurator instance={instance} />
             <div className={styles.details}>

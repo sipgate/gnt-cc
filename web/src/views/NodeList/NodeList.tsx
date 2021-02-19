@@ -8,7 +8,6 @@ import MemoryUtilisation from "../../components/MemoryUtilisation/MemoryUtilisat
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import { useClusterName } from "../../helpers/hooks";
 import PrefixLink from "../../components/PrefixLink";
-import Hero from "../../components/Hero/Hero";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 
 interface NodesResponse {
@@ -74,12 +73,7 @@ function NodeList(): ReactElement {
     );
   };
 
-  return (
-    <>
-      <Hero title={`Nodes on ${clusterName} cluster`} />
-      <ContentWrapper>{renderContent()}</ContentWrapper>
-    </>
-  );
+  return <ContentWrapper>{renderContent()}</ContentWrapper>;
 }
 
 export default NodeList;

@@ -4,7 +4,6 @@ import { useClusterName } from "../../helpers/hooks";
 import { GntInstance, GntNode } from "../../api/models";
 import { useApi } from "../../api";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
-import Hero from "../../components/Hero/Hero";
 import InstanceList from "../../components/InstanceList/InstanceList";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import styles from "./NodeDetail.module.scss";
@@ -31,26 +30,20 @@ const NodeDetail = (): ReactElement => {
     return <div>Failed to load: {error}</div>;
   }
 
-  const { node } = data;
-
   return (
-    <>
-      <Hero title={node.name} />
-
-      <ContentWrapper>
-        <div className={styles.wrapper}>
-          <div>
-            <h2>Primary Instances</h2>
-            <InstanceList instances={data.primaryInstances} />
-          </div>
-
-          <div>
-            <h2>Secondary Instances</h2>
-            <InstanceList instances={data.secondaryInstances} />
-          </div>
+    <ContentWrapper>
+      <div className={styles.wrapper}>
+        <div>
+          <h2>Primary Instances</h2>
+          <InstanceList instances={data.primaryInstances} />
         </div>
-      </ContentWrapper>
-    </>
+
+        <div>
+          <h2>Secondary Instances</h2>
+          <InstanceList instances={data.secondaryInstances} />
+        </div>
+      </div>
+    </ContentWrapper>
   );
 };
 

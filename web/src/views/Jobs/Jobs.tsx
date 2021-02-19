@@ -2,7 +2,6 @@ import React, { ReactElement } from "react";
 import { useApi } from "../../api";
 import { GntJob } from "../../api/models";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
-import Hero from "../../components/Hero/Hero";
 import JobList from "../../components/JobList/JobList";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import { useClusterName } from "../../helpers/hooks";
@@ -37,12 +36,7 @@ const Jobs = (): ReactElement => {
     return <JobList jobs={data.jobs} />;
   };
 
-  return (
-    <>
-      <Hero title="Jobs" />
-      <ContentWrapper>{renderContent()}</ContentWrapper>
-    </>
-  );
+  return <ContentWrapper>{renderContent()}</ContentWrapper>;
 };
 
 export default Jobs;

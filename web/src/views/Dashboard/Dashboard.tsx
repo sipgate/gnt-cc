@@ -1,13 +1,11 @@
-import React, { ReactElement, useContext } from "react";
-import styles from "./Dashboard.module.scss";
+import React, { ReactElement } from "react";
+import { useApi } from "../../api";
 import Card from "../../components/cards/Card/Card";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
-import AuthContext from "../../api/AuthContext";
-import Hero from "../../components/Hero/Hero";
-import { useApi } from "../../api";
-import { useClusterName } from "../../helpers/hooks";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import { convertMBToGB } from "../../helpers";
+import { useClusterName } from "../../helpers/hooks";
+import styles from "./Dashboard.module.scss";
 
 interface StatisticElement {
   count: number;
@@ -21,7 +19,6 @@ interface StatisticsResponse {
 
 function Dashboard(): ReactElement {
   const clusterName = useClusterName();
-  const authContext = useContext(AuthContext);
   const [{ data, isLoading, error }] = useApi<StatisticsResponse>(
     `clusters/${clusterName}/statistics`
   );
@@ -55,7 +52,6 @@ function Dashboard(): ReactElement {
 
   return (
     <>
-      <Hero title={`Welcome back, ${authContext.username}!`} />
       <ContentWrapper>
         <div className={styles.statistics}>
           {stats.map((stat) => (

@@ -13,6 +13,7 @@ import NodeDetail from "./NodeDetail/NodeDetail";
 import Instances from "./Instances/Instances";
 import InstanceConsole from "./InstanceConsole/InstanceConsole";
 import Jobs from "./Jobs/Jobs";
+import Breadcrumbs from "../components/Breadcrumbs/Breadcrumbs";
 
 interface ClusterResponse {
   clusters: GntCluster[];
@@ -44,6 +45,7 @@ const ClusterWrapper = (): ReactElement => {
           {clusterExists && (
             <>
               <Navbar clusters={clusterData.clusters} />
+              <Breadcrumbs />
               <Switch>
                 <AuthenticatedRoute
                   exact

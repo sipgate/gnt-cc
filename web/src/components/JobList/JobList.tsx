@@ -1,8 +1,9 @@
 import React, { ReactElement } from "react";
-import styles from "./JobList.module.scss";
-import { GntJob } from "../../api/models";
-import Badge, { BadgeStatus } from "../Badge/Badge";
 import DataTable, { IDataTableColumn } from "react-data-table-component";
+import { GntJob } from "../../api/models";
+import { durationHumanReadable, unixToDate } from "../../helpers/time";
+import Badge, { BadgeStatus } from "../Badge/Badge";
+import styles from "./JobList.module.scss";
 
 const columns: IDataTableColumn<GntJob>[] = [
   {
@@ -31,9 +32,13 @@ const columns: IDataTableColumn<GntJob>[] = [
     sortable: true,
     selector: (row) => row.startedAt,
     format: (row) => {
-      return row.startedAt < 0 ? "-" : row.startedAt;
+      if (row.startedAt < 0) {
+        return "-";
+      }
+
+      return unixToDate(row.startedAt);
     },
-    width: "120px",
+    width: "200px",
   },
   {
     name: "Duration",
@@ -45,7 +50,7 @@ const columns: IDataTableColumn<GntJob>[] = [
         return "-";
       }
 
-      return row.endedAt - row.startedAt;
+      return durationHumanReadable(row.endedAt - row.startedAt);
     },
   },
 ];

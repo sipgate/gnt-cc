@@ -1,13 +1,12 @@
-import React, { useContext, ReactElement } from "react";
-import styles from "./Navbar.module.scss";
-import logo from "../../assets/ganeti_logo.svg";
-import Button from "../Button/Button";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import React, { ReactElement, useContext } from "react";
 import AuthContext from "../../api/AuthContext";
+import { GntCluster } from "../../api/models";
+import Button from "../Button/Button";
 import ClusterSelector from "../ClusterSelector/ClusterSelector";
 import PrefixNavLink from "../PrefixNavLink";
-import PrefixLink from "../PrefixLink";
-import { GntCluster } from "../../api/models";
+import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
+import styles from "./Navbar.module.scss";
 
 const links = [
   {
@@ -41,9 +40,7 @@ const Navbar = function ({ clusters }: Props): ReactElement {
   return (
     <nav className={styles.navbar}>
       <div className={styles.begin}>
-        <PrefixLink className={styles.logoContainer} to="/">
-          <img className={styles.logo} src={logo} alt="Gnt-CC Logo" />
-        </PrefixLink>
+        <ClusterSelector clusters={clusters} />
 
         <div className={styles.items}>
           {links.map((link) => (
@@ -60,13 +57,8 @@ const Navbar = function ({ clusters }: Props): ReactElement {
         </div>
       </div>
       <div className={styles.end}>
-        <ClusterSelector clusters={clusters} />
-        <Button
-          className={styles.logoutButton}
-          label="Logout"
-          icon={faSignOutAlt}
-          onClick={logout}
-        ></Button>
+        <ThemeToggle />
+        <Button label="Logout" icon={faSignOutAlt} onClick={logout}></Button>
       </div>
     </nav>
   );

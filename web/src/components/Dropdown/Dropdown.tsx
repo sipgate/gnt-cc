@@ -37,7 +37,6 @@ function Dropdown({
     styles.dropdown,
     {
       [styles.expanded]: expanded,
-      [styles.hasIcon]: !!icon,
     },
   ]);
 
@@ -50,8 +49,8 @@ function Dropdown({
       }}
     >
       <div className={styles.current}>
-        <span className={styles.label}>{label}</span>
         {icon && <Icon icon={icon} />}
+        <span className={styles.label}>{label}</span>
       </div>
       <div className={styles.optionsWrapper}>
         <span className={styles.triangle} />

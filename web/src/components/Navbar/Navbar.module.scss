@@ -6,12 +6,13 @@
   align-items: center;
   padding: 0 1rem;
   background: var(--colorElevationMedium);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px 0 #0000000a;
   height: $navbarHeight;
 
   .begin {
     display: flex;
     align-items: center;
+    gap: 1rem;
 
     .logoContainer {
       display: flex;
@@ -21,13 +22,13 @@
       .logo {
         width: 3rem;
         height: 3rem;
+        margin-right: 1rem;
       }
     }
 
     .items {
       display: flex;
       align-items: center;
-      margin-left: 2rem;
 
       .item {
         display: block;
@@ -45,9 +46,6 @@
   .end {
     display: flex;
     align-items: center;
-
-    .logoutButton {
-      margin-left: 1rem;
-    }
+    gap: 2rem;
   }
 }

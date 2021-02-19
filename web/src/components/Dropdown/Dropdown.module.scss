@@ -1,6 +1,6 @@
 @import "../../styles/mixins.scss";
 
-$spacingOuter: 2rem;
+$spacingOuter: 1.5rem;
 $spacingInner: 0.5rem;
 $transitionDuration: 0.2s;
 $width: 200px;
@@ -21,6 +21,7 @@ $borderRadius: 2px;
     border-radius: 24px;
     width: 100%;
     height: 100%;
+    gap: 0.75rem;
 
     @include hoverOverlay();
 
@@ -36,7 +37,7 @@ $borderRadius: 2px;
 
   .optionsWrapper {
     position: absolute;
-    right: 0;
+    left: 0;
     visibility: hidden;
     top: calc(100% + 1rem);
     min-width: $width;
@@ -54,7 +55,7 @@ $borderRadius: 2px;
       background: var(--colorElevationHigh);
       position: absolute;
       top: -0.5rem;
-      right: $spacingOuter;
+      left: $spacingOuter;
       transform: rotate(45deg);
     }
 
@@ -62,10 +63,6 @@ $borderRadius: 2px;
       overflow: hidden;
       border-radius: $borderRadius;
     }
-  }
-
-  &.hasIcon .current .label {
-    margin: 0 $spacingOuter 0 0;
   }
 
   &.expanded .optionsWrapper {

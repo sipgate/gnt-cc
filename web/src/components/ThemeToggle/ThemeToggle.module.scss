@@ -6,11 +6,8 @@ $padding: 2px;
 $knobSize: $height - ($padding * 2);
 
 .toggle {
-  position: fixed;
-  z-index: 10;
-  left: $outerSpacing;
-  bottom: $outerSpacing;
-  border: 1px solid var(--colorEmphasisHigh);
+  position: relative;
+  border: 1px solid var(--colorSeparator);
   border-radius: $height / 2;
   height: $height;
   width: $width;
@@ -26,7 +23,7 @@ $knobSize: $height - ($padding * 2);
     width: $knobSize;
     height: $knobSize;
     border-radius: $knobSize / 2;
-    background: var(--colorEmphasisHigh);
+    background: var(--colorEmphasisMedium);
     left: $padding;
     top: $padding;
     bottom: $padding;

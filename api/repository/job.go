@@ -27,12 +27,23 @@ func (repo *JobRepository) GetAll(clusterName string) ([]model.GntJob, error) {
 	jobs := make([]model.GntJob, len(jobData))
 
 	for i, job := range jobData {
+		startedAt := -1
+		endedAt := -1
+
+		if len(job.StartTs) > 0 {
+			startedAt = job.StartTs[0]
+		}
+
+		if len(job.EndTs) > 0 {
+			endedAt = job.EndTs[0]
+		}
+
 		jobs[i] = model.GntJob{
 			ID:         job.ID,
 			Summary:    job.Summary[0],
 			ReceivedAt: job.ReceivedTs[0],
-			StartedAt:  job.StartTs[0],
-			EndedAt:    job.EndTs[0],
+			StartedAt:  startedAt,
+			EndedAt:    endedAt,
 			Status:     job.Status,
 		}
 	}

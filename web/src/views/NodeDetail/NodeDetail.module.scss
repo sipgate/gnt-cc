@@ -1,8 +1,8 @@
-.wrapper {
-    display: grid;
-    gap: 4rem;
-    
-    @media screen and (min-width: 1900px) {
-        grid-template-columns: 1fr 1fr;
-    }
+.tabBarWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  margin-top: 4rem;
 }

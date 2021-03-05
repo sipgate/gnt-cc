@@ -1,11 +1,19 @@
 import React, { ReactElement } from "react";
-import { useParams } from "react-router-dom";
-import { useClusterName } from "../../helpers/hooks";
-import { GntInstance, GntNode } from "../../api/models";
+import {
+  Redirect,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from "react-router-dom";
 import { useApi } from "../../api";
-import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
-import InstanceList from "../../components/InstanceList/InstanceList";
+import { GntInstance, GntNode } from "../../api/models";
+import { AuthenticatedRoute } from "../../App";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
+import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
+import TabBar from "../../components/TabBar/TabBar";
+import { useClusterName } from "../../helpers/hooks";
+import NodePrimaryInstances from "../NodePrimaryInstances/NodePrimaryInstances";
+import NodeSecondaryInstances from "../NodeSecondaryInstances/NodeSecondaryInstances";
 import styles from "./NodeDetail.module.scss";
 
 interface NodeResponse {
@@ -17,6 +25,8 @@ interface NodeResponse {
 const NodeDetail = (): ReactElement => {
   const { nodeName } = useParams<{ nodeName: string }>();
   const clusterName = useClusterName();
+  const { url, path } = useRouteMatch();
+  const { pathname } = useLocation();
 
   const [{ data, isLoading, error }] = useApi<NodeResponse>(
     `clusters/${clusterName}/nodes/${nodeName}`
@@ -32,16 +42,31 @@ const NodeDetail = (): ReactElement => {
 
   return (
     <ContentWrapper>
-      <div className={styles.wrapper}>
-        <div>
-          <h2>Primary Instances</h2>
-          <InstanceList instances={data.primaryInstances} />
-        </div>
+      <div className={styles.tabBarWrapper}>
+        <TabBar>
+          <TabBar.Tab
+            to={`${url}/primary-instances`}
+            label="Primary Instances"
+            isActive={pathname.includes("primary-instances")}
+          />
+          <TabBar.Tab
+            to={`${url}/secondary-instances`}
+            label="Secondary Instances"
+            isActive={pathname.includes("secondary-instances")}
+          />
+        </TabBar>
+      </div>
 
-        <div>
-          <h2>Secondary Instances</h2>
-          <InstanceList instances={data.secondaryInstances} />
-        </div>
+      <div className={styles.content}>
+        <AuthenticatedRoute path={`${path}/primary-instances`}>
+          <NodePrimaryInstances instances={data.primaryInstances} />
+        </AuthenticatedRoute>
+
+        <AuthenticatedRoute path={`${path}/secondary-instances`}>
+          <NodeSecondaryInstances instances={data.secondaryInstances} />
+        </AuthenticatedRoute>
+
+        <Redirect from={path} to={`${url}/primary-instances`} exact />
       </div>
     </ContentWrapper>
   );

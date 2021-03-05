@@ -1,15 +1,13 @@
 import { faTerminal } from "@fortawesome/free-solid-svg-icons";
-import React, { ChangeEvent, ReactElement, useMemo } from "react";
+import React, { ChangeEvent, ReactElement, useMemo, useState } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { GntInstance } from "../../api/models";
-import Button from "../Button/Button";
 import CustomDataTable from "../CustomDataTable/CustomDataTable";
-import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import Icon from "../Icon/Icon";
 import Input from "../Input/Input";
 import PrefixLink from "../PrefixLink";
 import Tag from "../Tag/Tag";
-import { filterInstances, useFilter } from "./filters";
+import { filterInstances } from "./filters";
 import styles from "./InstanceList.module.scss";
 
 const columns: IDataTableColumn<GntInstance>[] = [
@@ -88,15 +86,12 @@ interface Props {
 }
 
 function InstanceList({ instances }: Props): ReactElement {
-  const [
-    { filter, filterFields },
-    { setFilter, setFilterFields, reset },
-  ] = useFilter();
+  const [filter, setFilter] = useState("");
 
-  const filteredInstances = useMemo(
-    () => filterInstances(instances, filter, filterFields),
-    [instances, filter, filterFields]
-  );
+  const filteredInstances = useMemo(() => filterInstances(instances, filter), [
+    instances,
+    filter,
+  ]);
 
   return (
     <div className={styles.instanceList}>
@@ -104,52 +99,11 @@ function InstanceList({ instances }: Props): ReactElement {
         <Input
           name="instance-filter"
           type="search"
-          label="Filter"
+          label="Search"
           value={filter}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             setFilter(event.target.value)
           }
-        />
-        <span className={styles.filterListLabel}>Filter by</span>
-        <div className={styles.filterList}>
-          <FilterCheckbox
-            className={styles.filterCheckbox}
-            label="Name"
-            checked={filterFields.name}
-            onChange={(checked) =>
-              setFilterFields({
-                ...filterFields,
-                name: checked,
-              })
-            }
-          />
-          <FilterCheckbox
-            className={styles.filterCheckbox}
-            label="Primary Node"
-            checked={filterFields.primaryNode}
-            onChange={(checked) =>
-              setFilterFields({
-                ...filterFields,
-                primaryNode: checked,
-              })
-            }
-          />
-          <FilterCheckbox
-            className={styles.filterCheckbox}
-            label="Secondary Node(s)"
-            checked={filterFields.secondaryNodes}
-            onChange={(checked) =>
-              setFilterFields({
-                ...filterFields,
-                secondaryNodes: checked,
-              })
-            }
-          />
-        </div>
-        <Button
-          className={styles.filterResetButton}
-          label="Reset filters"
-          onClick={reset}
         />
       </div>
 

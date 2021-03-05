@@ -17,14 +17,17 @@ const links = [
   {
     to: "/instances",
     label: "Instances",
+    exactActive: true,
   },
   {
     to: "/nodes",
     label: "Nodes",
+    exactActive: true,
   },
   {
     to: "/jobs",
     label: "Jobs",
+    exactActive: true,
   },
 ];
 

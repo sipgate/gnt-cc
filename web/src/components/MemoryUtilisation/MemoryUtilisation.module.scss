@@ -1,7 +1,7 @@
 .wrapper {
   position: relative;
   padding: 0.25rem 0;
-  width: 120px;
+  width: 23ch;
 
   .total,
   .inUse {
@@ -9,8 +9,7 @@
     font-weight: bold;
   }
 
-  .separator,
-  .unit {
+  .separator {
     color: var(--colorEmphasisMedium);
     font-weight: bold;
   }

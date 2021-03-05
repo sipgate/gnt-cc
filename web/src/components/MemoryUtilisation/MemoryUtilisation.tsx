@@ -3,17 +3,16 @@ import styles from "./MemoryUtilisation.module.scss";
 import { classNameHelper } from "../../helpers";
 
 interface Props {
-  memoryTotal: number;
-  memoryInUse: number;
-  memoryUnit: "KB" | "MB" | "GB" | "TB";
+  memoryTotal: string;
+  memoryInUse: string;
+  usagePercent: number;
 }
 
 function MemoryUtilisation({
   memoryInUse,
   memoryTotal,
-  memoryUnit,
+  usagePercent,
 }: Props): ReactElement {
-  const usagePercent = (memoryInUse / memoryTotal) * 100;
   const classNames = classNameHelper([
     styles.wrapper,
     {
@@ -28,7 +27,6 @@ function MemoryUtilisation({
       <span className={styles.inUse}>{memoryInUse}</span>
       <span className={styles.separator}>/</span>
       <span className={styles.total}>{memoryTotal}</span>
-      <span className={styles.unit}>{memoryUnit}</span>
       <span className={styles.indicator}>
         <span
           className={styles.progress}

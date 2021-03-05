@@ -7,7 +7,7 @@ import CustomDataTable from "../../components/CustomDataTable/CustomDataTable";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import MemoryUtilisation from "../../components/MemoryUtilisation/MemoryUtilisation";
 import PrefixLink from "../../components/PrefixLink";
-import { convertMBToGB } from "../../helpers";
+import { prettyPrintMiB } from "../../helpers";
 import { useClusterName } from "../../helpers/hooks";
 import styles from "./NodeList.module.scss";
 
@@ -32,16 +32,20 @@ const columns: IDataTableColumn<GntNode>[] = [
     ),
   },
   {
-    name: "Memory",
+    name: "Memory Utilisation",
     sortable: true,
     selector: (row) => row.memoryTotal - row.memoryFree,
-    cell: (row) => (
-      <MemoryUtilisation
-        memoryInUse={convertMBToGB(row.memoryTotal - row.memoryFree)}
-        memoryTotal={convertMBToGB(row.memoryTotal)}
-        memoryUnit="GB"
-      />
-    ),
+    cell: (row) => {
+      const memoryUsed = row.memoryTotal - row.memoryFree;
+
+      return (
+        <MemoryUtilisation
+          memoryInUse={prettyPrintMiB(memoryUsed)}
+          memoryTotal={prettyPrintMiB(row.memoryTotal)}
+          usagePercent={(memoryUsed / row.memoryTotal) * 100}
+        />
+      );
+    },
   },
 ];
 

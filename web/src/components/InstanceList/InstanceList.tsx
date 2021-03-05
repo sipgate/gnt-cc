@@ -2,6 +2,7 @@ import { faTerminal } from "@fortawesome/free-solid-svg-icons";
 import React, { ChangeEvent, ReactElement, useMemo, useState } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { GntInstance } from "../../api/models";
+import { prettyPrintMiB } from "../../helpers";
 import CustomDataTable from "../CustomDataTable/CustomDataTable";
 import Icon from "../Icon/Icon";
 import Input from "../Input/Input";
@@ -59,10 +60,11 @@ const columns: IDataTableColumn<GntInstance>[] = [
   },
   {
     name: "Memory",
-    cell: (row) => `${row.memoryTotal} MB`,
     width: "90px",
     sortable: true,
     selector: (row) => row.memoryTotal,
+    cell: (row) => prettyPrintMiB(row.memoryTotal),
+    right: true,
   },
   {
     name: "",

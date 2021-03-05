@@ -3,7 +3,7 @@ import { useApi } from "../../api";
 import Card from "../../components/cards/Card/Card";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
-import { convertMBToGB } from "../../helpers";
+import { convertMiBToGiB } from "../../helpers";
 import { useClusterName } from "../../helpers/hooks";
 import styles from "./Dashboard.module.scss";
 
@@ -46,7 +46,7 @@ function Dashboard(): ReactElement {
     },
     {
       title: "Total Node Memory",
-      value: `${convertMBToGB(data.nodes.memoryTotal)} GB`,
+      value: `${convertMiBToGiB(data.nodes.memoryTotal)} GB`,
     },
   ];
 

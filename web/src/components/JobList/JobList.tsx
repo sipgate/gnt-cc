@@ -1,8 +1,9 @@
 import React, { ReactElement } from "react";
-import DataTable, { IDataTableColumn } from "react-data-table-component";
+import { IDataTableColumn } from "react-data-table-component";
 import { GntJob } from "../../api/models";
 import { durationHumanReadable, unixToDate } from "../../helpers/time";
 import Badge, { BadgeStatus } from "../Badge/Badge";
+import CustomDataTable from "../CustomDataTable/CustomDataTable";
 import styles from "./JobList.module.scss";
 
 function prettifySummary(summary: string): ReactElement {
@@ -99,16 +100,12 @@ function getBadgeStatusFromJobStatus(status: string) {
 function JobList({ jobs }: Props): ReactElement {
   return (
     <div className={styles.jobList}>
-      <DataTable<GntJob>
+      <CustomDataTable<GntJob>
         columns={columns}
         data={jobs}
         keyField="id"
-        pagination
-        paginationPerPage={20}
-        noHeader
         defaultSortAsc={false}
         defaultSortField="id"
-        highlightOnHover
       />
     </div>
   );

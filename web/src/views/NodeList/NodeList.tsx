@@ -1,14 +1,15 @@
 import React, { ReactElement } from "react";
-import styles from "./NodeList.module.scss";
-import DataTable, { IDataTableColumn } from "react-data-table-component";
-import { GntNode } from "../../api/models";
+import { IDataTableColumn } from "react-data-table-component";
 import { useApi } from "../../api";
-import { convertMBToGB } from "../../helpers";
-import MemoryUtilisation from "../../components/MemoryUtilisation/MemoryUtilisation";
-import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
-import { useClusterName } from "../../helpers/hooks";
-import PrefixLink from "../../components/PrefixLink";
+import { GntNode } from "../../api/models";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
+import CustomDataTable from "../../components/CustomDataTable/CustomDataTable";
+import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
+import MemoryUtilisation from "../../components/MemoryUtilisation/MemoryUtilisation";
+import PrefixLink from "../../components/PrefixLink";
+import { convertMBToGB } from "../../helpers";
+import { useClusterName } from "../../helpers/hooks";
+import styles from "./NodeList.module.scss";
 
 interface NodesResponse {
   nodes: GntNode[];
@@ -63,14 +64,7 @@ function NodeList(): ReactElement {
     const { nodes } = data;
 
     return (
-      <DataTable
-        columns={columns}
-        data={nodes}
-        pagination
-        paginationPerPage={20}
-        noHeader
-        highlightOnHover
-      />
+      <CustomDataTable columns={columns} data={nodes} defaultSortField="name" />
     );
   };
 

@@ -1,15 +1,16 @@
-import React, { ReactElement, ChangeEvent, useMemo } from "react";
-import styles from "./InstanceList.module.scss";
-import { GntInstance } from "../../api/models";
-import DataTable, { IDataTableColumn } from "react-data-table-component";
-import Tag from "../Tag/Tag";
-import PrefixLink from "../PrefixLink";
-import Input from "../Input/Input";
-import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
-import Button from "../Button/Button";
-import { useFilter, filterInstances } from "./filters";
-import Icon from "../Icon/Icon";
 import { faTerminal } from "@fortawesome/free-solid-svg-icons";
+import React, { ChangeEvent, ReactElement, useMemo } from "react";
+import { IDataTableColumn } from "react-data-table-component";
+import { GntInstance } from "../../api/models";
+import Button from "../Button/Button";
+import CustomDataTable from "../CustomDataTable/CustomDataTable";
+import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
+import Icon from "../Icon/Icon";
+import Input from "../Input/Input";
+import PrefixLink from "../PrefixLink";
+import Tag from "../Tag/Tag";
+import { filterInstances, useFilter } from "./filters";
+import styles from "./InstanceList.module.scss";
 
 const columns: IDataTableColumn<GntInstance>[] = [
   {
@@ -162,14 +163,11 @@ function InstanceList({ instances }: Props): ReactElement {
         instances
       </div>
 
-      <DataTable<GntInstance>
+      <CustomDataTable<GntInstance>
         columns={columns}
         data={filteredInstances}
         keyField="name"
-        pagination
-        paginationPerPage={20}
-        noHeader
-        highlightOnHover
+        defaultSortField="name"
       />
     </div>
   );

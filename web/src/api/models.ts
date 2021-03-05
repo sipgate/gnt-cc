@@ -12,8 +12,17 @@ export interface GntNode {
   name: string;
   memoryFree: number;
   memoryTotal: number;
+  diskTotal: number;
+  diskFree: number;
+  cpuCount: number;
   primaryInstances: string[];
   secondaryInstances: string[];
+  isMaster: boolean;
+  isMasterCandidate: boolean;
+  isMasterCapable: boolean;
+  isDrained: boolean;
+  isOffline: boolean;
+  isVMCapable: boolean;
 }
 
 export interface GntCluster {

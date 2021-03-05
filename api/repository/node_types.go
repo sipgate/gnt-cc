@@ -16,6 +16,7 @@ type rapiNodeResponse struct {
 	Offline         bool        `json:"offline"`
 	Drained         bool        `json:"drained"`
 	VMCapable       bool        `json:"vm_capable"`
+	Master          bool        `json:"master"`
 	MasterCandidate bool        `json:"master_candidate"`
 	MasterCapable   bool        `json:"master_capable"`
 	Mnode           int         `json:"mnode"`
@@ -29,6 +30,7 @@ type rapiNodeResponse struct {
 	Csockets        int         `json:"csockets"`
 	Role            string      `json:"role"`
 	Tags            []string    `json:"tags"`
+	Group           string      `json:"group"`
 	GroupUUID       string      `json:"group.uuid"`
 	Cnos            int         `json:"cnos"`
 	Ndparams        struct {

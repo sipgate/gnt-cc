@@ -108,6 +108,7 @@ function JobList({ jobs }: Props): ReactElement {
         noHeader
         defaultSortAsc={false}
         defaultSortField="id"
+        highlightOnHover
       />
     </div>
   );

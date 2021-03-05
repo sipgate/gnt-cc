@@ -69,6 +69,7 @@ function NodeList(): ReactElement {
         pagination
         paginationPerPage={20}
         noHeader
+        highlightOnHover
       />
     );
   };

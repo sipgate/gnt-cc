@@ -15,6 +15,7 @@ createTheme("default", {
   context: {
     background: "var(--colorElevationMedium)",
     text: "var(--colorEmphasisHigh)",
+    hover: "var(--colorEmphasisHigh)",
   },
   divider: {
     default: "var(--colorSeparator)",
@@ -29,6 +30,13 @@ createTheme("default", {
     button: "var(--colorEmphasisMedium)",
     hover: "var(--colorEmphasisHigh)",
     disabled: "var(--colorSeparator)",
+  },
+  highlightOnHover: {
+    default: "var(--colorInteractionBackground)",
+    text: "var(--colorEmphasisHigh)",
+  },
+  sortFocus: {
+    default: "var(--colorEmphasisHigh)",
   },
 });
 

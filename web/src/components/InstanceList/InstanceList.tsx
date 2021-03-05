@@ -169,6 +169,7 @@ function InstanceList({ instances }: Props): ReactElement {
         pagination
         paginationPerPage={20}
         noHeader
+        highlightOnHover
       />
     </div>
   );

@@ -68,7 +68,6 @@ const ClusterWrapper = (): ReactElement => {
                   path={`${path}/nodes/:nodeName`}
                   component={NodeDetail}
                 />
-                s
                 <AuthenticatedRoute
                   path={`${path}/nodes`}
                   component={NodeList}

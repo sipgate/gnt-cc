@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import styles from "./Button.module.scss";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import Icon from "../Icon/Icon";
-import { classNameHelper } from "../../helpers";
+import classNames from "classnames";
 
 export interface ButtonProps {
   onClick?: (event: React.MouseEvent) => void;
@@ -37,17 +37,14 @@ function Button({
     }
   };
 
-  const buttonClassNames = classNameHelper([
-    className || null,
-    {
-      [styles.button]: true,
-      [styles.hasLabel]: !!label,
-      [styles.isRound]: !!round,
-      [styles.isSmall]: !!small,
-      [styles.primary]: !!primary,
-      [styles.danger]: !!danger,
-    },
-  ]);
+  const buttonClassNames = classNames(className || null, {
+    [styles.button]: true,
+    [styles.hasLabel]: !!label,
+    [styles.isRound]: !!round,
+    [styles.isSmall]: !!small,
+    [styles.primary]: !!primary,
+    [styles.danger]: !!danger,
+  });
 
   if (href) {
     return (

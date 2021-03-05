@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState, ReactElement } from "react";
 import styles from "./Input.module.scss";
-import { classNameHelper } from "../../helpers";
+import classNames from "classnames";
 
 type InputType = "text" | "email" | "password" | "search";
 
@@ -37,18 +37,18 @@ const Input = ({
     }
   };
 
-  const classNames = classNameHelper([
-    styles.inputWrapper,
-    {
-      [styles.hasError]: !!error,
-      [styles.isFocused]: !!focused,
-      [styles.hasContent]: !!value,
-    },
-    className || null,
-  ]);
-
   return (
-    <div className={classNames}>
+    <div
+      className={classNames(
+        styles.inputWrapper,
+        {
+          [styles.hasError]: error,
+          [styles.isFocused]: focused,
+          [styles.hasContent]: value,
+        },
+        className
+      )}
+    >
       <input
         className={styles.input}
         id={name}

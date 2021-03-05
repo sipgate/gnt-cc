@@ -6,8 +6,8 @@ import {
   faTimes,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
+import classNames from "classnames";
 import React, { ReactElement, useState } from "react";
-import { classNameHelper } from "../../helpers";
 import Icon from "../Icon/Icon";
 import styles from "./VNCControl.module.scss";
 
@@ -53,11 +53,10 @@ const VNCControl = ({
 
   return (
     <div
-      className={classNameHelper([
-        className || null,
-        styles.wrapper,
-        { [styles.visible]: isConnected, [styles.expanded]: expanded },
-      ])}
+      className={classNames(className, styles.wrapper, {
+        [styles.visible]: isConnected,
+        [styles.expanded]: expanded,
+      })}
     >
       <span
         className={styles.toggleButton}

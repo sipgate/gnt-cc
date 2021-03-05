@@ -1,9 +1,9 @@
-import React, { useState, ReactElement } from "react";
-import styles from "./InstanceConfigurator.module.scss";
+import classNames from "classnames";
+import React, { ReactElement, useState } from "react";
 import { GntInstance } from "../../api/models";
-import ConfigurableCard from "../cards/ConfigurableCard/ConfigurableCard";
 import Button from "../Button/Button";
-import { classNameHelper } from "../../helpers";
+import ConfigurableCard from "../cards/ConfigurableCard/ConfigurableCard";
+import styles from "./InstanceConfigurator.module.scss";
 
 interface Props {
   instance: GntInstance;
@@ -93,10 +93,7 @@ const InstanceConfigurator = ({ instance }: Props): ReactElement => {
     <div className={styles.instanceConfigurator}>
       <div className={styles.header}>
         <div
-          className={classNameHelper([
-            styles.actions,
-            { [styles.hidden]: !isDirty },
-          ])}
+          className={classNames(styles.actions, { [styles.hidden]: !isDirty })}
         >
           <Button
             className={styles.action}

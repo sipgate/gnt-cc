@@ -4,7 +4,7 @@ import Dropdown from "../Dropdown/Dropdown";
 import { faServer } from "@fortawesome/free-solid-svg-icons";
 import { GntCluster } from "../../api/models";
 import { useHistory } from "react-router-dom";
-import { classNameHelper } from "../../helpers";
+import classNames from "classnames";
 import { useClusterName } from "../../helpers/hooks";
 
 interface Props {
@@ -31,10 +31,9 @@ const ClusterSelector = ({ clusters }: Props): ReactElement => {
       <Dropdown label={clusterName} icon={faServer}>
         {clusters.map((cluster) => (
           <div
-            className={classNameHelper([
-              styles.cluster,
-              { [styles.selected]: cluster.name === clusterName },
-            ])}
+            className={classNames(styles.cluster, {
+              [styles.selected]: cluster.name === clusterName,
+            })}
             key={cluster.name}
             onClick={() => selectCluster(cluster.name)}
           >

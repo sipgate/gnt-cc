@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import styles from "./Icon.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { classNameHelper } from "../../helpers";
+import classNames from "classnames";
 
 export interface IconProps {
   icon: IconDefinition;
@@ -11,7 +11,7 @@ export interface IconProps {
 
 function Icon({ icon, className }: IconProps): ReactElement {
   return (
-    <span className={classNameHelper([className || null, styles.icon])}>
+    <span className={classNames(className, styles.icon)}>
       <FontAwesomeIcon icon={icon} />
     </span>
   );

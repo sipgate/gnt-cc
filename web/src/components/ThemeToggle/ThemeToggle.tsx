@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from "react";
 import styles from "./ThemeToggle.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
-import { classNameHelper } from "../../helpers";
+import classNames from "classnames";
 
 const DARK_CLASS = "dark";
 
@@ -31,7 +31,7 @@ export const ThemeToggle = (): ReactElement => {
 
   return (
     <div
-      className={classNameHelper([styles.toggle, { [styles.isDark]: isDark }])}
+      className={classNames(styles.toggle, { [styles.isDark]: isDark })}
       onClick={() => setIsDark(!isDark)}
     >
       <span className={styles.knob} />

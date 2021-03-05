@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import styles from "./Dropdown.module.scss";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { classNameHelper } from "../../helpers";
+import classNames from "classnames";
 import Icon from "../Icon/Icon";
 
 interface Props {
@@ -32,17 +32,11 @@ function Dropdown({
       window.removeEventListener("click", handleOutsideClick);
     };
   }, []);
-
-  const classNames = classNameHelper([
-    styles.dropdown,
-    {
-      [styles.expanded]: expanded,
-    },
-  ]);
-
   return (
     <div
-      className={classNames}
+      className={classNames(styles.dropdown, {
+        [styles.expanded]: expanded,
+      })}
       onClick={(e) => {
         e.stopPropagation();
         toggle();

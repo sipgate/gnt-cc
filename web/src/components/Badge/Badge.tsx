@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, ReactElement } from "react";
-import { classNameHelper } from "../../helpers";
+import classNames from "classnames";
 import styles from "./Badge.module.scss";
 
 export enum BadgeStatus {
@@ -15,14 +15,11 @@ type Props = {
 function Badge({ children, status }: PropsWithChildren<Props>): ReactElement {
   return (
     <span
-      className={classNameHelper([
-        styles.badge,
-        {
-          [styles.success]: status === BadgeStatus.SUCCESS,
-          [styles.warning]: status === BadgeStatus.WARNING,
-          [styles.failure]: status === BadgeStatus.FAILURE,
-        },
-      ])}
+      className={classNames(styles.badge, {
+        [styles.success]: status === BadgeStatus.SUCCESS,
+        [styles.warning]: status === BadgeStatus.WARNING,
+        [styles.failure]: status === BadgeStatus.FAILURE,
+      })}
     >
       {children}
     </span>

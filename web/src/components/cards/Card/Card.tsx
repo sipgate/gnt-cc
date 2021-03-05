@@ -1,6 +1,6 @@
+import classNames from "classnames";
 import React, { ReactElement, PropsWithChildren } from "react";
 import styles from "./Card.module.scss";
-import { classNameHelper } from "../../../helpers";
 
 interface Props {
   title?: string;
@@ -20,16 +20,12 @@ function Card({
   rightTitleSlot,
   className,
 }: PropsWithChildren<Props>): ReactElement {
-  const classNames = classNameHelper([
-    className || null,
-    styles.card,
-    {
-      [styles.noHorizontalPadding]: !!noHorizontalPadding,
-    },
-  ]);
-
   return (
-    <div className={classNames}>
+    <div
+      className={classNames(className || null, styles.card, {
+        [styles.noHorizontalPadding]: !!noHorizontalPadding,
+      })}
+    >
       <div className={styles.cardHeader}>
         {leftTitleSlot && leftTitleSlot()}
         <span className={styles.cardTitle}>{title}</span>

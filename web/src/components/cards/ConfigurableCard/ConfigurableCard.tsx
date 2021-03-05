@@ -1,8 +1,8 @@
+import classNames from "classnames";
 import React, { ReactElement } from "react";
 import styles from "./ConfigurableCard.module.scss";
 import Card from "../Card/Card";
 import Button from "../../Button/Button";
-import { classNameHelper } from "../../../helpers";
 import {
   faCheck,
   faUndo,
@@ -34,10 +34,7 @@ const ConfigurableCard = ({
 }: Props): ReactElement => {
   const getAcceptButton = () => (
     <Button
-      className={classNameHelper([
-        styles.interaction,
-        { [styles.hidden]: !isDirty },
-      ])}
+      className={classNames(styles.interaction, { [styles.hidden]: !isDirty })}
       icon={faCheck}
       onClick={onAccept}
     />
@@ -45,10 +42,7 @@ const ConfigurableCard = ({
 
   const getResetButton = () => (
     <Button
-      className={classNameHelper([
-        styles.interaction,
-        { [styles.hidden]: !isDirty },
-      ])}
+      className={classNames(styles.interaction, { [styles.hidden]: !isDirty })}
       icon={faUndo}
       onClick={onReset}
     />

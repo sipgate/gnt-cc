@@ -22,9 +22,16 @@ type GntNode struct {
 	MemoryTotal        int      `json:"memoryTotal"`
 	MemoryFree         int      `json:"memoryFree"`
 	DiskTotal          int      `json:"diskTotal"`
+	DiskFree           int      `json:"diskFree"`
 	CPUCount           int      `json:"cpuCount"`
 	PrimaryInstances   []string `json:"primaryInstances"`
 	SecondaryInstances []string `json:"secondaryInstances"`
+	IsMaster           bool     `json:"isMaster"`
+	IsMasterCandidate  bool     `json:"isMasterCandidate"`
+	IsMasterCapable    bool     `json:"isMasterCapable"`
+	IsDrained          bool     `json:"isDrained"`
+	IsOffline          bool     `json:"isOffline"`
+	IsVMCapable        bool     `json:"isVmCapable"`
 }
 
 type GntJob struct {

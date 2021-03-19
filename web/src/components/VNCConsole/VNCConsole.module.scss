@@ -3,7 +3,7 @@
 .vncConsole {
   position: relative;
   width: 100%;
-  height: calc(100vh - #{$navbarHeight});
+  height: calc(100vh - #{$navbarHeight} - #{$breadcrumbsHeight});
 
   .control {
     position: absolute;

@@ -1,35 +1,108 @@
-.actions {
+header {
   display: flex;
+  gap: 1rem;
+  align-items: center;
 
-  .action {
-    margin: 0 0.25rem;
+  .consoleLink {
+    display: inline-flex;
+    gap: 0.75rem;
+    align-items: center;
+    color: inherit;
+    margin-left: auto;
+  }
+}
 
-    &:first-child {
-      margin-left: 0;
+.quickInfo {
+  display: flex;
+  justify-content: space-around;
+  gap: 4rem;
+  background: var(--overlay);
+
+  > div {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+
+    .value {
+      display: block;
+      font-size: 2em;
+      font-weight: bold;
+      margin: 1rem 0;
     }
 
-    &:last-child {
-      margin-right: 0;
+    .label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--colorEmphasisMedium);
     }
   }
 }
 
-.link {
-  color: var(--foregroundPrimary);
+.sections {
+  > section {
+    > h2 {
+      font-size: 1em;
+      padding: 0.5rem 0;
+    }
+  }
 }
 
-.details {
-  .nodeList {
-    list-style: none;
-    font-size: 1rem;
-    padding: 0;
-
-    .nodeListNode {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem;
-      border-bottom: 1px solid rgba(#000, 0.1);
+.nicCard {
+  > div {
+    > p {
+      margin: 0;
     }
+
+    .nicMac {
+      color: var(--colorEmphasisLow);
+      margin-top: 2rem;
+    }
+
+    .nicBridge {
+      font-size: 1.25em;
+    }
+  }
+}
+
+.diskCard {
+  > div {
+    > .diskCapacity {
+      font-size: 1.25em;
+    }
+  }
+}
+
+.nicCard,
+.diskCard {
+  width: 320px;
+  padding: 1rem;
+  border: 1px solid var(--colorSeparator);
+  border-radius: 4px;
+  display: flex;
+
+  > span {
+    opacity: 0.75;
+  }
+
+  > div {
+    padding: 0 1rem;
+
+    > p {
+      margin: 0;
+
+      &:not(:last-child) {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  &:not(:last-of-type) {
+    margin-bottom: 1rem;
+  }
+
+  .badge {
+    margin-left: auto;
   }
 }

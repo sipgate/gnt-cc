@@ -1,3 +1,18 @@
+export type GntDisk = {
+  uuid: string;
+  name: string;
+  capacity: number;
+  template: string;
+};
+
+export type GntNic = {
+  uuid: string;
+  name: string;
+  mode: string;
+  bridge: string;
+  mac: string;
+};
+
 export interface GntInstance {
   name: string;
   primaryNode: string;
@@ -6,6 +21,8 @@ export interface GntInstance {
   memoryTotal: number;
   isRunning: boolean;
   offersVnc: boolean;
+  disks: GntDisk[];
+  nics: GntNic[];
 }
 
 export interface GntNode {

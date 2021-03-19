@@ -4,12 +4,13 @@ $spacingOuter: 1.5rem;
 $spacingInner: 0.5rem;
 $transitionDuration: 0.2s;
 $width: 200px;
-$borderRadius: 2px;
+$borderRadius: 4px;
+$size: 40px;
 
 .dropdown {
   position: relative;
   width: $width;
-  height: 48px;
+  height: $size;
   cursor: pointer;
 
   .current {
@@ -18,7 +19,7 @@ $borderRadius: 2px;
     z-index: 1;
     padding: 0 $spacingOuter;
     border: 1px solid var(--colorSeparator);
-    border-radius: 24px;
+    border-radius: $size / 2;
     width: 100%;
     height: 100%;
     gap: 0.75rem;
@@ -61,7 +62,7 @@ $borderRadius: 2px;
 
     .options {
       overflow: hidden;
-      border-radius: $borderRadius;
+      border-radius: inherit;
     }
   }
 

@@ -76,17 +76,17 @@ func (repo *NodeRepository) GetAll(clusterName string) ([]model.GntNode, error) 
 
 	for i, node := range nodeData {
 		nodes[i] = model.GntNode{
-			Name:               node.Name,
-			MemoryTotal:        node.Mtotal,
-			MemoryFree:         node.Mfree,
-			DiskTotal:          node.Dtotal,
-			CPUCount:           node.Ctotal,
-			IsDrained:          node.Drained,
-			IsMaster:           isMaster(node),
-			IsMasterCandidate:  node.MasterCandidate,
-			IsMasterCapable:    node.MasterCapable,
-			IsOffline:          node.Offline,
-			IsVMCapable:        node.VMCapable,
+			Name:              node.Name,
+			MemoryTotal:       node.Mtotal,
+			MemoryFree:        node.Mfree,
+			DiskTotal:         node.Dtotal,
+			CPUCount:          node.Ctotal,
+			IsDrained:         node.Drained,
+			IsMaster:          isMaster(node),
+			IsMasterCandidate: node.MasterCandidate,
+			IsMasterCapable:   node.MasterCapable,
+			IsOffline:         node.Offline,
+			IsVMCapable:       node.VMCapable,
 		}
 	}
 

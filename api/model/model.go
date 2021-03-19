@@ -1,13 +1,30 @@
 package model
 
+type GntDisk struct {
+	Uuid     string `json:"uuid"`
+	Name     string `json:"name"`
+	Template string `json:"template"`
+	Capacity int    `json:"capacity"`
+}
+
+type GntNic struct {
+	Uuid   string `json:"uuid"`
+	Mode   string `json:"mode"`
+	Name   string `json:"name"`
+	Mac    string `json:"mac"`
+	Bridge string `json:"bridge"`
+}
+
 type GntInstance struct {
-	Name           string   `json:"name"`
-	PrimaryNode    string   `json:"primaryNode"`
-	SecondaryNodes []string `json:"secondaryNodes"`
-	CpuCount       int      `json:"cpuCount"`
-	MemoryTotal    int      `json:"memoryTotal"`
-	IsRunning      bool     `json:"isRunning"`
-	OffersVNC      bool     `json:"offersVnc"`
+	Name           string    `json:"name"`
+	PrimaryNode    string    `json:"primaryNode"`
+	SecondaryNodes []string  `json:"secondaryNodes"`
+	CpuCount       int       `json:"cpuCount"`
+	MemoryTotal    int       `json:"memoryTotal"`
+	IsRunning      bool      `json:"isRunning"`
+	OffersVNC      bool      `json:"offersVnc"`
+	Disks          []GntDisk `json:"disks"`
+	Nics           []GntNic  `json:"nics"`
 }
 
 type GntCluster struct {

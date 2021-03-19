@@ -51,6 +51,8 @@ func (repo *InstanceRepository) Get(clusterName string, instanceName string) (mo
 			MemoryTotal:    parsedInstance.BeParams.Memory,
 			IsRunning:      parsedInstance.OperState,
 			OffersVNC:      parsedInstance.CustomHvParams.VncBindAddress != "",
+			Disks:          extractDisks(parsedInstance),
+			Nics:           extractNics(parsedInstance),
 		},
 	}, nil
 }
@@ -121,4 +123,60 @@ func convertQueryResourceToStruct(resource query.Resource) (instanceQueryResourc
 	err = json.Unmarshal(data, &parsed)
 
 	return parsed, err
+}
+
+func extractDisks(instance rapiInstanceResponse) []model.GntDisk {
+	disks := []model.GntDisk{}
+	diskNames := instance.DiskNames
+	diskSizes := instance.DiskSizes
+
+	for i, uuid := range instance.DiskUuids {
+		var name string
+
+		if diskNameAsString, ok := diskNames[i].(string); ok {
+			name = diskNameAsString
+		} else {
+			name = fmt.Sprintf("Disk %d", i)
+		}
+
+		disks = append(disks, model.GntDisk{
+			Uuid:     uuid,
+			Name:     name,
+			Template: instance.DiskTemplate,
+			Capacity: diskSizes[i],
+		})
+	}
+
+	return disks
+}
+
+func extractNics(instance rapiInstanceResponse) []model.GntNic {
+	nics := []model.GntNic{}
+
+	for i, uuid := range instance.NicUuids {
+		mode := instance.NicModes[i]
+		mac := instance.NicMacs[i]
+		var name string
+
+		if nicNameAsString, ok := instance.NicNames[i].(string); ok {
+			name = nicNameAsString
+		} else {
+			name = fmt.Sprintf("NIC %d", i)
+		}
+
+		bridge := ""
+		if nicBridgeAsString, ok := instance.NicBridges[i].(string); ok {
+			bridge = nicBridgeAsString
+		}
+
+		nics = append(nics, model.GntNic{
+			Uuid:   uuid,
+			Mode:   mode,
+			Mac:    mac,
+			Name:   name,
+			Bridge: bridge,
+		})
+	}
+
+	return nics
 }

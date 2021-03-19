@@ -82,6 +82,8 @@ func TestInstanceRepoGetFuncReturnsSuccessfulResult_OnValidResponse(t *testing.T
 		SecondaryNodes: []string{"node4"},
 		CpuCount:       1,
 		MemoryTotal:    128,
+		Nics:           []model.GntNic{},
+		Disks:          []model.GntDisk{},
 	}, result.Instance)
 }
 

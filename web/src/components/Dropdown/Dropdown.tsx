@@ -48,7 +48,7 @@ function Dropdown({
       </div>
       <div className={styles.optionsWrapper}>
         <span className={styles.triangle} />
-        <span className={styles.options}>{children}</span>
+        <div className={styles.options}>{children}</div>
       </div>
     </div>
   );

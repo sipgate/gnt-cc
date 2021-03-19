@@ -77,15 +77,22 @@ func TestNodeRepoGetAllFuncReturnsNodes(t *testing.T) {
 		MemoryTotal:        15709,
 		MemoryFree:         10230,
 		CPUCount:           8,
-		PrimaryInstances:   []string{"burns", "milhouse"},
-		SecondaryInstances: []string{},
+		PrimaryInstances:   nil,
+		SecondaryInstances: nil,
+		IsMasterCandidate:  true,
+		IsMasterCapable:    true,
+		IsMaster:           true,
+		IsVMCapable:        true,
 	}, {
 		Name:               "node2",
 		MemoryTotal:        15709,
 		MemoryFree:         10229,
 		CPUCount:           8,
-		PrimaryInstances:   []string{"marge"},
-		SecondaryInstances: []string{},
+		PrimaryInstances:   nil,
+		SecondaryInstances: nil,
+		IsMasterCandidate:  true,
+		IsMasterCapable:    true,
+		IsVMCapable:        true,
 	}}, nodes)
 }
 
@@ -106,5 +113,9 @@ func TestNodeRepoGetFuncReturnsNode(t *testing.T) {
 		CPUCount:           8,
 		PrimaryInstances:   []string{"burns", "milhouse"},
 		SecondaryInstances: []string{},
+		IsMasterCandidate:  true,
+		IsMasterCapable:    true,
+		IsMaster:           true,
+		IsVMCapable:        true,
 	}, result.Node)
 }

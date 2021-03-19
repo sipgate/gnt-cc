@@ -1,5 +1,8 @@
+@import "../../styles/vars.scss";
+
 .root {
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 0;
+  height: $breadcrumbsHeight;
   background: var(--colorPrimaryShade);
   color: var(--colorElevationLow);
 

@@ -121,21 +121,21 @@ type rapiInstanceResponse struct {
 	Mtime            float64       `json:"mtime"`
 	CustomNicParams  []ganetiNic   `json:"custom_nicparams"`
 	DiskNames        []interface{} `json:"disk.names"`
-	DiskSizes        []interface{} `json:"disk.sizes"`
+	DiskSizes        []int         `json:"disk.sizes"`
 	DiskSpindles     []interface{} `json:"disk.spindles"`
 	DiskTemplate     string        `json:"disk_template"`
 	DiskUsage        int           `json:"disk_usage"`
-	DiskUuids        []interface{} `json:"disk.uuids"`
+	DiskUuids        []string      `json:"disk.uuids"`
 	NetworkPort      int           `json:"network_port"`
 	NicBridges       []interface{} `json:"nic.bridges"`
 	NicIps           []interface{} `json:"nic.ips"`
 	NicLinks         []interface{} `json:"nic.links"`
-	NicMacs          []interface{} `json:"nic.macs"`
-	NicModes         []interface{} `json:"nic.modes"`
+	NicMacs          []string      `json:"nic.macs"`
+	NicModes         []string      `json:"nic.modes"`
 	NicNames         []interface{} `json:"nic.names"`
 	NicNetworks      []interface{} `json:"nic.networks"`
 	NicNetworksNames []interface{} `json:"nic.networks.names"`
-	NicUuids         []interface{} `json:"nic.uuids"`
+	NicUuids         []string      `json:"nic.uuids"`
 	OperRAM          interface{}   `json:"oper_ram"`
 	OperVcpus        interface{}   `json:"oper_vcpus"`
 	Os               string        `json:"os"`

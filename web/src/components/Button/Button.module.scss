@@ -1,6 +1,6 @@
 @import "../../styles/mixins.scss";
 
-$size: 48px;
+$size: 40px;
 $sizeSmall: 28px;
 
 .button {
@@ -10,7 +10,7 @@ $sizeSmall: 28px;
   align-items: center;
   justify-content: center;
   padding: 0 1.5rem;
-  height: 48px;
+  height: $size;
   background: var(--colorInteractionBackground);
   color: var(--colorEmphasisHigh);
   border-radius: 2px;

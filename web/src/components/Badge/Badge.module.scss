@@ -26,4 +26,10 @@
         border-color: var(--colorDanger);
         background-color: var(--colorDanger);
     }
+
+    &.primary {
+        color: white;
+        border-color: var(--colorPrimary);
+        background-color: var(--colorPrimary);
+    }
 }

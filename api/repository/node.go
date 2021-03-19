@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gnt-cc/model"
 	"gnt-cc/rapi_client"
+	"strings"
 )
 
 type NodeRepository struct {
@@ -42,7 +43,7 @@ func (repo *NodeRepository) Get(clusterName string, nodeName string) (model.Node
 			DiskFree:           node.Dfree,
 			CPUCount:           node.Ctotal,
 			IsDrained:          node.Drained,
-			IsMaster:           node.Master,
+			IsMaster:           isMaster(node),
 			IsMasterCandidate:  node.MasterCandidate,
 			IsMasterCapable:    node.MasterCapable,
 			IsOffline:          node.Offline,
@@ -51,6 +52,10 @@ func (repo *NodeRepository) Get(clusterName string, nodeName string) (model.Node
 			SecondaryInstances: node.SinstList,
 		},
 	}, nil
+}
+
+func isMaster(node rapiNodeResponse) bool {
+	return strings.ToLower(node.Role) == "m"
 }
 
 func (repo *NodeRepository) GetAll(clusterName string) ([]model.GntNode, error) {
@@ -76,8 +81,12 @@ func (repo *NodeRepository) GetAll(clusterName string) ([]model.GntNode, error) 
 			MemoryFree:         node.Mfree,
 			DiskTotal:          node.Dtotal,
 			CPUCount:           node.Ctotal,
-			PrimaryInstances:   node.PinstList,
-			SecondaryInstances: node.SinstList,
+			IsDrained:          node.Drained,
+			IsMaster:           isMaster(node),
+			IsMasterCandidate:  node.MasterCandidate,
+			IsMasterCapable:    node.MasterCapable,
+			IsOffline:          node.Offline,
+			IsVMCapable:        node.VMCapable,
 		}
 	}
 

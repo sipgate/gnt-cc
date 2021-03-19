@@ -2,6 +2,7 @@ import React, { ReactElement } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { useApi } from "../../api";
 import { GntNode } from "../../api/models";
+import Badge, { BadgeStatus } from "../../components/Badge/Badge";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import CustomDataTable from "../../components/CustomDataTable/CustomDataTable";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
@@ -23,12 +24,19 @@ const columns: IDataTableColumn<GntNode>[] = [
     sortable: true,
     selector: (row) => row.name,
     cell: (row) => (
-      <PrefixLink
-        className={`${styles.link} ${styles.name}`}
-        to={`/nodes/${row.name}`}
-      >
-        {row.name}
-      </PrefixLink>
+      <>
+        <PrefixLink
+          className={`${styles.link} ${styles.name}`}
+          to={`/nodes/${row.name}`}
+        >
+          {row.name}
+        </PrefixLink>
+        {row.isMaster && (
+          <Badge status={BadgeStatus.PRIMARY} className={styles.badge}>
+            Master
+          </Badge>
+        )}
+      </>
     ),
   },
   {

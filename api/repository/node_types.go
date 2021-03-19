@@ -16,7 +16,6 @@ type rapiNodeResponse struct {
 	Offline         bool        `json:"offline"`
 	Drained         bool        `json:"drained"`
 	VMCapable       bool        `json:"vm_capable"`
-	Master          bool        `json:"master"`
 	MasterCandidate bool        `json:"master_candidate"`
 	MasterCapable   bool        `json:"master_capable"`
 	Mnode           int         `json:"mnode"`

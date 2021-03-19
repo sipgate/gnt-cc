@@ -5,9 +5,20 @@ import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 
 const DARK_CLASS = "dark";
+const DARK_THEME_ID = "theme-dark";
+
+const savedThemeState = localStorage.getItem(DARK_THEME_ID);
+const initialState = savedThemeState
+  ? (JSON.parse(savedThemeState) as boolean)
+  : false;
 
 export const ThemeToggle = (): ReactElement => {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(initialState);
+
+  function setIsDarkPersistent(value: boolean) {
+    setIsDark(value);
+    localStorage.setItem(DARK_THEME_ID, JSON.stringify(value));
+  }
 
   useEffect(() => {
     if (isDark) {
@@ -19,7 +30,9 @@ export const ThemeToggle = (): ReactElement => {
 
   useEffect(() => {
     const setPreferredMode = (prefersDark: boolean) => {
-      setIsDark(prefersDark);
+      if (savedThemeState === null) {
+        setIsDark(prefersDark);
+      }
     };
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -32,7 +45,7 @@ export const ThemeToggle = (): ReactElement => {
   return (
     <div
       className={classNames(styles.toggle, { [styles.isDark]: isDark })}
-      onClick={() => setIsDark(!isDark)}
+      onClick={() => setIsDarkPersistent(!isDark)}
     >
       <span className={styles.knob} />
       <span>

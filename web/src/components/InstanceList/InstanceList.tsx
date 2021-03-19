@@ -3,6 +3,7 @@ import React, { ChangeEvent, ReactElement, useMemo, useState } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { GntInstance } from "../../api/models";
 import { prettyPrintMiB } from "../../helpers";
+import Badge, { BadgeStatus } from "../Badge/Badge";
 import CustomDataTable from "../CustomDataTable/CustomDataTable";
 import Icon from "../Icon/Icon";
 import Input from "../Input/Input";
@@ -17,12 +18,19 @@ const columns: IDataTableColumn<GntInstance>[] = [
     sortable: true,
     selector: (row) => row.name,
     cell: (row) => (
-      <PrefixLink
-        className={`${styles.link} ${styles.name}`}
-        to={`/instances/${row.name}`}
-      >
-        {row.name}
-      </PrefixLink>
+      <>
+        <PrefixLink
+          className={`${styles.link} ${styles.name}`}
+          to={`/instances/${row.name}`}
+        >
+          {row.name}
+        </PrefixLink>
+        {!row.isRunning && (
+          <Badge className={styles.badge} status={BadgeStatus.FAILURE}>
+            Offline
+          </Badge>
+        )}
+      </>
     ),
   },
   {

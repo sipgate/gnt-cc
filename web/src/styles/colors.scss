@@ -1,39 +1,40 @@
-@mixin whenDark {
-  html.dark & {
+@mixin whenLight {
+  html.light & {
     @content;
   }
 }
 
 body {
-  --colorEmphasisHigh: #000;
-  --colorEmphasisMedium: #333;
-  --colorEmphasisLow: rgba(1, 1, 1, 0.2);
-  --colorSeparator: #e3e3e3;
-  --colorInteractionBackground: rgb(235, 235, 235);
-  --colorElevationLow: #fff;
-  --colorElevationMedium: #fff;
-  --colorElevationHigh: #fff;
+  --colorEmphasisHigh: #f5f5f5;
+  --colorEmphasisMedium: #a4aa9d;
+  --colorEmphasisLow: #464646;
+  --colorSeparator: #464646;
+  --colorInteractionBackground: #303030;
+  --colorElevationLow: #262626;
+  --colorElevationMedium: #303030;
+  --colorElevationHigh: #3b3b3b;
+  --dropShadowElevationLow: 0 0.125rem 0.25rem 0 #111;
+  --dropShadowElevationHigh: 0 0.25rem 1rem #000;
+  --overlay: rgba(255, 255, 255, 0.1);
+  --colorPrimaryShade: #7cb0dc;
+
   --colorPrimary: #67a0d5;
-  --colorPrimaryShade: #4672af;
   --colorWarning: #febc2c;
   --colorSuccess: #5cb85c;
   --colorDanger: #f84c48;
-  --dropShadowElevationLow: 0 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.3);
-  --dropShadowElevationHigh: 0 0.25rem 1rem rgba(0, 0, 0, 0.5);
-  --overlay: rgba(0, 0, 0, 0.05);
 
-  @include whenDark {
-    --colorEmphasisHigh: #f5f5f5;
-    --colorEmphasisMedium: #a4aa9d;
-    --colorEmphasisLow: #464646;
-    --colorSeparator: #464646;
-    --colorInteractionBackground: #303030;
-    --colorElevationLow: #262626;
-    --colorElevationMedium: #303030;
-    --colorElevationHigh: #3b3b3b;
-    --colorPrimaryShade: #7cb0dc;
-    --dropShadowElevationLow: 0 0.125rem 0.25rem 0 #111;
-    --dropShadowElevationHigh: 0 0.25rem 1rem #000;
-    --overlay: rgba(255, 255, 255, 0.1);
+  @include whenLight {
+    --colorEmphasisHigh: #000;
+    --colorEmphasisMedium: #333;
+    --colorEmphasisLow: rgba(1, 1, 1, 0.2);
+    --colorSeparator: #e3e3e3;
+    --colorInteractionBackground: rgb(235, 235, 235);
+    --colorElevationLow: #fff;
+    --colorElevationMedium: #fff;
+    --colorElevationHigh: #fff;
+    --colorPrimaryShade: #4672af;
+    --dropShadowElevationLow: 0 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.3);
+    --dropShadowElevationHigh: 0 0.25rem 1rem rgba(0, 0, 0, 0.5);
+    --overlay: rgba(0, 0, 0, 0.05);
   }
 }

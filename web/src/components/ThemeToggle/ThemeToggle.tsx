@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 
-const DARK_CLASS = "dark";
+const LIGHT_CLASS = "light";
 const DARK_THEME_ID = "theme-dark";
 
 const savedThemeState = localStorage.getItem(DARK_THEME_ID);
@@ -22,9 +22,9 @@ export const ThemeToggle = (): ReactElement => {
 
   useEffect(() => {
     if (isDark) {
-      document.documentElement.classList.add(DARK_CLASS);
+      document.documentElement.classList.remove(LIGHT_CLASS);
     } else {
-      document.documentElement.classList.remove(DARK_CLASS);
+      document.documentElement.classList.add(LIGHT_CLASS);
     }
   }, [isDark]);
 

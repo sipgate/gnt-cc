@@ -1,5 +1,13 @@
 package repository
 
+type X struct {
+	Data []interface{} `json:"data"`
+}
+
+type OpLogEntry struct  {
+	Data []X `json:"data"`
+}
+
 type rapiJobResponse struct {
 	Status     string        `json:"status"`
 	ID         int           `json:"id"`
@@ -9,4 +17,5 @@ type rapiJobResponse struct {
 	Summary    []string      `json:"summary"`
 	OpStatus   []string      `json:"opstatus"`
 	Ops        []interface{} `json:"ops"`
+	OpLog		   []interface{}  `json:"oplog"`
 }

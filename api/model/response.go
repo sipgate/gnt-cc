@@ -38,6 +38,11 @@ type AllJobsResponse struct {
 	Jobs         []GntJob `json:"jobs"`
 }
 
+type JobResponse struct {
+	Cluster      string   `json:"cluster"`
+	Job        GntJob `json:"job"`
+}
+
 type ErrorResponse struct {
 	Message string `json:"message"`
 }

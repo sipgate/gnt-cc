@@ -2,7 +2,6 @@ package router
 
 import (
 	"crypto/tls"
-	rice "github.com/GeertJohan/go.rice"
 	auth2 "gnt-cc/auth"
 	"gnt-cc/config"
 	"gnt-cc/controllers"
@@ -15,6 +14,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	rice "github.com/GeertJohan/go.rice"
 
 	_ "gnt-cc/docs"
 
@@ -130,6 +131,7 @@ func (r *router) SetupAPIRoutes(staticBox *rice.Box) {
 		withCluster.GET("/instances/:instance/console", r.instanceController.OpenInstanceConsole)
 		withCluster.GET("/statistics", r.statisticsController.Get)
 		withCluster.GET("/jobs", r.jobController.GetAll)
+		withCluster.GET("/jobs/:job", r.jobController.Get)
 	}
 
 	r.engine.StaticFS("/static", staticBox.HTTPBox())

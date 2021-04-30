@@ -15,5 +15,6 @@ type (
 
 	jobRepository interface {
 		GetAll(clusterName string) ([]model.GntJob, error)
+		Get(clusterName, jobID string) (model.JobResult, error)
 	}
 )

@@ -8,5 +8,10 @@ type InstanceResult struct {
 
 type NodeResult struct {
 	Found bool
-	Node  GntNode
+	Node  GntNode	
+}
+
+type JobResult struct {
+	Found bool
+	Job  GntJob
 }

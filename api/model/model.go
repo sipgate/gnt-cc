@@ -52,6 +52,13 @@ type GntNode struct {
 	IsVMCapable        bool     `json:"isVmCapable"`
 }
 
+type GntJobLogEntry struct {
+	Serial int `json:"serial"`
+	Message string `json:"message"`
+	StartedAt  int    `json:"startedAt"`
+	EndedAt    int    `json:"endedAt"`
+}
+
 type GntJob struct {
 	ID         int    `json:"id"`
 	Summary    string `json:"summary"`
@@ -59,4 +66,5 @@ type GntJob struct {
 	StartedAt  int    `json:"startedAt"`
 	EndedAt    int    `json:"endedAt"`
 	Status     string `json:"status"`
+	Log       []GntJobLogEntry `json:"log"`
 }

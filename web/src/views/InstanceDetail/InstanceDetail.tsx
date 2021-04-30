@@ -3,12 +3,13 @@ import {
   faMemory,
   faMicrochip,
   faNetworkWired,
+  faServer,
   faTag,
   faTerminal,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
-import React, { ReactElement } from "react";
+import React, { PropsWithChildren, ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useApi } from "../../api";
 import { GntDisk, GntInstance, GntNic } from "../../api/models";
@@ -18,67 +19,74 @@ import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import Icon from "../../components/Icon/Icon";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import PrefixLink from "../../components/PrefixLink";
+import QuickInfoBanner from "../../components/QuickInfoBanner/QuickInfoBanner";
 import { useClusterName } from "../../helpers/hooks";
 import { prettyPrintMiB } from "../../helpers/numbers";
 import styles from "./InstanceDetail.module.scss";
 
-type QuickInfoItemProps = {
-  value: string;
-  label: string;
+type CardProps = {
   icon: IconDefinition;
+  title: string;
+  badge?: ReactElement;
 };
 
-function QuickInfoItem({
-  value,
-  label,
+function Card({
   icon,
-}: QuickInfoItemProps): ReactElement {
+  badge,
+  title,
+  children,
+}: PropsWithChildren<CardProps>): ReactElement {
   return (
-    <div>
-      <span className={styles.value}>{value}</span>
-      <span className={styles.label}>
-        <Icon icon={icon} />
-        {label}
-      </span>
+    <div
+      className={classNames(styles.card, {
+        [styles.hasBody]: !!children,
+      })}
+    >
+      <Icon className={styles.icon} icon={icon} />
+      <span className={styles.title}>{title}</span>
+      {badge}
+      {children && <div className={styles.body}>{children}</div>}
     </div>
   );
 }
 
 function DiskCard({ name, capacity, template }: GntDisk): ReactElement {
   return (
-    <div className={classNames(styles.diskCard, styles.card)}>
-      <Icon icon={faHdd} />
-      <div>
-        <p>{name}</p>
-        <p className={styles.diskCapacity}>{prettyPrintMiB(capacity)}</p>
-      </div>
-      <Badge className={styles.badge}>{template}</Badge>
-    </div>
+    <Card icon={faHdd} title={name} badge={<Badge>{template}</Badge>}>
+      <p className={styles.diskCapacity}>{prettyPrintMiB(capacity)}</p>
+    </Card>
   );
 }
 
 function TagCard({ tag }: { tag: string }): ReactElement {
+  return <Card icon={faTag} title={tag} />;
+}
+
+type NodeCardProps = {
+  name: string;
+  primary?: boolean;
+};
+
+function NodeCard({ name, primary }: NodeCardProps): ReactElement {
   return (
-    <div className={classNames(styles.tagCard, styles.card)}>
-      <Icon icon={faTag} />
-      <div>
-        <p>{tag}</p>
-      </div>
-    </div>
+    <Card
+      icon={faServer}
+      title={name}
+      badge={
+        primary ? (
+          <Badge status={BadgeStatus.PRIMARY}>Primary</Badge>
+        ) : undefined
+      }
+    />
   );
 }
 
 function NicCard({ name, mode, mac, bridge }: GntNic): ReactElement {
   return (
-    <div className={classNames(styles.nicCard, styles.card)}>
-      <Icon icon={faNetworkWired} />
-      <div>
-        <p>{name}</p>
-        {bridge.length && <p className={styles.nicBridge}>{bridge}</p>}
-        <p className={styles.nicMac}>{mac}</p>
-      </div>
-      <Badge className={styles.badge}>{mode}</Badge>
-    </div>
+    <Card icon={faNetworkWired} title={name} badge={<Badge>{mode}</Badge>}>
+      {bridge.length && <p className={styles.nicBridge}>{bridge}</p>}
+      <p className={styles.nicMac}>{mac}</p>
+    </Card>
   );
 }
 
@@ -130,23 +138,24 @@ const InstanceDetail = (): ReactElement => {
               </PrefixLink>
             )}
           </header>
-          <div className={styles.quickInfo}>
-            <QuickInfoItem
+
+          <QuickInfoBanner>
+            <QuickInfoBanner.Item
               icon={faMicrochip}
               label="vCPUs"
               value={instance.cpuCount.toString()}
             />
-            <QuickInfoItem
+            <QuickInfoBanner.Item
               icon={faMemory}
               label="Memory"
               value={prettyPrintMiB(instance.memoryTotal)}
             />
-            <QuickInfoItem
+            <QuickInfoBanner.Item
               icon={faHdd}
               label="Storage"
               value={prettyPrintMiB(totalStorage)}
             />
-          </div>
+          </QuickInfoBanner>
 
           <div className={styles.sections}>
             <section>
@@ -159,6 +168,17 @@ const InstanceDetail = (): ReactElement => {
               <h2>Networking</h2>
               {instance.nics.map((nic) => (
                 <NicCard key={nic.name} {...nic} />
+              ))}
+            </section>
+            <section>
+              <h2>Nodes</h2>
+              <NodeCard
+                key={instance.primaryNode}
+                name={instance.primaryNode}
+                primary
+              />
+              {instance.secondaryNodes.map((node) => (
+                <NodeCard key={node} name={node} />
               ))}
             </section>
             <section>

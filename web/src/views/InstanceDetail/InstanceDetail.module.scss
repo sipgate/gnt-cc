@@ -12,39 +12,11 @@ header {
   }
 }
 
-.quickInfo {
-  display: flex;
-  justify-content: space-around;
-  gap: 4rem;
-  background: var(--overlay);
-
-  > div {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-
-    .value {
-      display: block;
-      font-size: 2em;
-      font-weight: bold;
-      margin: 1rem 0;
-    }
-
-    .label {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      color: var(--colorEmphasisMedium);
-    }
-  }
-}
-
 .sections {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2rem;
-  
+
   > section {
     > h2 {
       font-size: 1em;
@@ -53,61 +25,48 @@ header {
   }
 }
 
-.nicCard {
-  > div {
-    > p {
-      margin: 0;
-    }
-
-    .nicMac {
-      color: var(--colorEmphasisLow);
-      margin-top: 2rem;
-    }
-
-    .nicBridge {
-      font-size: 1.25em;
-    }
-  }
+.diskCapacity {
+  font-size: 1.25em;
+  margin: 0;
 }
 
-.diskCard {
-  > div {
-    > .diskCapacity {
-      font-size: 1.25em;
-    }
-  }
+.nicMac {
+  color: var(--colorEmphasisLow);
+  margin: 0;
+}
+
+.nicBridge {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.25em;
 }
 
 .card {
+  display: grid;
+  grid-template-columns: 24px 1fr min-content;
+  grid-template-areas: "icon title badge";
+  gap: 1rem;
   padding: 1rem;
   border: 1px solid var(--colorSeparator);
   border-radius: 4px;
-  display: flex;
 
-  > span {
-    opacity: 0.75;
-    flex-shrink: 0;
-    margin-bottom: auto;
-    margin-top: 2px;
-  }
-
-  > div {
-    padding: 0 1rem;
-
-    > p {
-      margin: 0;
-
-      &:not(:last-child) {
-        margin-bottom: 0.5rem;
-      }
-    }
+  &.hasBody {
+    grid-template-areas: "icon title badge" ". body body";
   }
 
   &:not(:last-of-type) {
     margin-bottom: 1rem;
   }
 
-  .badge {
-    margin-left: auto;
+  .icon {
+    opacity: 0.65;
+  }
+
+  .icon,
+  .title {
+    align-self: center;
+  }
+
+  .body {
+    grid-area: body;
   }
 }

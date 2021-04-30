@@ -1,0 +1,26 @@
+.root {
+  display: flex;
+  justify-content: space-around;
+  background: var(--overlay);
+
+  > div {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+
+    .value {
+      display: block;
+      font-size: 2em;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+
+    .label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--colorEmphasisMedium);
+    }
+  }
+}

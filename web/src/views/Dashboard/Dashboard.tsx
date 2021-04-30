@@ -1,11 +1,15 @@
+import {
+  faMemory,
+  faMicrochip,
+  faServer,
+} from "@fortawesome/free-solid-svg-icons";
 import React, { ReactElement } from "react";
 import { useApi } from "../../api";
-import Card from "../../components/cards/Card/Card";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
-import { convertMiBToGiB } from "../../helpers";
+import QuickInfoBanner from "../../components/QuickInfoBanner/QuickInfoBanner";
+import { prettyPrintMiB } from "../../helpers";
 import { useClusterName } from "../../helpers/hooks";
-import styles from "./Dashboard.module.scss";
 
 interface StatisticElement {
   count: number;
@@ -31,37 +35,31 @@ function Dashboard(): ReactElement {
     return <div>Failed to load: {error}</div>;
   }
 
-  const stats = [
-    {
-      title: "Nodes",
-      value: data.nodes.count,
-    },
-    {
-      title: "Instances",
-      value: data.instances.count,
-    },
-    {
-      title: "Node CPU Cores",
-      value: data.nodes.cpuCount,
-    },
-    {
-      title: "Total Node Memory",
-      value: `${convertMiBToGiB(data.nodes.memoryTotal)} GB`,
-    },
-  ];
-
   return (
     <>
       <ContentWrapper>
-        <div className={styles.statistics}>
-          {stats.map((stat) => (
-            <Card key={stat.title} title={stat.title}>
-              <div className={styles.stat}>
-                <span>{stat.value}</span>
-              </div>
-            </Card>
-          ))}
-        </div>
+        <QuickInfoBanner>
+          <QuickInfoBanner.Item
+            icon={faServer}
+            label="Nodes"
+            value={String(data.nodes.count)}
+          />
+          <QuickInfoBanner.Item
+            icon={faServer}
+            label="Instances"
+            value={String(data.instances.count)}
+          />
+          <QuickInfoBanner.Item
+            icon={faMicrochip}
+            label="Node CPU Cores"
+            value={String(data.nodes.cpuCount)}
+          />
+          <QuickInfoBanner.Item
+            icon={faMemory}
+            label="Memory"
+            value={prettyPrintMiB(data.nodes.memoryTotal)}
+          />
+        </QuickInfoBanner>
       </ContentWrapper>
     </>
   );

@@ -53,6 +53,7 @@ func (repo *InstanceRepository) Get(clusterName string, instanceName string) (mo
 			OffersVNC:      parsedInstance.CustomHvParams.VncBindAddress != "",
 			Disks:          extractDisks(parsedInstance),
 			Nics:           extractNics(parsedInstance),
+			Tags:           parsedInstance.Tags,
 		},
 	}, nil
 }

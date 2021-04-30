@@ -3,9 +3,11 @@ import {
   faMemory,
   faMicrochip,
   faNetworkWired,
+  faTag,
   faTerminal,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
+import classNames from "classnames";
 import React, { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useApi } from "../../api";
@@ -44,7 +46,7 @@ function QuickInfoItem({
 
 function DiskCard({ name, capacity, template }: GntDisk): ReactElement {
   return (
-    <div className={styles.diskCard}>
+    <div className={classNames(styles.diskCard, styles.card)}>
       <Icon icon={faHdd} />
       <div>
         <p>{name}</p>
@@ -55,9 +57,20 @@ function DiskCard({ name, capacity, template }: GntDisk): ReactElement {
   );
 }
 
+function TagCard({ tag }: { tag: string }): ReactElement {
+  return (
+    <div className={classNames(styles.tagCard, styles.card)}>
+      <Icon icon={faTag} />
+      <div>
+        <p>{tag}</p>
+      </div>
+    </div>
+  );
+}
+
 function NicCard({ name, mode, mac, bridge }: GntNic): ReactElement {
   return (
-    <div className={styles.nicCard}>
+    <div className={classNames(styles.nicCard, styles.card)}>
       <Icon icon={faNetworkWired} />
       <div>
         <p>{name}</p>
@@ -146,6 +159,12 @@ const InstanceDetail = (): ReactElement => {
               <h2>Networking</h2>
               {instance.nics.map((nic) => (
                 <NicCard key={nic.name} {...nic} />
+              ))}
+            </section>
+            <section>
+              <h2>Tags</h2>
+              {instance.tags.map((tag) => (
+                <TagCard key={tag} tag={tag} />
               ))}
             </section>
           </div>

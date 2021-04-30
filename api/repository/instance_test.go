@@ -84,6 +84,7 @@ func TestInstanceRepoGetFuncReturnsSuccessfulResult_OnValidResponse(t *testing.T
 		MemoryTotal:    128,
 		Nics:           []model.GntNic{},
 		Disks:          []model.GntDisk{},
+		Tags:           []string{"tag1"},
 	}, result.Instance)
 }
 

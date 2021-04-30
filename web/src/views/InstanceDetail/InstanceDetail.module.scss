@@ -41,6 +41,10 @@ header {
 }
 
 .sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  
   > section {
     > h2 {
       font-size: 1em;
@@ -74,9 +78,7 @@ header {
   }
 }
 
-.nicCard,
-.diskCard {
-  width: 320px;
+.card {
   padding: 1rem;
   border: 1px solid var(--colorSeparator);
   border-radius: 4px;
@@ -84,6 +86,9 @@ header {
 
   > span {
     opacity: 0.75;
+    flex-shrink: 0;
+    margin-bottom: auto;
+    margin-top: 2px;
   }
 
   > div {

@@ -17,7 +17,9 @@
   "nic.bridges": [],
   "status": "ADMIN_down",
   "custom_hvparams": {},
-  "tags": [],
+  "tags": [
+    "tag1"
+  ],
   "nic.networks": [],
   "snodes": ["node4"],
   "nic.macs": [],

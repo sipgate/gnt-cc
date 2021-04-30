@@ -25,6 +25,7 @@ type GntInstance struct {
 	OffersVNC      bool      `json:"offersVnc"`
 	Disks          []GntDisk `json:"disks"`
 	Nics           []GntNic  `json:"nics"`
+	Tags           []string  `json:"tags"`
 }
 
 type GntCluster struct {

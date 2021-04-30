@@ -23,6 +23,7 @@ export interface GntInstance {
   offersVnc: boolean;
   disks: GntDisk[];
   nics: GntNic[];
+  tags: string[];
 }
 
 export interface GntNode {

@@ -3,7 +3,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 4rem;
+  padding: 20vh;
+
+  .headline {
+    color: var(--colorPrimary);
+    font-size: 2em;
+    padding: 2rem 0;
+  }
 
   .logo {
     margin: 2rem 0;

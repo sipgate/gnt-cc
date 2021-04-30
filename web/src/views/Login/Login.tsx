@@ -2,7 +2,6 @@ import React, { ReactElement, useContext, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { useFormik } from "formik";
 import styles from "./Login.module.scss";
-import logo from "../../assets/ganeti_logo.svg";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 import AuthContext from "../../api/AuthContext";
@@ -91,11 +90,14 @@ function Login({ history }: RouteComponentProps): ReactElement {
 
   return (
     <div className={styles.login}>
-      <section className={styles.logo}>
-        <img src={logo} alt="Gnt-CC Logo" />
-      </section>
-
       <section>
+        <div className={styles.headline}>
+          Ganeti
+          <br />
+          Control
+          <br />
+          Center
+        </div>
         <form onSubmit={formik.handleSubmit}>
           <Input
             type="text"

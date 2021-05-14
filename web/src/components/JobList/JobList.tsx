@@ -2,32 +2,11 @@ import React, { ReactElement } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { GntJob } from "../../api/models";
 import { durationHumanReadable, unixToDate } from "../../helpers/time";
-import Badge, { BadgeStatus } from "../Badge/Badge";
 import CustomDataTable from "../CustomDataTable/CustomDataTable";
+import JobStatus from "../JobStatus";
+import JobSummary from "../JobSummary/JobSummary";
 import PrefixLink from "../PrefixLink";
 import styles from "./JobList.module.scss";
-
-function prettifySummary(summary: string): ReactElement {
-  const regex = /([A-Z_]+)(?:\((.*)\))?/;
-
-  const matches = summary.match(regex);
-
-  if (!matches) {
-    return <></>;
-  }
-
-  const jobType = matches[1] || "";
-  const jobDetails = matches[2] || "";
-
-  return (
-    <span>
-      <span className={styles.jobType}>
-        {jobType.toLowerCase().replace(/_/g, " ")}
-      </span>
-      <span className={styles.jobDetails}>{jobDetails}</span>
-    </span>
-  );
-}
 
 const columns: IDataTableColumn<GntJob>[] = [
   {
@@ -46,16 +25,13 @@ const columns: IDataTableColumn<GntJob>[] = [
     sortable: true,
     selector: (row) => row.status,
     width: "120px",
-    cell: (row) => {
-      const status = getBadgeStatusFromJobStatus(row.status);
-      return <Badge status={status}>{row.status}</Badge>;
-    },
+    cell: (row) => <JobStatus status={row.status} />,
   },
   {
     name: "Summary",
     sortable: true,
     selector: (row) => row.summary,
-    cell: (row) => prettifySummary(row.summary),
+    cell: (row) => <JobSummary summary={row.summary} />,
   },
   {
     name: "Start",
@@ -87,20 +63,6 @@ const columns: IDataTableColumn<GntJob>[] = [
 
 interface Props {
   jobs: GntJob[];
-}
-
-function getBadgeStatusFromJobStatus(status: string) {
-  if (status === "success") {
-    return BadgeStatus.SUCCESS;
-  }
-  if (["queued", "waiting", "canceling"].includes(status)) {
-    return BadgeStatus.WARNING;
-  }
-  if (status === "error") {
-    return BadgeStatus.FAILURE;
-  }
-
-  return undefined;
 }
 
 function JobList({ jobs }: Props): ReactElement {

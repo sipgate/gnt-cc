@@ -4,6 +4,7 @@ import { GntJob } from "../../api/models";
 import { durationHumanReadable, unixToDate } from "../../helpers/time";
 import Badge, { BadgeStatus } from "../Badge/Badge";
 import CustomDataTable from "../CustomDataTable/CustomDataTable";
+import PrefixLink from "../PrefixLink";
 import styles from "./JobList.module.scss";
 
 function prettifySummary(summary: string): ReactElement {
@@ -33,6 +34,11 @@ const columns: IDataTableColumn<GntJob>[] = [
     name: "ID",
     sortable: true,
     selector: (row) => row.id,
+    cell: (row) => (
+      <PrefixLink className={styles.link} to={`/jobs/${row.id}`}>
+        {row.id}
+      </PrefixLink>
+    ),
     width: "120px",
   },
   {

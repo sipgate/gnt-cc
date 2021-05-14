@@ -39,8 +39,8 @@ type AllJobsResponse struct {
 }
 
 type JobResponse struct {
-	Cluster      string   `json:"cluster"`
-	Job        GntJob `json:"job"`
+	Cluster string `json:"cluster"`
+	Job     GntJob `json:"job"`
 }
 
 type ErrorResponse struct {

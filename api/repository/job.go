@@ -80,14 +80,14 @@ func (repo *JobRepository) Get(clusterName, jobID string) (model.JobResult, erro
 			StartedAt:  timestamps.startedAt,
 			EndedAt:    timestamps.endedAt,
 			Status:     job.Status,
-			Log: log,
+			Log:        log,
 		},
 	}, nil
 }
 
 type timestamps struct {
-		startedAt int
-		endedAt int
+	startedAt int
+	endedAt   int
 }
 
 func parseJobTimestamp(job *rapiJobResponse) timestamps {
@@ -104,20 +104,20 @@ func parseJobTimestamp(job *rapiJobResponse) timestamps {
 
 	return timestamps{
 		startedAt: startedAt,
-		endedAt: endedAt,
+		endedAt:   endedAt,
 	}
 }
 
-func parseJobLog(job *rapiJobResponse) ([]model.GntJobLogEntry, error) {	
+func parseJobLog(job *rapiJobResponse) ([]model.GntJobLogEntry, error) {
 	returnedEntries := job.OpLog[0]
 	opLogEntries := make([]model.GntJobLogEntry, len(returnedEntries))
-	
+
 	for i, logEntry := range returnedEntries {
 		serial, ok := logEntry[0].(float64)
 		if !ok {
 			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("serial not a float64, but a %T", logEntry[0]))
 		}
-		
+
 		timings, ok := logEntry[1].([]interface{})
 		if !ok {
 			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("timings not an array, but a %T", logEntry[1]))
@@ -132,17 +132,17 @@ func parseJobLog(job *rapiJobResponse) ([]model.GntJobLogEntry, error) {
 		if !ok {
 			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("timingsDuration not a float64, but a %T", timings[1]))
 		}
-		
+
 		msg, ok := logEntry[3].(string)
 		if !ok {
 			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("message not a string, but a %T", logEntry[3]))
 		}
 
 		opLogEntries[i] = model.GntJobLogEntry{
-			Serial: int(serial),
+			Serial:    int(serial),
 			StartedAt: int(timingsStart),
-			Duration: int(timingsDuration),
-			Message: msg,
+			Duration:  int(timingsDuration),
+			Message:   msg,
 		}
 	}
 
@@ -152,4 +152,3 @@ func parseJobLog(job *rapiJobResponse) ([]model.GntJobLogEntry, error) {
 func makeOpLogParseError(jobID int, reason string) error {
 	return fmt.Errorf("cannot parse oplog of job [%d]: %s", jobID, reason)
 }
-

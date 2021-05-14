@@ -50,12 +50,11 @@ func (controller *JobController) Get(c *gin.Context) {
 	clusterName := c.Param("cluster")
 	jobID := c.Param("job")
 
-	
 	if jobID == "" {
 		c.AbortWithStatusJSON(400, createErrorBody("job ID is required"))
 		return
 	}
-	
+
 	result, err := controller.Repository.Get(clusterName, jobID)
 
 	if err != nil {
@@ -69,7 +68,7 @@ func (controller *JobController) Get(c *gin.Context) {
 	}
 
 	c.JSON(200, model.JobResponse{
-		Cluster:  clusterName,
-		Job: result.Job,
+		Cluster: clusterName,
+		Job:     result.Job,
 	})
 }

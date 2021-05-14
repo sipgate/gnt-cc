@@ -53,18 +53,18 @@ type GntNode struct {
 }
 
 type GntJobLogEntry struct {
-	Serial int `json:"serial"`
-	Message string `json:"message"`
-	StartedAt  int    `json:"startedAt"`
-	Duration    int    `json:"duration"`
+	Serial    int    `json:"serial"`
+	Message   string `json:"message"`
+	StartedAt int    `json:"startedAt"`
+	Duration  int    `json:"duration"`
 }
 
 type GntJob struct {
-	ID         int    `json:"id"`
-	Summary    string `json:"summary"`
-	ReceivedAt int    `json:"receivedAt"`
-	StartedAt  int    `json:"startedAt"`
-	EndedAt    int    `json:"endedAt"`
-	Status     string `json:"status"`
-	Log       []GntJobLogEntry `json:"log"`
+	ID         int              `json:"id"`
+	Summary    string           `json:"summary"`
+	ReceivedAt int              `json:"receivedAt"`
+	StartedAt  int              `json:"startedAt"`
+	EndedAt    int              `json:"endedAt"`
+	Status     string           `json:"status"`
+	Log        []GntJobLogEntry `json:"log"`
 }

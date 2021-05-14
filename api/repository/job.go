@@ -28,14 +28,14 @@ func (repo *JobRepository) GetAll(clusterName string) ([]model.GntJob, error) {
 	jobs := make([]model.GntJob, len(jobData))
 
 	for i, job := range jobData {
-		ts := parseJobTimestamp(&job)
+		timestamps := parseJobTimestamp(&job)
 
 		jobs[i] = model.GntJob{
 			ID:         job.ID,
 			Summary:    job.Summary[0],
 			ReceivedAt: job.ReceivedTs[0],
-			StartedAt:  ts.startedAt,
-			EndedAt:    ts.endedAt,
+			StartedAt:  timestamps.startedAt,
+			EndedAt:    timestamps.endedAt,
 			Status:     job.Status,
 		}
 	}
@@ -64,7 +64,7 @@ func (repo *JobRepository) Get(clusterName, jobID string) (model.JobResult, erro
 		return model.JobResult{}, err
 	}
 
-	ts := parseJobTimestamp(&job)
+	timestamps := parseJobTimestamp(&job)
 	log, err := parseJobLog(&job)
 
 	if err != nil {
@@ -77,8 +77,8 @@ func (repo *JobRepository) Get(clusterName, jobID string) (model.JobResult, erro
 			ID:         job.ID,
 			Summary:    job.Summary[0],
 			ReceivedAt: job.ReceivedTs[0],
-			StartedAt:  ts.startedAt,
-			EndedAt:    ts.endedAt,
+			StartedAt:  timestamps.startedAt,
+			EndedAt:    timestamps.endedAt,
 			Status:     job.Status,
 			Log: log,
 		},
@@ -108,63 +108,48 @@ func parseJobTimestamp(job *rapiJobResponse) timestamps {
 	}
 }
 
-type dataFloat64 struct {
-	data float64
-}
-
-type dataString struct {
-	data string
-}
-
-type dataTimestamps struct {
-	data []dataFloat64
-}
-
-type dataInterface struct {
-	data []interface{}
-}
-
-func parseJobLog(job *rapiJobResponse) ([]model.GntJobLogEntry, error) {
-	entries, ok := job.OpLog[0].(dataInterface)
-
-	if !ok {
-		return []model.GntJobLogEntry{}, fmt.Errorf("cannot parse job oplog [jobID=%d]", job.ID)
-	}
-
-	opLogEntries := make([]model.GntJobLogEntry, len(entries.data))
-
-	for i, v := range entries.data {
-		entry, ok := v.(dataInterface)
-
+func parseJobLog(job *rapiJobResponse) ([]model.GntJobLogEntry, error) {	
+	returnedEntries := job.OpLog[0]
+	opLogEntries := make([]model.GntJobLogEntry, len(returnedEntries))
+	
+	for i, logEntry := range returnedEntries {
+		serial, ok := logEntry[0].(float64)
 		if !ok {
-			return []model.GntJobLogEntry{}, fmt.Errorf("cannot parse job oplog, cannot parse entry [jobID=%d]", job.ID)
+			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("serial not a float64, but a %T", logEntry[0]))
+		}
+		
+		timings, ok := logEntry[1].([]interface{})
+		if !ok {
+			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("timings not an array, but a %T", logEntry[1]))
 		}
 
-		logEntry := entry.data
-
-		serial, ok := logEntry[0].(dataFloat64)
+		timingsStart, ok := timings[0].(float64)
 		if !ok {
-			return []model.GntJobLogEntry{}, fmt.Errorf("cannot parse job oplog, serial could not be parsed [jobID=%d]", job.ID)
+			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("timingsStart not a float64, but a %T", timings[0]))
 		}
 
-		ts, ok := logEntry[1].(dataTimestamps)
+		timingsDuration, ok := timings[1].(float64)
 		if !ok {
-			return []model.GntJobLogEntry{}, fmt.Errorf("cannot parse job oplog, ts could not be parsed [jobID=%d]", job.ID)
+			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("timingsDuration not a float64, but a %T", timings[1]))
 		}
-
-		msg, ok := logEntry[3].(dataString)
+		
+		msg, ok := logEntry[3].(string)
 		if !ok {
-			return []model.GntJobLogEntry{}, fmt.Errorf("cannot parse job oplog, message could not be parsed [jobID=%d]", job.ID)
+			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("message not a string, but a %T", logEntry[3]))
 		}
 
 		opLogEntries[i] = model.GntJobLogEntry{
-			Serial: int(serial.data),
-			StartedAt: int(ts.data[0].data),
-			EndedAt: int(ts.data[1].data),
-			Message: msg.data,
+			Serial: int(serial),
+			StartedAt: int(timingsStart),
+			Duration: int(timingsDuration),
+			Message: msg,
 		}
 	}
 
 	return opLogEntries, nil
+}
+
+func makeOpLogParseError(jobID int, reason string) error {
+	return fmt.Errorf("cannot parse oplog of job [%d]: %s", jobID, reason)
 }
 

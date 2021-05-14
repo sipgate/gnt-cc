@@ -17,5 +17,5 @@ type rapiJobResponse struct {
 	Summary    []string      `json:"summary"`
 	OpStatus   []string      `json:"opstatus"`
 	Ops        []interface{} `json:"ops"`
-	OpLog		   []interface{}  `json:"oplog"`
+	OpLog		   [][][]interface{}  `json:"oplog"`
 }

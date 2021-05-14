@@ -14,6 +14,7 @@ import { GntDisk, GntInstance, GntNic } from "../../api/models";
 import Badge, { BadgeStatus } from "../../components/Badge/Badge";
 import Button from "../../components/Button/Button";
 import Card from "../../components/Card/Card";
+import CardGrid from "../../components/CardGrid/CardGrid";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import PrefixLink from "../../components/PrefixLink";
@@ -129,21 +130,18 @@ const InstanceDetail = (): ReactElement => {
             />
           </QuickInfoBanner>
 
-          <div className={styles.sections}>
-            <section>
-              <h2>Disks</h2>
+          <CardGrid>
+            <CardGrid.Section headline="Disks">
               {instance.disks.map((disk) => (
                 <DiskCard key={disk.name} {...disk} />
               ))}
-            </section>
-            <section>
-              <h2>Networking</h2>
+            </CardGrid.Section>
+            <CardGrid.Section headline="Networking">
               {instance.nics.map((nic) => (
                 <NicCard key={nic.name} {...nic} />
               ))}
-            </section>
-            <section>
-              <h2>Nodes</h2>
+            </CardGrid.Section>
+            <CardGrid.Section headline="Nodes">
               <NodeCard
                 key={instance.primaryNode}
                 name={instance.primaryNode}
@@ -152,14 +150,13 @@ const InstanceDetail = (): ReactElement => {
               {instance.secondaryNodes.map((node) => (
                 <NodeCard key={node} name={node} />
               ))}
-            </section>
-            <section>
-              <h2>Tags</h2>
+            </CardGrid.Section>
+            <CardGrid.Section headline="Tags">
               {instance.tags.map((tag) => (
                 <TagCard key={tag} tag={tag} />
               ))}
-            </section>
-          </div>
+            </CardGrid.Section>
+          </CardGrid>
         </ContentWrapper>
       )}
       {!instance && <div>Instance not found</div>}

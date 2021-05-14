@@ -12,19 +12,6 @@ header {
   }
 }
 
-.sections {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2rem;
-
-  > section {
-    > h2 {
-      font-size: 1em;
-      padding: 0.5rem 0;
-    }
-  }
-}
-
 .diskCapacity {
   font-size: 1.25em;
   margin: 0;

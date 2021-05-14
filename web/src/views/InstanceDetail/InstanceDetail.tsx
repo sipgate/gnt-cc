@@ -6,49 +6,21 @@ import {
   faServer,
   faTag,
   faTerminal,
-  IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
-import classNames from "classnames";
-import React, { PropsWithChildren, ReactElement } from "react";
+import React, { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useApi } from "../../api";
 import { GntDisk, GntInstance, GntNic } from "../../api/models";
 import Badge, { BadgeStatus } from "../../components/Badge/Badge";
 import Button from "../../components/Button/Button";
+import Card from "../../components/Card/Card";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
-import Icon from "../../components/Icon/Icon";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import PrefixLink from "../../components/PrefixLink";
 import QuickInfoBanner from "../../components/QuickInfoBanner/QuickInfoBanner";
 import { useClusterName } from "../../helpers/hooks";
 import { prettyPrintMiB } from "../../helpers/numbers";
 import styles from "./InstanceDetail.module.scss";
-
-type CardProps = {
-  icon: IconDefinition;
-  title: string;
-  badge?: ReactElement;
-};
-
-function Card({
-  icon,
-  badge,
-  title,
-  children,
-}: PropsWithChildren<CardProps>): ReactElement {
-  return (
-    <div
-      className={classNames(styles.card, {
-        [styles.hasBody]: !!children,
-      })}
-    >
-      <Icon className={styles.icon} icon={icon} />
-      <span className={styles.title}>{title}</span>
-      {badge}
-      {children && <div className={styles.body}>{children}</div>}
-    </div>
-  );
-}
 
 function DiskCard({ name, capacity, template }: GntDisk): ReactElement {
   return (

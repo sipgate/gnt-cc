@@ -1,0 +1,30 @@
+.root {
+  display: grid;
+  grid-template-columns: 24px 1fr min-content;
+  grid-template-areas: "icon title badge";
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--colorSeparator);
+  border-radius: 4px;
+
+  &.hasBody {
+    grid-template-areas: "icon title badge" ". body body";
+  }
+
+  &:not(:last-of-type) {
+    margin-bottom: 1rem;
+  }
+
+  .icon {
+    opacity: 0.65;
+  }
+
+  .icon,
+  .title {
+    align-self: center;
+  }
+
+  .body {
+    grid-area: body;
+  }
+}

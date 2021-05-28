@@ -63,7 +63,6 @@ export type GntJobLogEntry = {
   serial: number;
   message: string;
   startedAt: number;
-  duration: number;
 };
 
 export type GntJobWithLog = GntJob & {

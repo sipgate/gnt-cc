@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gnt-cc/model"
 	"gnt-cc/rapi_client"
+	"strings"
 )
 
 type JobRepository struct {
@@ -128,11 +129,6 @@ func parseJobLog(job *rapiJobResponse) ([]model.GntJobLogEntry, error) {
 			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("timingsStart not a float64, but a %T", timings[0]))
 		}
 
-		timingsDuration, ok := timings[1].(float64)
-		if !ok {
-			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("timingsDuration not a float64, but a %T", timings[1]))
-		}
-
 		msg, ok := logEntry[3].(string)
 		if !ok {
 			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("message not a string, but a %T", logEntry[3]))
@@ -141,8 +137,7 @@ func parseJobLog(job *rapiJobResponse) ([]model.GntJobLogEntry, error) {
 		opLogEntries[i] = model.GntJobLogEntry{
 			Serial:    int(serial),
 			StartedAt: int(timingsStart),
-			Duration:  int(timingsDuration),
-			Message:   msg,
+			Message:   strings.TrimPrefix(msg, "* "),
 		}
 	}
 

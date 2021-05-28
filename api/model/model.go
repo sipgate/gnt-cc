@@ -56,7 +56,6 @@ type GntJobLogEntry struct {
 	Serial    int    `json:"serial"`
 	Message   string `json:"message"`
 	StartedAt int    `json:"startedAt"`
-	Duration  int    `json:"duration"`
 }
 
 type GntJob struct {

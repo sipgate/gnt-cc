@@ -95,7 +95,7 @@ const InstanceDetail = (): ReactElement => {
     <>
       {instance && (
         <ContentWrapper>
-          <header>
+          <header className={styles.header}>
             <h1>{hostname}</h1>
             {instance.isRunning ? (
               <Badge status={BadgeStatus.SUCCESS}>Online</Badge>

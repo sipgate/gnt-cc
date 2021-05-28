@@ -1,5 +1,9 @@
-header {
+.header {
   display: flex;
   gap: 1rem;
   align-items: center;
+}
+
+.text {
+  color: var(--colorEmphasisLow)
 }

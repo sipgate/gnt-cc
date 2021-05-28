@@ -5,11 +5,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React, { ReactElement } from "react";
 import { useApi } from "../../api";
+import Badge from "../../components/Badge/Badge";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
+import PrefixLink from "../../components/PrefixLink";
 import QuickInfoBanner from "../../components/QuickInfoBanner/QuickInfoBanner";
 import { prettyPrintMiB } from "../../helpers";
 import { useClusterName } from "../../helpers/hooks";
+import styles from "./Dashboard.module.scss";
 
 interface StatisticElement {
   count: number;
@@ -19,6 +22,7 @@ interface StatisticElement {
 interface StatisticsResponse {
   instances: StatisticElement;
   nodes: StatisticElement;
+  master: string;
 }
 
 function Dashboard(): ReactElement {
@@ -35,6 +39,8 @@ function Dashboard(): ReactElement {
     return <div>Failed to load: {error}</div>;
   }
 
+  const { master, nodes, instances } = data;
+
   return (
     <>
       <ContentWrapper>
@@ -42,24 +48,30 @@ function Dashboard(): ReactElement {
           <QuickInfoBanner.Item
             icon={faServer}
             label="Nodes"
-            value={String(data.nodes.count)}
+            value={String(nodes.count)}
           />
           <QuickInfoBanner.Item
             icon={faServer}
             label="Instances"
-            value={String(data.instances.count)}
+            value={String(instances.count)}
           />
           <QuickInfoBanner.Item
             icon={faMicrochip}
             label="Node CPU Cores"
-            value={String(data.nodes.cpuCount)}
+            value={String(nodes.cpuCount)}
           />
           <QuickInfoBanner.Item
             icon={faMemory}
             label="Memory"
-            value={prettyPrintMiB(data.nodes.memoryTotal)}
+            value={prettyPrintMiB(nodes.memoryTotal)}
           />
         </QuickInfoBanner>
+        <div className={styles.currentMaster}>
+          <Badge>Master</Badge>
+          <PrefixLink to={`/nodes/${master}`}>
+            <span className={styles.master}>{master}</span>
+          </PrefixLink>
+        </div>
       </ContentWrapper>
     </>
   );

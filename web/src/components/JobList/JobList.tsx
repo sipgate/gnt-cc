@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { GntJob } from "../../api/models";
-import { durationHumanReadable, unixToDate } from "../../helpers/time";
+import { durationHumanReadable } from "../../helpers/time";
 import CustomDataTable from "../CustomDataTable/CustomDataTable";
 import JobStartedAt from "../JobStartedAt";
 import JobStatus from "../JobStatus";
@@ -14,11 +14,7 @@ const columns: IDataTableColumn<GntJob>[] = [
     name: "ID",
     sortable: true,
     selector: (row) => row.id,
-    cell: (row) => (
-      <PrefixLink className={styles.link} to={`/jobs/${row.id}`}>
-        {row.id}
-      </PrefixLink>
-    ),
+    cell: (row) => <PrefixLink to={`/jobs/${row.id}`}>{row.id}</PrefixLink>,
     width: "120px",
   },
   {
@@ -33,7 +29,7 @@ const columns: IDataTableColumn<GntJob>[] = [
     sortable: true,
     selector: (row) => row.summary,
     cell: (row) => (
-      <PrefixLink className={styles.link} to={`/jobs/${row.id}`}>
+      <PrefixLink to={`/jobs/${row.id}`}>
         <JobSummary summary={row.summary} />
       </PrefixLink>
     ),

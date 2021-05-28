@@ -25,10 +25,7 @@ const columns: IDataTableColumn<GntNode>[] = [
     selector: (row) => row.name,
     cell: (row) => (
       <>
-        <PrefixLink
-          className={`${styles.link} ${styles.name}`}
-          to={`/nodes/${row.name}`}
-        >
+        <PrefixLink className={styles.name} to={`/nodes/${row.name}`}>
           {row.name}
         </PrefixLink>
         {row.isMaster && (

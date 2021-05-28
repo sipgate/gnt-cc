@@ -56,4 +56,5 @@ type StatisticsElement struct {
 type StatisticsResponse struct {
 	Instances StatisticsElement `json:"instances"`
 	Nodes     StatisticsElement `json:"nodes"`
+	Master    string            `json:"master"`
 }

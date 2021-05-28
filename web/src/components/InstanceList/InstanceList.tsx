@@ -19,10 +19,7 @@ const columns: IDataTableColumn<GntInstance>[] = [
     selector: (row) => row.name,
     cell: (row) => (
       <>
-        <PrefixLink
-          className={`${styles.link} ${styles.name}`}
-          to={`/instances/${row.name}`}
-        >
+        <PrefixLink className={styles.name} to={`/instances/${row.name}`}>
           {row.name}
         </PrefixLink>
         {!row.isRunning && (
@@ -38,7 +35,7 @@ const columns: IDataTableColumn<GntInstance>[] = [
     sortable: true,
     selector: (row) => row.primaryNode,
     cell: (row) => (
-      <PrefixLink className={styles.link} to={`/nodes/${row.primaryNode}`}>
+      <PrefixLink to={`/nodes/${row.primaryNode}`}>
         {row.primaryNode}
       </PrefixLink>
     ),
@@ -47,10 +44,7 @@ const columns: IDataTableColumn<GntInstance>[] = [
     name: "Secondary Node(s)",
     cell: (row) => (
       <div>
-        <PrefixLink
-          className={styles.link}
-          to={`/nodes/${row.secondaryNodes[0]}`}
-        >
+        <PrefixLink to={`/nodes/${row.secondaryNodes[0]}`}>
           {row.secondaryNodes[0]}
         </PrefixLink>
         {row.secondaryNodes.length > 1 && (
@@ -78,11 +72,7 @@ const columns: IDataTableColumn<GntInstance>[] = [
     name: "",
     cell: (row) =>
       row.offersVnc && (
-        <PrefixLink
-          className={styles.link}
-          title="Open Console"
-          to={`/instances/${row.name}/console`}
-        >
+        <PrefixLink title="Open Console" to={`/instances/${row.name}/console`}>
           <Icon icon={faTerminal} />
         </PrefixLink>
       ),

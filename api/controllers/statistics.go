@@ -47,6 +47,10 @@ func (controller *StatisticsController) Get(c *gin.Context) {
 		response.Nodes.Count++
 		response.Nodes.CPUCount += node.CPUCount
 		response.Nodes.MemoryTotal += node.MemoryTotal
+
+		if node.IsMaster {
+			response.Master = node.Name
+		}
 	}
 
 	c.JSON(http.StatusOK, response)

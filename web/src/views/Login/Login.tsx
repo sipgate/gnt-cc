@@ -1,11 +1,12 @@
+import { useFormik } from "formik";
 import React, { ReactElement, useContext, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { useFormik } from "formik";
-import styles from "./Login.module.scss";
+import { buildApiUrl } from "../../api";
+import AuthContext from "../../api/AuthContext";
+import logo from "../../assets/logo.svg";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
-import AuthContext from "../../api/AuthContext";
-import { buildApiUrl } from "../../api";
+import styles from "./Login.module.scss";
 
 export interface LoginCredentials {
   username: string;
@@ -90,14 +91,10 @@ function Login({ history }: RouteComponentProps): ReactElement {
 
   return (
     <div className={styles.login}>
+      <section className={styles.logo}>
+        <img src={logo} alt="gnt-cc logo" />
+      </section>
       <section>
-        <div className={styles.headline}>
-          Ganeti
-          <br />
-          Control
-          <br />
-          Center
-        </div>
         <form onSubmit={formik.handleSubmit}>
           <Input
             type="text"

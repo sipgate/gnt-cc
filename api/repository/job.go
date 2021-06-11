@@ -28,8 +28,9 @@ func (repo *JobRepository) GetAll(clusterName string) ([]model.GntJob, error) {
 
 	jobs := make([]model.GntJob, len(jobData))
 
-	for i, job := range jobData {
-		timestamps := parseJobTimestamp(&job)
+	for i := range jobData {
+		job := &jobData[i]
+		timestamps := parseJobTimestamp(job)
 
 		jobs[i] = model.GntJob{
 			ID:         job.ID,

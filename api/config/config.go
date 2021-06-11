@@ -36,6 +36,10 @@ type LDAPConfig struct {
 	GroupFilter           string
 }
 
+type RapiConfig struct {
+	SkipCertificateVerify bool
+}
+
 type Config struct {
 	Bind                 string
 	Port                 int
@@ -47,6 +51,7 @@ type Config struct {
 	Users                []UserConfig
 	Clusters             []ClusterConfig
 	LDAPConfig           LDAPConfig
+	RapiConfig           RapiConfig
 }
 
 const (

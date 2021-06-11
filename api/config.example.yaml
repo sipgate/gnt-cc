@@ -26,7 +26,6 @@ clusters:
     username: "gnt-cc"
     password: "gnt-cc"
     ssl: true
-    skipCertificateVerify: true
   - name: "production-cluster"
     hostname: "prod-cluster.example.com"
     port: 5080

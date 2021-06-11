@@ -37,7 +37,7 @@ func New(engine *gin.Engine) *router {
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
 
-	rapiClient, err := createRAPIClientFromConfig(config.Get().Clusters)
+	rapiClient, err := createRAPIClientFromConfig(config.Get().Clusters, config.Get().RapiConfig)
 	if err != nil {
 		panic(err)
 	}
@@ -69,16 +69,14 @@ func New(engine *gin.Engine) *router {
 	return &r
 }
 
-func createHTTPClient() *http.Client {
+func createHTTPClient(skipCertificateVerify bool) *http.Client {
 	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: skipCertificateVerify},
 		Dial: (&net.Dialer{
 			Timeout: 5 * time.Second,
 		}).Dial,
 		TLSHandshakeTimeout: 5 * time.Second,
 	}
-
-	if config.Get().
 
 	return &http.Client{
 		Timeout:   time.Second * 10,
@@ -86,8 +84,8 @@ func createHTTPClient() *http.Client {
 	}
 }
 
-func createRAPIClientFromConfig(configs []config.ClusterConfig) (rapi_client.Client, error) {
-	return rapi_client.New(createHTTPClient(), configs)
+func createRAPIClientFromConfig(configs []config.ClusterConfig, rapiConfig config.RapiConfig) (rapi_client.Client, error) {
+	return rapi_client.New(createHTTPClient(rapiConfig.SkipCertificateVerify), configs)
 }
 
 func (r *router) InitStaticRoute() {

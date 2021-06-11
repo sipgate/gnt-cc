@@ -37,7 +37,7 @@ func New(engine *gin.Engine) *router {
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
 
-	rapiClient, err := createRAPIClientFromConfig(config.Get().Clusters)
+	rapiClient, err := createRAPIClientFromConfig(config.Get().Clusters, config.Get().RapiConfig)
 	if err != nil {
 		panic(err)
 	}
@@ -69,9 +69,9 @@ func New(engine *gin.Engine) *router {
 	return &r
 }
 
-func createHTTPClient() *http.Client {
+func createHTTPClient(skipCertificateVerify bool) *http.Client {
 	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: skipCertificateVerify},
 		Dial: (&net.Dialer{
 			Timeout: 5 * time.Second,
 		}).Dial,
@@ -84,11 +84,19 @@ func createHTTPClient() *http.Client {
 	}
 }
 
-func createRAPIClientFromConfig(configs []config.ClusterConfig) (rapi_client.Client, error) {
-	return rapi_client.New(createHTTPClient(), configs)
+func createRAPIClientFromConfig(configs []config.ClusterConfig, rapiConfig config.RapiConfig) (rapi_client.Client, error) {
+	return rapi_client.New(createHTTPClient(rapiConfig.SkipCertificateVerify), configs)
 }
 
-func (r *router) InitTemplates(box *rice.Box) {
+func (r *router) InitStaticRoute() {
+	appBox := rice.MustFindBox("../web/build")
+	staticBox := rice.MustFindBox("../web/build/static")
+
+	r.initTemplates(appBox)
+	r.engine.StaticFS("/static", staticBox.HTTPBox())
+}
+
+func (r *router) initTemplates(box *rice.Box) {
 	var err error
 	var tmpl string
 	var message *template.Template
@@ -104,7 +112,7 @@ func (r *router) InitTemplates(box *rice.Box) {
 	r.engine.SetHTMLTemplate(message)
 }
 
-func (r *router) SetupAPIRoutes(staticBox *rice.Box) {
+func (r *router) SetupAPIRoutes() {
 	authMiddleware := auth2.GetMiddleware()
 
 	r.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -134,7 +142,6 @@ func (r *router) SetupAPIRoutes(staticBox *rice.Box) {
 		withCluster.GET("/jobs/:job", r.jobController.Get)
 	}
 
-	r.engine.StaticFS("/static", staticBox.HTTPBox())
 	r.engine.NoRoute(func(c *gin.Context) {
 		path := c.Request.URL.Path
 

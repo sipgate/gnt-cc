@@ -9,8 +9,8 @@ require (
 	github.com/daaku/go.zipexe v1.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/gin-gonic/gin v1.6.3
-	github.com/go-openapi/swag v0.19.9 // indirect
 	github.com/go-playground/validator/v10 v10.4.0 // indirect
+	github.com/gofrs/uuid v3.3.0+incompatible // indirect
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/gorilla/websocket v1.4.2
 	github.com/json-iterator/go v1.1.10 // indirect
@@ -31,12 +31,10 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.2.0
-	github.com/swaggo/swag v1.6.8
+	github.com/swaggo/swag v1.7.0
 	github.com/ugorji/go v1.1.12 // indirect
 	golang.org/x/crypto v0.0.0-20201012173705-84dcc777aaee // indirect
-	golang.org/x/net v0.0.0-20201010224723-4f7140c49acb // indirect
 	golang.org/x/sys v0.0.0-20201015000850-e3ed0017c211 // indirect
-	golang.org/x/tools v0.0.0-20201015182029-a5d9e455e9c4 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect

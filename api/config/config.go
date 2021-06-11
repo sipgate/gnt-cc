@@ -12,13 +12,14 @@ import (
 )
 
 type ClusterConfig struct {
-	Name        string
-	Hostname    string
-	Port        int
-	Description string
-	Username    string
-	Password    string
-	SSL         bool
+	Name                  string
+	Hostname              string
+	Port                  int
+	Description           string
+	Username              string
+	Password              string
+	SSL                   bool
+	SkipCertificateVerify bool
 }
 
 type UserConfig struct {
@@ -35,6 +36,10 @@ type LDAPConfig struct {
 	GroupFilter           string
 }
 
+type RapiConfig struct {
+	SkipCertificateVerify bool
+}
+
 type Config struct {
 	Bind                 string
 	Port                 int
@@ -46,6 +51,7 @@ type Config struct {
 	Users                []UserConfig
 	Clusters             []ClusterConfig
 	LDAPConfig           LDAPConfig
+	RapiConfig           RapiConfig
 }
 
 const (

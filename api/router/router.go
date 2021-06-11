@@ -78,6 +78,8 @@ func createHTTPClient() *http.Client {
 		TLSHandshakeTimeout: 5 * time.Second,
 	}
 
+	if config.Get().
+
 	return &http.Client{
 		Timeout:   time.Second * 10,
 		Transport: transport,
@@ -88,7 +90,15 @@ func createRAPIClientFromConfig(configs []config.ClusterConfig) (rapi_client.Cli
 	return rapi_client.New(createHTTPClient(), configs)
 }
 
-func (r *router) InitTemplates(box *rice.Box) {
+func (r *router) InitStaticRoute() {
+	appBox := rice.MustFindBox("../web/build")
+	staticBox := rice.MustFindBox("../web/build/static")
+
+	r.initTemplates(appBox)
+	r.engine.StaticFS("/static", staticBox.HTTPBox())
+}
+
+func (r *router) initTemplates(box *rice.Box) {
 	var err error
 	var tmpl string
 	var message *template.Template
@@ -104,7 +114,7 @@ func (r *router) InitTemplates(box *rice.Box) {
 	r.engine.SetHTMLTemplate(message)
 }
 
-func (r *router) SetupAPIRoutes(staticBox *rice.Box) {
+func (r *router) SetupAPIRoutes() {
 	authMiddleware := auth2.GetMiddleware()
 
 	r.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -134,7 +144,6 @@ func (r *router) SetupAPIRoutes(staticBox *rice.Box) {
 		withCluster.GET("/jobs/:job", r.jobController.Get)
 	}
 
-	r.engine.StaticFS("/static", staticBox.HTTPBox())
 	r.engine.NoRoute(func(c *gin.Context) {
 		path := c.Request.URL.Path
 

@@ -12,13 +12,14 @@ import (
 )
 
 type ClusterConfig struct {
-	Name        string
-	Hostname    string
-	Port        int
-	Description string
-	Username    string
-	Password    string
-	SSL         bool
+	Name                  string
+	Hostname              string
+	Port                  int
+	Description           string
+	Username              string
+	Password              string
+	SSL                   bool
+	SkipCertificateVerify bool
 }
 
 type UserConfig struct {

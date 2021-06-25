@@ -1,8 +1,13 @@
-# gnt-cc
+<p align="center">
+  <img alt="gnt-cc logo" src="https://user-images.githubusercontent.com/22923578/123423959-7ba85a80-d5c0-11eb-8852-06ab161d4e3f.png" width="160"/>
+</p>
+<h2 align="center">gnt-cc - a frontend for Ganeti clusters</h2>
 
 ![](https://github.com/sipgate/gnt-cc/workflows/Build/badge.svg)
 
-This is gnt-cc, an API + web frontend for one to many Ganeti virtualisation clusters.
+gnt-cc is a web-based frontend for [Ganeti](https://github.com/ganeti/ganeti/) clusters.
+
+![gnt-cc-screenshot-light](https://user-images.githubusercontent.com/22923578/123422533-a691af00-d5be-11eb-909a-a884b7e0c6bc.png)
 
 # Development
 

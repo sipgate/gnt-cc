@@ -1,35 +1,35 @@
 .badge {
-    height: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border: 1px solid var(--colorEmphasisLow);
-    padding: 0 0.75rem;
-    border-radius: 0.75rem;
-    text-transform: uppercase;
-    font-size: 0.8em;
-    
-    &.success {
-        color: white;
-        border-color: var(--colorSuccess);
-        background-color: var(--colorSuccess);
-    }
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--colorEmphasisLow);
+  padding: 0 0.75rem;
+  border-radius: 0.75rem;
+  text-transform: uppercase;
+  font-size: 0.8em;
 
-    &.warning {
-        color: black;
-        border-color: var(--colorWarning);
-        background-color: var(--colorWarning);
-    }
+  &.success {
+    color: white;
+    border-color: var(--colorSuccess);
+    background-color: var(--colorSuccess);
+  }
 
-    &.failure {
-        color: white;
-        border-color: var(--colorDanger);
-        background-color: var(--colorDanger);
-    }
+  &.warning {
+    color: black;
+    border-color: var(--colorWarning);
+    background-color: var(--colorWarning);
+  }
 
-    &.primary {
-        color: white;
-        border-color: var(--colorPrimary);
-        background-color: var(--colorPrimary);
-    }
+  &.failure {
+    color: white;
+    border-color: var(--colorDanger);
+    background-color: var(--colorDanger);
+  }
+
+  &.primary {
+    color: white;
+    border-color: var(--colorPrimary);
+    background-color: var(--colorPrimary);
+  }
 }

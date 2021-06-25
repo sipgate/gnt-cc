@@ -37,6 +37,31 @@ const columns: IDataTableColumn<GntNode>[] = [
     ),
   },
   {
+    name: "Primary Instances",
+    sortable: true,
+    selector: (row) => row.primaryInstancesCount,
+    cell: (row) => (
+      <PrefixLink to={`/nodes/${row.name}/primary-instances`}>
+        {row.primaryInstancesCount}
+      </PrefixLink>
+    ),
+  },
+  {
+    name: "Secondary Instances",
+    sortable: true,
+    selector: (row) => row.secondaryInstancesCount,
+    cell: (row) => (
+      <PrefixLink to={`/nodes/${row.name}/secondary-instances`}>
+        {row.secondaryInstancesCount}
+      </PrefixLink>
+    ),
+  },
+  {
+    name: "CPU Cores",
+    sortable: true,
+    selector: (row) => row.cpuCount,
+  },
+  {
     name: "Memory Utilisation",
     sortable: true,
     selector: (row) => row.memoryTotal - row.memoryFree,
@@ -48,6 +73,22 @@ const columns: IDataTableColumn<GntNode>[] = [
           memoryInUse={prettyPrintMiB(memoryUsed)}
           memoryTotal={prettyPrintMiB(row.memoryTotal)}
           usagePercent={(memoryUsed / row.memoryTotal) * 100}
+        />
+      );
+    },
+  },
+  {
+    name: "Disk Utilisation",
+    sortable: true,
+    selector: (row) => row.diskTotal - row.diskFree,
+    cell: (row) => {
+      const diskUsed = row.diskTotal - row.diskFree;
+
+      return (
+        <MemoryUtilisation
+          memoryInUse={prettyPrintMiB(diskUsed)}
+          memoryTotal={prettyPrintMiB(row.diskTotal)}
+          usagePercent={(diskUsed / row.diskTotal) * 100}
         />
       );
     },

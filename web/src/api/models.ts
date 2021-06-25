@@ -13,7 +13,7 @@ export type GntNic = {
   mac: string;
 };
 
-export interface GntInstance {
+export type GntInstance = {
   name: string;
   primaryNode: string;
   secondaryNodes: string[];
@@ -24,31 +24,31 @@ export interface GntInstance {
   disks: GntDisk[];
   nics: GntNic[];
   tags: string[];
-}
+};
 
-export interface GntNode {
+export type GntNode = {
   name: string;
   memoryFree: number;
   memoryTotal: number;
   diskTotal: number;
   diskFree: number;
   cpuCount: number;
-  primaryInstances: string[];
-  secondaryInstances: string[];
+  primaryInstancesCount: number;
+  secondaryInstancesCount: number;
   isMaster: boolean;
   isMasterCandidate: boolean;
   isMasterCapable: boolean;
   isDrained: boolean;
   isOffline: boolean;
   isVMCapable: boolean;
-}
+};
 
-export interface GntCluster {
+export type GntCluster = {
   name: string;
   hostname: string;
   description: string;
   port: number;
-}
+};
 
 export type GntJob = {
   id: number;

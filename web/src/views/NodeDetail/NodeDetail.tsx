@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import {
   Redirect,
+  Route,
   useLocation,
   useParams,
   useRouteMatch,
@@ -66,7 +67,9 @@ const NodeDetail = (): ReactElement => {
           <NodeSecondaryInstances instances={data.secondaryInstances} />
         </AuthenticatedRoute>
 
-        <Redirect from={path} to={`${url}/primary-instances`} exact />
+        <AuthenticatedRoute path={path} exact>
+          <Redirect to={`${url}/primary-instances`} />
+        </AuthenticatedRoute>
       </div>
     </ContentWrapper>
   );

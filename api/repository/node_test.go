@@ -73,26 +73,30 @@ func TestNodeRepoGetAllFuncReturnsNodes(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.EqualValues(t, []model.GntNode{{
-		Name:               "node1",
-		MemoryTotal:        15709,
-		MemoryFree:         10230,
-		CPUCount:           8,
-		PrimaryInstances:   nil,
-		SecondaryInstances: nil,
-		IsMasterCandidate:  true,
-		IsMasterCapable:    true,
-		IsMaster:           true,
-		IsVMCapable:        true,
+		Name:                    "node1",
+		MemoryTotal:             64420,
+		MemoryFree:              31873,
+		CPUCount:                24,
+		DiskTotal:               1660012,
+		DiskFree:                671740,
+		IsMasterCandidate:       false,
+		IsMasterCapable:         true,
+		IsMaster:                false,
+		IsVMCapable:             true,
+		PrimaryInstancesCount:   2,
+		SecondaryInstancesCount: 0,
 	}, {
-		Name:               "node2",
-		MemoryTotal:        15709,
-		MemoryFree:         10229,
-		CPUCount:           8,
-		PrimaryInstances:   nil,
-		SecondaryInstances: nil,
-		IsMasterCandidate:  true,
-		IsMasterCapable:    true,
-		IsVMCapable:        true,
+		Name:                    "node2",
+		MemoryTotal:             128848,
+		MemoryFree:              82412,
+		CPUCount:                40,
+		DiskTotal:               2241324,
+		DiskFree:                1119916,
+		IsMasterCandidate:       true,
+		IsMasterCapable:         true,
+		IsVMCapable:             true,
+		PrimaryInstancesCount:   0,
+		SecondaryInstancesCount: 2,
 	}}, nodes)
 }
 
@@ -106,16 +110,18 @@ func TestNodeRepoGetFuncReturnsNode(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.True(t, result.Found)
-	assert.EqualValues(t, model.GntNode{
-		Name:               "node1",
-		MemoryTotal:        15709,
-		MemoryFree:         10244,
-		CPUCount:           8,
+	assert.EqualValues(t, model.GntNodeWithInstances{
+		GntNode: model.GntNode{
+			Name:              "node1",
+			MemoryTotal:       15709,
+			MemoryFree:        10244,
+			CPUCount:          8,
+			IsMasterCandidate: true,
+			IsMasterCapable:   true,
+			IsMaster:          true,
+			IsVMCapable:       true,
+		},
 		PrimaryInstances:   []string{"burns", "milhouse"},
 		SecondaryInstances: []string{},
-		IsMasterCandidate:  true,
-		IsMasterCapable:    true,
-		IsMaster:           true,
-		IsVMCapable:        true,
 	}, result.Node)
 }

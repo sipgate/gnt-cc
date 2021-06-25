@@ -35,19 +35,20 @@ func (repo *NodeRepository) Get(clusterName string, nodeName string) (model.Node
 
 	return model.NodeResult{
 		Found: true,
-		Node: model.GntNode{
-			Name:               node.Name,
-			MemoryTotal:        node.Mtotal,
-			MemoryFree:         node.Mfree,
-			DiskTotal:          node.Dtotal,
-			DiskFree:           node.Dfree,
-			CPUCount:           node.Ctotal,
-			IsDrained:          node.Drained,
-			IsMaster:           isMaster(node),
-			IsMasterCandidate:  node.MasterCandidate,
-			IsMasterCapable:    node.MasterCapable,
-			IsOffline:          node.Offline,
-			IsVMCapable:        node.VMCapable,
+		Node: model.GntNodeWithInstances{
+			GntNode: model.GntNode{
+				Name:              node.Name,
+				MemoryTotal:       node.Mtotal,
+				MemoryFree:        node.Mfree,
+				DiskTotal:         node.Dtotal,
+				DiskFree:          node.Dfree,
+				CPUCount:          node.Ctotal,
+				IsDrained:         node.Drained,
+				IsMaster:          isMaster(node),
+				IsMasterCandidate: node.MasterCandidate,
+				IsMasterCapable:   node.MasterCapable,
+				IsOffline:         node.Offline,
+				IsVMCapable:       node.VMCapable},
 			PrimaryInstances:   node.PinstList,
 			SecondaryInstances: node.SinstList,
 		},
@@ -76,17 +77,20 @@ func (repo *NodeRepository) GetAll(clusterName string) ([]model.GntNode, error) 
 
 	for i, node := range nodeData {
 		nodes[i] = model.GntNode{
-			Name:              node.Name,
-			MemoryTotal:       node.Mtotal,
-			MemoryFree:        node.Mfree,
-			DiskTotal:         node.Dtotal,
-			CPUCount:          node.Ctotal,
-			IsDrained:         node.Drained,
-			IsMaster:          isMaster(node),
-			IsMasterCandidate: node.MasterCandidate,
-			IsMasterCapable:   node.MasterCapable,
-			IsOffline:         node.Offline,
-			IsVMCapable:       node.VMCapable,
+			Name:                    node.Name,
+			MemoryTotal:             node.Mtotal,
+			MemoryFree:              node.Mfree,
+			DiskTotal:               node.Dtotal,
+			DiskFree:                node.Dfree,
+			CPUCount:                node.Ctotal,
+			PrimaryInstancesCount:   node.PinstCnt,
+			SecondaryInstancesCount: node.SinstCnt,
+			IsDrained:               node.Drained,
+			IsMaster:                isMaster(node),
+			IsMasterCandidate:       node.MasterCandidate,
+			IsMasterCapable:         node.MasterCapable,
+			IsOffline:               node.Offline,
+			IsVMCapable:             node.VMCapable,
 		}
 	}
 

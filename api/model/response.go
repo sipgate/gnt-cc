@@ -26,10 +26,10 @@ type AllNodesResponse struct {
 }
 
 type NodeResponse struct {
-	Cluster            string        `json:"cluster"`
-	Node               GntNode       `json:"node"`
-	PrimaryInstances   []GntInstance `json:"primaryInstances"`
-	SecondaryInstances []GntInstance `json:"secondaryInstances"`
+	Cluster            string               `json:"cluster"`
+	Node               GntNodeWithInstances `json:"node"`
+	PrimaryInstances   []GntInstance        `json:"primaryInstances"`
+	SecondaryInstances []GntInstance        `json:"secondaryInstances"`
 }
 
 type AllJobsResponse struct {

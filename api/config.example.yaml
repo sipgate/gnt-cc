@@ -18,6 +18,8 @@ ldapConfig:
   userFilter: "(&(objectClass=posixAccount)(uid=%s))"
   groupFilter: "(&(objectClass=posixGroup)(cn=someGroupName)(memberUid=%s))"
   baseDn: "dc=domain,dc=org"
+rapiConfig:
+  skipCertificateVerify: false
 clusters:
   - name: "test-cluster"
     hostname: "test-cluster.examlpe.com"

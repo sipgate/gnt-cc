@@ -19,7 +19,6 @@ type ClusterConfig struct {
 	Username              string
 	Password              string
 	SSL                   bool
-	SkipCertificateVerify bool
 }
 
 type UserConfig struct {

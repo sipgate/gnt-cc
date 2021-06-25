@@ -1,7 +1,6 @@
 import React, { ReactElement } from "react";
 import {
   Redirect,
-  Route,
   useLocation,
   useParams,
   useRouteMatch,

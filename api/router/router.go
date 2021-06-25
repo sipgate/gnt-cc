@@ -16,9 +16,6 @@ import (
 	"time"
 
 	rice "github.com/GeertJohan/go.rice"
-
-	_ "gnt-cc/docs"
-
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -88,15 +85,7 @@ func createRAPIClientFromConfig(configs []config.ClusterConfig, rapiConfig confi
 	return rapi_client.New(createHTTPClient(rapiConfig.SkipCertificateVerify), configs)
 }
 
-func (r *router) InitStaticRoute() {
-	appBox := rice.MustFindBox("../web/build")
-	staticBox := rice.MustFindBox("../web/build/static")
-
-	r.initTemplates(appBox)
-	r.engine.StaticFS("/static", staticBox.HTTPBox())
-}
-
-func (r *router) initTemplates(box *rice.Box) {
+func (r *router) InitTemplates(box *rice.Box) {
 	var err error
 	var tmpl string
 	var message *template.Template

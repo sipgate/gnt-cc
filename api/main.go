@@ -8,6 +8,7 @@ import (
 
 	_ "gnt-cc/docs"
 
+	rice "github.com/GeertJohan/go.rice"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -42,7 +43,11 @@ func main() {
 	r.SetupAPIRoutes()
 
 	if !config.Get().DevelopmentMode {
-		r.InitStaticRoute()
+		appBox := rice.MustFindBox("../web/build")
+		staticBox := rice.MustFindBox("../web/build/static")
+
+		r.InitTemplates(appBox)
+		engine.StaticFS("/static", staticBox.HTTPBox())
 	}
 
 	bindInfo := config.Get().Bind + ":" + strconv.Itoa(config.Get().Port)

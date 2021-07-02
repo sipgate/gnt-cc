@@ -101,7 +101,7 @@ func TestInstanceRepoGetAllFuncCorrectlyReturnsInstances_WhenAValidRAPIResponseW
 	queryPerformer.On("Perform", mock.Anything, query.RequestConfig{
 		ClusterName:  "test1",
 		ResourceType: "instance",
-		Fields:       []string{"name", "pnode", "snodes", "beparams", "oper_state", "custom_hvparams"},
+		Fields:       []string{"name", "pnode", "snodes", "beparams", "oper_state", "hvparams"},
 	}).
 		Once().Return([]query.Resource{{
 		"name":       "bart",
@@ -109,7 +109,7 @@ func TestInstanceRepoGetAllFuncCorrectlyReturnsInstances_WhenAValidRAPIResponseW
 		"snodes":     []string{"node1", "node2"},
 		"beparams":   partialBeParams,
 		"oper_state": false,
-		"custom_hvparams": map[string]interface{}{
+		"hvparams": map[string]interface{}{
 			"vnc_bind_address": "",
 		},
 	}, {
@@ -118,7 +118,7 @@ func TestInstanceRepoGetAllFuncCorrectlyReturnsInstances_WhenAValidRAPIResponseW
 		"snodes":     []string{"node4"},
 		"beparams":   partialBeParams,
 		"oper_state": true,
-		"custom_hvparams": map[string]interface{}{
+		"hvparams": map[string]interface{}{
 			"vnc_bind_address": "test",
 		},
 	}}, nil)

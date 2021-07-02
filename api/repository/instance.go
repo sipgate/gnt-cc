@@ -50,7 +50,7 @@ func (repo *InstanceRepository) Get(clusterName string, instanceName string) (mo
 			CpuCount:       parsedInstance.BeParams.VCPUs,
 			MemoryTotal:    parsedInstance.BeParams.Memory,
 			IsRunning:      parsedInstance.OperState,
-			OffersVNC:      parsedInstance.CustomHvParams.VncBindAddress != "",
+			OffersVNC:      parsedInstance.HvParams.VncBindAddress != "",
 			Disks:          extractDisks(parsedInstance),
 			Nics:           extractNics(parsedInstance),
 			Tags:           parsedInstance.Tags,
@@ -68,7 +68,7 @@ func (repo *InstanceRepository) GetAll(clusterName string) ([]model.GntInstance,
 			"snodes",
 			"beparams",
 			"oper_state",
-			"custom_hvparams",
+			"hvparams",
 		},
 	})
 
@@ -109,7 +109,7 @@ func parseInstanceResource(resource query.Resource) (model.GntInstance, error) {
 		CpuCount:       parsed.BeParams.VCPUs,
 		MemoryTotal:    parsed.BeParams.MaxMem,
 		IsRunning:      parsed.OperState,
-		OffersVNC:      parsed.CustomHvParams.VncBindAddress != "",
+		OffersVNC:      parsed.HvParams.VncBindAddress != "",
 	}, nil
 }
 

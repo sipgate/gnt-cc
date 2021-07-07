@@ -34,6 +34,11 @@ const columns: IDataTableColumn<GntNode>[] = [
             Master
           </Badge>
         )}
+        {row.isOffline && (
+          <Badge status={BadgeStatus.FAILURE} className={styles.badge}>
+            Offline
+          </Badge>
+        )}
       </>
     ),
   },

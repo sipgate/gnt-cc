@@ -6,14 +6,13 @@ before:
     - go get github.com/GeertJohan/go.rice/rice
     - go mod download
     - swag init
+    - rice embed-go
 
 builds:
   - goos:
       - linux
     goarch:
       - amd64
-    hooks:
-      post: rice append --exec gnt-cc
 
 archives:
   - files:

@@ -1,0 +1,32 @@
+.root {
+  .job {
+    position: relative;
+    min-width: 360px;
+    padding: 1rem;
+
+    .statusDot {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 100%;
+    }
+
+    &.running .statusDot {
+      background-color: var(--colorPrimary);
+    }
+
+    &.error .statusDot {
+      background-color: var(--colorDanger);
+    }
+
+    &.success .statusDot {
+      background-color: var(--colorSuccess);
+    }
+
+    &.pending .statusDot {
+      background-color: var(--colorWarning);
+    }
+  }
+}

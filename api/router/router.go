@@ -128,6 +128,7 @@ func (r *router) SetupAPIRoutes() {
 		withCluster.GET("/instances/:instance/console", r.instanceController.OpenInstanceConsole)
 		withCluster.GET("/statistics", r.statisticsController.Get)
 		withCluster.GET("/jobs", r.jobController.GetAll)
+		withCluster.GET("/jobs/many", r.jobController.GetManyWithLogs)
 		withCluster.GET("/jobs/:job", r.jobController.Get)
 	}
 

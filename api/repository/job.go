@@ -67,7 +67,7 @@ func (repo *JobRepository) Get(clusterName, jobID string) (model.JobResult, erro
 	}
 
 	timestamps := parseJobTimestamp(&job)
-	log, err := parseJobLog(&job)
+	jobLog, err := parseJobLog(&job)
 
 	if err != nil {
 		return model.JobResult{}, err
@@ -82,7 +82,7 @@ func (repo *JobRepository) Get(clusterName, jobID string) (model.JobResult, erro
 			StartedAt:  timestamps.startedAt,
 			EndedAt:    timestamps.endedAt,
 			Status:     job.Status,
-			Log:        log,
+			Log:        jobLog,
 		},
 	}, nil
 }

@@ -1,10 +1,11 @@
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 import React, { ReactElement, useContext, useMemo } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { GntJob } from "../../api/models";
 import JobWatchContext from "../../contexts/JobWatchContext";
 import { durationHumanReadable } from "../../helpers/time";
-import Button from "../Button/Button";
 import CustomDataTable from "../CustomDataTable/CustomDataTable";
+import IconButton from "../IconButton/IconButton";
 import JobStartedAt from "../JobStartedAt";
 import JobStatus from "../JobStatus";
 import JobSummary from "../JobSummary/JobSummary";
@@ -65,16 +66,11 @@ function JobList({ jobs }: Props): ReactElement {
         },
       },
       {
-        name: "Track",
+        name: "Watch",
         sortable: false,
         width: "120px",
         cell: (row) => (
-          <Button
-            label="Track"
-            onClick={() => {
-              trackJob(row.id);
-            }}
-          />
+          <IconButton icon={faEye} onClick={() => trackJob(row.id)} />
         ),
       },
     ],

@@ -37,7 +37,7 @@ const Jobs = (): ReactElement => {
 
     return (
       <>
-        <JobList jobs={data.jobs} />;
+        <JobList jobs={data.jobs} />
       </>
     );
   };

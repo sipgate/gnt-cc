@@ -23,5 +23,8 @@ module.exports = {
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended"
   ],
-  rules: { "react/display-name": "off" }
+  rules: { "react/display-name": "off" },
+  ignorePatterns: [
+    "build"
+  ]
 };

@@ -1,32 +1,66 @@
 .root {
+  position: relative;
+
   .job {
     position: relative;
-    min-width: 360px;
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    grid-template-areas: "actions .";
+    gap: 1rem;
+    min-width: 400px;
     padding: 1rem;
 
-    .statusDot {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      width: 0.75rem;
-      height: 0.75rem;
-      border-radius: 100%;
+    .actions {
+      grid-area: actions;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    &.running .statusDot {
-      background-color: var(--colorPrimary);
-    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
 
-    &.error .statusDot {
-      background-color: var(--colorDanger);
-    }
+      .statusDot {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 100%;
+      }
 
-    &.success .statusDot {
-      background-color: var(--colorSuccess);
-    }
+      &.running .statusDot {
+        background-color: var(--colorPrimary);
+      }
 
-    &.pending .statusDot {
-      background-color: var(--colorWarning);
+      &.error .statusDot {
+        background-color: var(--colorDanger);
+      }
+
+      &.success .statusDot {
+        background-color: var(--colorSuccess);
+      }
+
+      &.pending .statusDot {
+        background-color: var(--colorWarning);
+      }
     }
+  }
+
+  .count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--colorPrimary);
+    width: 20px;
+    height: 20px;
+    z-index: 1;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
   }
 }

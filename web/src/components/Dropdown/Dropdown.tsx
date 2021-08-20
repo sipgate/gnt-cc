@@ -9,14 +9,22 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import classNames from "classnames";
 import Icon from "../Icon/Icon";
 
-interface Props {
-  label: string;
-  icon?: IconDefinition;
+export enum Alignment {
+  LEFT = "left",
+  CENTER = "center",
+  RIGHT = "right",
 }
+
+type Props = {
+  label?: string;
+  icon?: IconDefinition;
+  align?: Alignment;
+};
 
 function Dropdown({
   label,
   icon,
+  align = Alignment.LEFT,
   children,
 }: PropsWithChildren<Props>): ReactElement {
   const [expanded, setExpanded] = useState(false);
@@ -34,9 +42,14 @@ function Dropdown({
   }, []);
   return (
     <div
-      className={classNames(styles.dropdown, {
-        [styles.expanded]: expanded,
-      })}
+      className={classNames(
+        styles.root,
+        {
+          [styles.expanded]: expanded,
+          [styles.hasLabel]: !!label,
+        },
+        styles[align]
+      )}
       onClick={(e) => {
         e.stopPropagation();
         toggle();
@@ -44,7 +57,7 @@ function Dropdown({
     >
       <div className={styles.current}>
         {icon && <Icon icon={icon} />}
-        <span className={styles.label}>{label}</span>
+        {label && <span className={styles.label}>{label}</span>}
       </div>
       <div className={styles.optionsWrapper}>
         <span className={styles.triangle} />

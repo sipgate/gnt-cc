@@ -63,12 +63,15 @@ function App(): ReactElement {
       >
         <JobWatchContext.Provider
           value={{
-            trackJob: (jobID) => {
+            trackJob(jobID) {
               if (trackedJobs.includes(jobID)) {
                 return;
               }
 
               setTrackedJobs([...trackedJobs, jobID]);
+            },
+            untrackJob(jobID) {
+              setTrackedJobs(trackedJobs.filter((id) => id !== jobID));
             },
             trackedJobs,
           }}

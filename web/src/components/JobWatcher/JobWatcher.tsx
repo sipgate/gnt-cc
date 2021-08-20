@@ -1,12 +1,14 @@
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import React, { ReactElement, useContext, useEffect } from "react";
 import { useApi } from "../../api";
 import { GntJobWithLog } from "../../api/models";
 import JobWatchContext from "../../contexts/JobWatchContext";
 import { useClusterName } from "../../helpers/hooks";
-import Dropdown from "../Dropdown/Dropdown";
+import Dropdown, { Alignment } from "../Dropdown/Dropdown";
+import IconButton from "../IconButton/IconButton";
 import JobSummary from "../JobSummary/JobSummary";
+import PrefixLink from "../PrefixLink";
 import styles from "./JobWatcher.module.scss";
 
 interface JobResponse {
@@ -29,9 +31,9 @@ function getJobStatus(status: string) {
 
 function JobWatcher(): ReactElement | null {
   const clusterName = useClusterName();
-  const { trackedJobs } = useContext(JobWatchContext);
+  const { trackedJobs, untrackJob } = useContext(JobWatchContext);
 
-  const [{ data, isLoading, error }, loadJobs] = useApi<JobResponse>(
+  const [{ data, error }, loadJobs] = useApi<JobResponse>(
     `clusters/${clusterName}/jobs/many?ids=${trackedJobs.join(",")}`,
     { manual: true }
   );
@@ -65,18 +67,30 @@ function JobWatcher(): ReactElement | null {
 
   return (
     <section className={styles.root}>
-      <Dropdown label="Watched Jobs" icon={faBell}>
+      <Dropdown icon={faEye} align={Alignment.CENTER}>
         {jobs.map((job) => (
           <div
             className={classNames(styles.job, getJobStatus(job.status))}
             key={job.id}
           >
-            <JobSummary summary={job.summary} />
-            {/* Current Step: {job.log[job.log.length - 1]?.message} */}
-            <span className={styles.statusDot} />
+            <div className={styles.actions}>
+              <IconButton
+                icon={faEyeSlash}
+                onClick={() => untrackJob(job.id)}
+              />
+            </div>
+            <div className={styles.content}>
+              <PrefixLink to={`/jobs/${job.id}`}>
+                <JobSummary summary={job.summary} />
+              </PrefixLink>
+              <div className={styles.step}></div>
+              {/* Current Step: {job.log[job.log.length - 1]?.message} */}
+              <span className={styles.statusDot} />
+            </div>
           </div>
         ))}
       </Dropdown>
+      <span className={styles.count}>{trackedJobs.length}</span>
     </section>
   );
 }

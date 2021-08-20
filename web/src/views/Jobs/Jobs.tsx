@@ -24,7 +24,7 @@ const Jobs = (): ReactElement => {
   useEffect(() => {
     const intervalID = setInterval(reload, REFRESH_INTERVAL);
     return () => clearInterval(intervalID);
-  }, []);
+  }, [clusterName]);
 
   const renderContent = (): ReactElement | null => {
     if (isLoading && !data) {

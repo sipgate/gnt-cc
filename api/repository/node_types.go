@@ -29,7 +29,6 @@ type rapiNodeResponse struct {
 	Csockets        int         `json:"csockets"`
 	Role            string      `json:"role"`
 	Tags            []string    `json:"tags"`
-	Group           string      `json:"group"`
 	GroupUUID       string      `json:"group.uuid"`
 	Cnos            int         `json:"cnos"`
 	Ndparams        struct {

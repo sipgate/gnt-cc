@@ -11,6 +11,11 @@ type NodeResult struct {
 	Node  GntNodeWithInstances
 }
 
+type GroupResult struct {
+	Found bool
+	Group GntGroup
+}
+
 type JobResult struct {
 	Found bool
 	Job   GntJob

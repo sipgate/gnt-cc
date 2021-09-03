@@ -3,13 +3,15 @@ package repository
 import (
 	"encoding/json"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"gnt-cc/model"
 	"gnt-cc/rapi_client"
 	"strings"
 )
 
 type NodeRepository struct {
-	RAPIClient rapi_client.Client
+	RAPIClient      rapi_client.Client
+	GroupRepository GroupRepository
 }
 
 func (repo *NodeRepository) Get(clusterName string, nodeName string) (model.NodeResult, error) {
@@ -59,6 +61,17 @@ func isMaster(node rapiNodeResponse) bool {
 	return strings.ToLower(node.Role) == "m"
 }
 
+func (repo *NodeRepository) getGroupNameFromUUID(clusterName string, groups []model.GntGroup, groupUUID string) string {
+	for _, group := range groups {
+		if strings.ToLower(group.UUID) == strings.ToLower(groupUUID) {
+			return group.Name
+		}
+	}
+
+	log.Errorf("No group found in cluster %s with UUID %s", clusterName, groupUUID)
+	return ""
+}
+
 func (repo *NodeRepository) GetAll(clusterName string) ([]model.GntNode, error) {
 	response, err := repo.RAPIClient.Get(clusterName, "/2/nodes?bulk=1")
 
@@ -74,6 +87,11 @@ func (repo *NodeRepository) GetAll(clusterName string) ([]model.GntNode, error) 
 	}
 
 	nodes := make([]model.GntNode, len(nodeData))
+
+	groups, err := repo.GroupRepository.GetAll(clusterName)
+	if err != nil {
+		log.Errorf("Failed to lookup group names during NodeRepository.GetAll for in cluster %s", clusterName)
+	}
 
 	for i, node := range nodeData {
 		nodes[i] = model.GntNode{
@@ -91,6 +109,7 @@ func (repo *NodeRepository) GetAll(clusterName string) ([]model.GntNode, error) 
 			IsMasterCapable:         node.MasterCapable,
 			IsOffline:               node.Offline,
 			IsVMCapable:             node.VMCapable,
+			GroupName:               repo.getGroupNameFromUUID(clusterName, groups, node.GroupUUID),
 		}
 	}
 

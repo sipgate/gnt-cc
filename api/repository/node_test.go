@@ -64,11 +64,15 @@ func TestNodeRepoGetAllFuncReturnsError_WhenJSONResponseIsInvalid(t *testing.T) 
 }
 
 func TestNodeRepoGetAllFuncReturnsNodes(t *testing.T) {
-	validResponse, _ := ioutil.ReadFile("../testfiles/rapi_responses/valid_nodes_response.json")
+	validNodesResponse, _ := ioutil.ReadFile("../testfiles/rapi_responses/valid_nodes_response.json")
+	validGroupsResponse, _ := ioutil.ReadFile("../testfiles/rapi_responses/valid_groups_response.json")
 	client := mocking.NewRAPIClient()
-	client.On("Get", mock.Anything, mock.Anything).
-		Once().Return(rapi_client.Response{Status: 200, Body: string(validResponse)}, nil)
-	repo := repository.NodeRepository{RAPIClient: client}
+	client.On("Get", mock.Anything, "/2/nodes?bulk=1").
+		Once().Return(rapi_client.Response{Status: 200, Body: string(validNodesResponse)}, nil)
+	client.On("Get", mock.Anything, "/2/groups?bulk=1").
+		Once().Return(rapi_client.Response{Status: 200, Body: string(validGroupsResponse)}, nil)
+	groupRepo := repository.GroupRepository{RAPIClient: client}
+	repo := repository.NodeRepository{RAPIClient: client, GroupRepository: groupRepo}
 	nodes, err := repo.GetAll("test")
 
 	assert.NoError(t, err)
@@ -85,6 +89,7 @@ func TestNodeRepoGetAllFuncReturnsNodes(t *testing.T) {
 		IsVMCapable:             true,
 		PrimaryInstancesCount:   2,
 		SecondaryInstancesCount: 0,
+		GroupName:               "groupname1",
 	}, {
 		Name:                    "node2",
 		MemoryTotal:             128848,
@@ -97,6 +102,7 @@ func TestNodeRepoGetAllFuncReturnsNodes(t *testing.T) {
 		IsVMCapable:             true,
 		PrimaryInstancesCount:   0,
 		SecondaryInstancesCount: 2,
+		GroupName:               "groupname2",
 	}}, nodes)
 }
 

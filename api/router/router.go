@@ -40,7 +40,8 @@ func New(engine *gin.Engine) *router {
 	}
 
 	instanceRepository := repository.InstanceRepository{RAPIClient: rapiClient, QueryPerformer: &query.Performer{}}
-	nodeRepository := repository.NodeRepository{RAPIClient: rapiClient}
+	groupRepository := repository.GroupRepository{RAPIClient: rapiClient}
+	nodeRepository := repository.NodeRepository{RAPIClient: rapiClient, GroupRepository: groupRepository}
 	jobRepository := repository.JobRepository{RAPIClient: rapiClient}
 
 	r := router{

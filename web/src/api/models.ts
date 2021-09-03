@@ -41,6 +41,7 @@ export type GntNode = {
   isDrained: boolean;
   isOffline: boolean;
   isVMCapable: boolean;
+  groupName: string;
 };
 
 export type GntCluster = {

@@ -1,0 +1,205 @@
+[
+  {
+    "custom_ndparams": {},
+    "custom_diskparams": {},
+    "ctime": 1.2,
+    "uuid": "uuid1",
+    "tags": [],
+    "node_cnt": 1,
+    "alloc_policy": "last_resort",
+    "name": "groupname1",
+    "mtime": 2.3,
+    "node_list": [
+      "server1"
+    ],
+    "diskparams": {
+      "file": {},
+      "diskless": {},
+      "plain": {
+        "stripes": 1
+      },
+      "rbd": {
+        "pool": "rbd",
+        "access": "kernelspace"
+      },
+      "gluster": {
+        "port": 24007,
+        "host": "127.0.0.1",
+        "volume": "gv0",
+        "access": "kernelspace"
+      },
+      "drbd": {
+        "disk-barriers": "n",
+        "c-max-rate": 1310720,
+        "c-plan-ahead": 20,
+        "data-stripes": 1,
+        "meta-stripes": 1,
+        "protocol": "C",
+        "metavg": "vg01",
+        "meta-barriers": false,
+        "c-min-rate": 10240,
+        "net-custom": "",
+        "c-delay-target": 1,
+        "c-fill-target": 0,
+        "disk-custom": "",
+        "dynamic-resync": true,
+        "resync-rate": 10240000
+      },
+      "ext": {
+        "access": "kernelspace"
+      },
+      "blockdev": {},
+      "sharedfile": {}
+    },
+    "custom_ipolicy": {},
+    "serial_no": 6,
+    "ipolicy": {
+      "std": {
+        "spindle-use": 1,
+        "nic-count": 1,
+        "memory-size": 128,
+        "disk-count": 1,
+        "cpu-count": 1,
+        "disk-size": 1024
+      },
+      "vcpu-ratio": 4,
+      "disk-templates": [
+        "drbd",
+        "plain"
+      ],
+      "minmax": [
+        {
+          "min": {
+            "spindle-use": 1,
+            "nic-count": 1,
+            "memory-size": 128,
+            "disk-count": 1,
+            "cpu-count": 1,
+            "disk-size": 1024
+          },
+          "max": {
+            "spindle-use": 12,
+            "nic-count": 8,
+            "memory-size": 32768,
+            "disk-count": 16,
+            "cpu-count": 12,
+            "disk-size": 1048576
+          }
+        }
+      ],
+      "spindle-ratio": 60
+    },
+    "ndparams": {
+      "ovs": false,
+      "spindle_count": 1,
+      "oob_program": "",
+      "ovs_name": "switch1",
+      "cpu_speed": 1,
+      "ovs_link": "",
+      "exclusive_storage": false,
+      "ssh_port": 22
+    }
+  },
+  {
+    "custom_ndparams": {},
+    "custom_diskparams": {},
+    "ctime": 1.2,
+    "uuid": "uuid2",
+    "tags": [],
+    "node_cnt": 1,
+    "alloc_policy": "last_resort",
+    "name": "groupname2",
+    "mtime": 2.3,
+    "node_list": [
+      "server2"
+    ],
+    "diskparams": {
+      "file": {},
+      "diskless": {},
+      "plain": {
+        "stripes": 1
+      },
+      "rbd": {
+        "pool": "rbd",
+        "access": "kernelspace"
+      },
+      "gluster": {
+        "port": 24007,
+        "host": "127.0.0.1",
+        "volume": "gv0",
+        "access": "kernelspace"
+      },
+      "drbd": {
+        "disk-barriers": "n",
+        "c-max-rate": 1310720,
+        "c-plan-ahead": 20,
+        "data-stripes": 1,
+        "meta-stripes": 1,
+        "protocol": "C",
+        "metavg": "vg01",
+        "meta-barriers": false,
+        "c-min-rate": 10240,
+        "net-custom": "",
+        "c-delay-target": 1,
+        "c-fill-target": 0,
+        "disk-custom": "",
+        "dynamic-resync": true,
+        "resync-rate": 10240000
+      },
+      "ext": {
+        "access": "kernelspace"
+      },
+      "blockdev": {},
+      "sharedfile": {}
+    },
+    "custom_ipolicy": {},
+    "serial_no": 6,
+    "ipolicy": {
+      "std": {
+        "spindle-use": 1,
+        "nic-count": 1,
+        "memory-size": 128,
+        "disk-count": 1,
+        "cpu-count": 1,
+        "disk-size": 1024
+      },
+      "vcpu-ratio": 4,
+      "disk-templates": [
+        "drbd",
+        "plain"
+      ],
+      "minmax": [
+        {
+          "min": {
+            "spindle-use": 1,
+            "nic-count": 1,
+            "memory-size": 128,
+            "disk-count": 1,
+            "cpu-count": 1,
+            "disk-size": 1024
+          },
+          "max": {
+            "spindle-use": 12,
+            "nic-count": 8,
+            "memory-size": 32768,
+            "disk-count": 16,
+            "cpu-count": 12,
+            "disk-size": 1048576
+          }
+        }
+      ],
+      "spindle-ratio": 60
+    },
+    "ndparams": {
+      "ovs": false,
+      "spindle_count": 1,
+      "oob_program": "",
+      "ovs_name": "switch1",
+      "cpu_speed": 1,
+      "ovs_link": "",
+      "exclusive_storage": false,
+      "ssh_port": 22
+    }
+  }
+
+]

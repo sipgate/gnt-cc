@@ -59,6 +59,11 @@ type GntNodeWithInstances struct {
 	SecondaryInstances []string `json:"secondaryInstances"`
 }
 
+type GntGroup struct {
+	UUID string `json:"uuid"`
+	Name string `json:"name"`
+}
+
 type GntJobLogEntry struct {
 	Serial    int    `json:"serial"`
 	Message   string `json:"message"`

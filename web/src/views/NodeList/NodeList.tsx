@@ -43,6 +43,11 @@ const columns: IDataTableColumn<GntNode>[] = [
     ),
   },
   {
+    name: "Group",
+    sortable: true,
+    selector: (row) => row.groupName,
+  },
+  {
     name: "Primary Instances",
     sortable: true,
     selector: (row) => row.primaryInstancesCount,

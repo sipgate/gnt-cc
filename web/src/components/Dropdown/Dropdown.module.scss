@@ -7,11 +7,14 @@ $width: 200px;
 $borderRadius: 4px;
 $size: 40px;
 
-.dropdown {
+.root {
   position: relative;
-  width: $width;
   height: $size;
   cursor: pointer;
+
+  &.hasLabel {
+    min-width: $width;
+  }
 
   .current {
     display: flex;
@@ -38,7 +41,6 @@ $size: 40px;
 
   .optionsWrapper {
     position: absolute;
-    left: 0;
     visibility: hidden;
     top: calc(100% + 1rem);
     min-width: $width;
@@ -56,12 +58,13 @@ $size: 40px;
       background: var(--colorElevationHigh);
       position: absolute;
       top: -0.5rem;
-      left: $spacingOuter;
       transform: rotate(45deg);
     }
 
     .options {
       overflow: hidden;
+      overflow-y: auto;
+      max-height: 300px;
       border-radius: inherit;
     }
   }
@@ -70,5 +73,31 @@ $size: 40px;
     visibility: visible;
     opacity: 1;
     transition: opacity $transitionDuration, visibility 0s;
+  }
+
+  &.left .optionsWrapper {
+    left: 0;
+
+    .triangle {
+      left: $spacingOuter;
+    }
+  }
+
+  &.center .optionsWrapper {
+    left: 50%;
+    transform: translateX(-50%);
+
+    .triangle {
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+    }
+  }
+
+  &.right .optionsWrapper {
+    right: 0;
+
+    .triangle {
+      right: $spacingOuter;
+    }
   }
 }

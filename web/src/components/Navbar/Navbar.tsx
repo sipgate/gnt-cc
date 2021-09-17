@@ -4,6 +4,7 @@ import AuthContext from "../../api/AuthContext";
 import { GntCluster } from "../../api/models";
 import Button from "../Button/Button";
 import ClusterSelector from "../ClusterSelector/ClusterSelector";
+import JobWatcher from "../JobWatcher/JobWatcher";
 import PrefixNavLink from "../PrefixNavLink";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
 import styles from "./Navbar.module.scss";
@@ -60,6 +61,7 @@ const Navbar = function ({ clusters }: Props): ReactElement {
         </div>
       </div>
       <div className={styles.end}>
+        <JobWatcher />
         <ThemeToggle />
         <Button label="Logout" icon={faSignOutAlt} onClick={logout}></Button>
       </div>

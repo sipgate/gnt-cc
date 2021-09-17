@@ -9,6 +9,7 @@ import {
 import Login from "./views/Login/Login";
 import AuthContext from "./api/AuthContext";
 import ClusterWrapper from "./views/ClusterWrapper";
+import JobWatchContext from "./contexts/JobWatchContext";
 
 const STORAGE_TOKEN_KEY = "gnt-cc-token";
 
@@ -39,6 +40,7 @@ const parseJwtPayload = (token: string | null): JwtPayload | null => {
 function App(): ReactElement {
   const storedAuthToken = localStorage.getItem(STORAGE_TOKEN_KEY);
   const [authToken, setAuthToken] = useState(storedAuthToken);
+  const [trackedJobs, setTrackedJobs] = useState<number[]>([]);
 
   useEffect(() => {
     if (authToken) {
@@ -59,18 +61,34 @@ function App(): ReactElement {
           authToken,
         }}
       >
-        <Router>
-          <Switch>
-            <Route exact path="/login" component={Login} />
+        <JobWatchContext.Provider
+          value={{
+            trackJob(jobID) {
+              if (trackedJobs.includes(jobID)) {
+                return;
+              }
 
-            <AuthenticatedRoute
-              path="/:clusterName?"
-              component={ClusterWrapper}
-            />
+              setTrackedJobs([...trackedJobs, jobID]);
+            },
+            untrackJob(jobID) {
+              setTrackedJobs(trackedJobs.filter((id) => id !== jobID));
+            },
+            trackedJobs,
+          }}
+        >
+          <Router>
+            <Switch>
+              <Route exact path="/login" component={Login} />
 
-            <Route render={() => <span>404 Not found</span>}></Route>
-          </Switch>
-        </Router>
+              <AuthenticatedRoute
+                path="/:clusterName?"
+                component={ClusterWrapper}
+              />
+
+              <Route render={() => <span>404 Not found</span>}></Route>
+            </Switch>
+          </Router>
+        </JobWatchContext.Provider>
       </AuthContext.Provider>
     </div>
   );

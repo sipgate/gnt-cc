@@ -5,7 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import React, { ReactElement } from "react";
 import { useApi } from "../../api";
-import Badge from "../../components/Badge/Badge";
+import StatusBadge from "../../components/StatusBadge/StatusBadge";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import PrefixLink from "../../components/PrefixLink";
@@ -67,7 +67,7 @@ function Dashboard(): ReactElement {
           />
         </QuickInfoBanner>
         <div className={styles.currentMaster}>
-          <Badge>Master</Badge>
+          <StatusBadge>Master</StatusBadge>
           <PrefixLink to={`/nodes/${master}`}>
             <span className={styles.master}>{master}</span>
           </PrefixLink>

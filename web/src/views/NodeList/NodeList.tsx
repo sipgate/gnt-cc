@@ -2,13 +2,17 @@ import React, { ReactElement } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { useApi } from "../../api";
 import { GntNode } from "../../api/models";
-import Badge, { BadgeStatus } from "../../components/Badge/Badge";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import CustomDataTable from "../../components/CustomDataTable/CustomDataTable";
 import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import MemoryUtilisation from "../../components/MemoryUtilisation/MemoryUtilisation";
 import PrefixLink from "../../components/PrefixLink";
+import StatusBadge, {
+  BadgeStatus,
+} from "../../components/StatusBadge/StatusBadge";
+import CustomColorBadge from "../../CustomColorBadge/CustomColorBadge";
 import { prettyPrintMiB } from "../../helpers";
+import { getColorForString } from "../../helpers/colors";
 import { useClusterName } from "../../helpers/hooks";
 import styles from "./NodeList.module.scss";
 
@@ -30,14 +34,14 @@ const columns: IDataTableColumn<GntNode>[] = [
           {row.name}
         </PrefixLink>
         {row.isMaster && (
-          <Badge status={BadgeStatus.PRIMARY} className={styles.badge}>
+          <StatusBadge status={BadgeStatus.PRIMARY} className={styles.badge}>
             Master
-          </Badge>
+          </StatusBadge>
         )}
         {row.isOffline && (
-          <Badge status={BadgeStatus.FAILURE} className={styles.badge}>
+          <StatusBadge status={BadgeStatus.FAILURE} className={styles.badge}>
             Offline
-          </Badge>
+          </StatusBadge>
         )}
       </>
     ),
@@ -46,6 +50,11 @@ const columns: IDataTableColumn<GntNode>[] = [
     name: "Group",
     sortable: true,
     selector: (row) => row.groupName,
+    cell: (row) => (
+      <CustomColorBadge color={getColorForString(row.groupName)}>
+        {row.groupName}
+      </CustomColorBadge>
+    ),
   },
   {
     name: "Primary Instances",

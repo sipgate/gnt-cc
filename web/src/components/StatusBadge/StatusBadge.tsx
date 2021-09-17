@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, ReactElement } from "react";
 import classNames from "classnames";
-import styles from "./Badge.module.scss";
+import styles from "./StatusBadge.module.scss";
 
 export enum BadgeStatus {
   SUCCESS,
@@ -14,7 +14,7 @@ type Props = {
   className?: string;
 };
 
-function Badge({
+function StatusBadge({
   children,
   status,
   className,
@@ -37,4 +37,4 @@ function Badge({
   );
 }
 
-export default Badge;
+export default StatusBadge;

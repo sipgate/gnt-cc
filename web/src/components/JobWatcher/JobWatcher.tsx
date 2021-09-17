@@ -6,7 +6,7 @@ import { GntJobWithLog } from "../../api/models";
 import JobWatchContext from "../../contexts/JobWatchContext";
 import { useClusterName } from "../../helpers/hooks";
 import Dropdown, { Alignment } from "../Dropdown/Dropdown";
-import IconButton from "../IconButton/IconButton";
+import Icon from "../Icon/Icon";
 import JobSummary from "../JobSummary/JobSummary";
 import PrefixLink from "../PrefixLink";
 import styles from "./JobWatcher.module.scss";
@@ -15,7 +15,7 @@ interface JobResponse {
   jobs: GntJobWithLog[];
 }
 
-function getJobStatus(status: string) {
+function getJobStatusStyles(status: string) {
   if (status === "success") {
     return styles.success;
   }
@@ -27,6 +27,10 @@ function getJobStatus(status: string) {
   }
 
   return styles.running;
+}
+
+function getJobStatusTitle(status: string) {
+  return `Job status: ${status}`;
 }
 
 function JobWatcher(): ReactElement | null {
@@ -70,22 +74,23 @@ function JobWatcher(): ReactElement | null {
       <Dropdown icon={faEye} align={Alignment.CENTER}>
         {jobs.map((job) => (
           <div
-            className={classNames(styles.job, getJobStatus(job.status))}
+            className={classNames(styles.job, getJobStatusStyles(job.status))}
             key={job.id}
           >
             <div className={styles.actions}>
-              <IconButton
-                icon={faEyeSlash}
+              <button
+                className={styles.untrackButton}
                 onClick={() => untrackJob(job.id)}
-              />
+                title={getJobStatusTitle(job.status)}
+              >
+                <Icon icon={faEyeSlash} />
+              </button>
             </div>
             <div className={styles.content}>
               <PrefixLink to={`/jobs/${job.id}`}>
                 <JobSummary summary={job.summary} />
               </PrefixLink>
               <div className={styles.step}></div>
-              {/* Current Step: {job.log[job.log.length - 1]?.message} */}
-              <span className={styles.statusDot} />
             </div>
           </div>
         ))}

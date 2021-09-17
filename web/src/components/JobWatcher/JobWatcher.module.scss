@@ -6,21 +6,45 @@
     display: grid;
     grid-template-columns: 2rem 1fr;
     grid-template-areas: "actions .";
-    gap: 1rem;
     min-width: 400px;
-    padding: 1rem;
 
     .actions {
       grid-area: actions;
       display: flex;
       justify-content: center;
       align-items: center;
+
+      .untrackButton {
+        border: 0;
+        display: block;
+        height: 100%;
+        width: 32px;
+        cursor: pointer;
+        color: #fff;
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          opacity: 0;
+          transition: opacity 0.15s;
+          background-color: rgba(#fff, 0.2);
+        }
+
+        &:hover::after {
+          opacity: 1;
+        }
+      }
     }
 
     .content {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      padding: 1rem;
 
       .statusDot {
         position: absolute;
@@ -30,22 +54,23 @@
         height: 0.75rem;
         border-radius: 100%;
       }
+    }
 
-      &.running .statusDot {
-        background-color: var(--colorPrimary);
-      }
+    &.running .actions .untrackButton {
+      background-color: var(--colorPrimary);
+    }
 
-      &.error .statusDot {
-        background-color: var(--colorDanger);
-      }
+    &.error .actions .untrackButton {
+      background-color: var(--colorDanger);
+    }
 
-      &.success .statusDot {
-        background-color: var(--colorSuccess);
-      }
+    &.success .actions .untrackButton {
+      background-color: var(--colorSuccess);
+    }
 
-      &.pending .statusDot {
-        background-color: var(--colorWarning);
-      }
+    &.pending .actions .untrackButton {
+      background-color: var(--colorWarning);
+      color: #000;
     }
   }
 

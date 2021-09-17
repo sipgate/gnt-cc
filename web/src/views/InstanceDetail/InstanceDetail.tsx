@@ -11,7 +11,9 @@ import React, { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useApi } from "../../api";
 import { GntDisk, GntInstance, GntNic } from "../../api/models";
-import Badge, { BadgeStatus } from "../../components/Badge/Badge";
+import StatusBadge, {
+  BadgeStatus,
+} from "../../components/StatusBadge/StatusBadge";
 import Button from "../../components/Button/Button";
 import Card from "../../components/Card/Card";
 import CardGrid from "../../components/CardGrid/CardGrid";
@@ -25,7 +27,11 @@ import styles from "./InstanceDetail.module.scss";
 
 function DiskCard({ name, capacity, template }: GntDisk): ReactElement {
   return (
-    <Card icon={faHdd} title={name} badge={<Badge>{template}</Badge>}>
+    <Card
+      icon={faHdd}
+      title={name}
+      badge={<StatusBadge>{template}</StatusBadge>}
+    >
       <p className={styles.diskCapacity}>{prettyPrintMiB(capacity)}</p>
     </Card>
   );
@@ -47,7 +53,7 @@ function NodeCard({ name, primary }: NodeCardProps): ReactElement {
       title={name}
       badge={
         primary ? (
-          <Badge status={BadgeStatus.PRIMARY}>Primary</Badge>
+          <StatusBadge status={BadgeStatus.PRIMARY}>Primary</StatusBadge>
         ) : undefined
       }
     />
@@ -56,7 +62,11 @@ function NodeCard({ name, primary }: NodeCardProps): ReactElement {
 
 function NicCard({ name, mode, mac, bridge }: GntNic): ReactElement {
   return (
-    <Card icon={faNetworkWired} title={name} badge={<Badge>{mode}</Badge>}>
+    <Card
+      icon={faNetworkWired}
+      title={name}
+      badge={<StatusBadge>{mode}</StatusBadge>}
+    >
       {bridge.length && <p className={styles.nicBridge}>{bridge}</p>}
       <p className={styles.nicMac}>{mac}</p>
     </Card>
@@ -98,9 +108,9 @@ const InstanceDetail = (): ReactElement => {
           <header className={styles.header}>
             <h1>{hostname}</h1>
             {instance.isRunning ? (
-              <Badge status={BadgeStatus.SUCCESS}>Online</Badge>
+              <StatusBadge status={BadgeStatus.SUCCESS}>Online</StatusBadge>
             ) : (
-              <Badge status={BadgeStatus.FAILURE}>Offline</Badge>
+              <StatusBadge status={BadgeStatus.FAILURE}>Offline</StatusBadge>
             )}
             {instance.offersVnc && (
               <PrefixLink

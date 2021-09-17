@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import Badge, { BadgeStatus } from "./Badge/Badge";
+import StatusBadge, { BadgeStatus } from "./StatusBadge/StatusBadge";
 
 function getBadgeStatus(status: string): BadgeStatus {
   if (status === "success") {
@@ -22,7 +22,7 @@ type Props = {
 function JobStatus({ status }: Props): ReactElement {
   const badgeStatus = getBadgeStatus(status);
 
-  return <Badge status={badgeStatus}>{status}</Badge>;
+  return <StatusBadge status={badgeStatus}>{status}</StatusBadge>;
 }
 
 export default JobStatus;

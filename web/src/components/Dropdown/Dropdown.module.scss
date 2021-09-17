@@ -63,6 +63,8 @@ $size: 40px;
 
     .options {
       overflow: hidden;
+      overflow-y: auto;
+      max-height: 300px;
       border-radius: inherit;
     }
   }

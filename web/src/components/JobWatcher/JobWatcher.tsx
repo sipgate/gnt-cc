@@ -1,4 +1,9 @@
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faExclamation,
+  faEye,
+  faEyeSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import React, { ReactElement, useContext, useEffect } from "react";
 import { useApi } from "../../api";
@@ -13,6 +18,12 @@ import styles from "./JobWatcher.module.scss";
 
 interface JobResponse {
   jobs: GntJobWithLog[];
+}
+
+enum WatcherStatus {
+  InProgress,
+  Succeeded,
+  HasFailures,
 }
 
 function getJobStatusStyles(status: string) {
@@ -31,6 +42,22 @@ function getJobStatusStyles(status: string) {
 
 function getJobStatusTitle(status: string) {
   return `Job status: ${status}`;
+}
+
+function getWatcherStatus(jobs: GntJobWithLog[]): WatcherStatus {
+  for (const job of jobs) {
+    if (job.status !== "error" && job.status !== "success") {
+      return WatcherStatus.InProgress;
+    }
+  }
+
+  for (const job of jobs) {
+    if (job.status === "error") {
+      return WatcherStatus.HasFailures;
+    }
+  }
+
+  return WatcherStatus.Succeeded;
 }
 
 function JobWatcher(): ReactElement | null {
@@ -69,6 +96,8 @@ function JobWatcher(): ReactElement | null {
     ? data.jobs.filter((job) => trackedJobs.includes(job.id)).reverse()
     : [];
 
+  const watcherStatus = getWatcherStatus(jobs);
+
   return (
     <section className={styles.root}>
       <Dropdown icon={faEye} align={Alignment.CENTER}>
@@ -80,7 +109,10 @@ function JobWatcher(): ReactElement | null {
             <div className={styles.actions}>
               <button
                 className={styles.untrackButton}
-                onClick={() => untrackJob(job.id)}
+                onClick={(ev) => {
+                  ev.stopPropagation();
+                  untrackJob(job.id);
+                }}
                 title={getJobStatusTitle(job.status)}
               >
                 <Icon icon={faEyeSlash} />
@@ -95,7 +127,19 @@ function JobWatcher(): ReactElement | null {
           </div>
         ))}
       </Dropdown>
-      <span className={styles.count}>{trackedJobs.length}</span>
+      {watcherStatus === WatcherStatus.InProgress && (
+        <span className={styles.count}>{trackedJobs.length}</span>
+      )}
+      {watcherStatus === WatcherStatus.Succeeded && (
+        <span className={styles.successIndicator}>
+          <Icon icon={faCheck} />
+        </span>
+      )}
+      {watcherStatus === WatcherStatus.HasFailures && (
+        <span className={styles.failureIndicator}>
+          <Icon icon={faExclamation} />
+        </span>
+      )}
     </section>
   );
 }

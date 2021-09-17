@@ -15,6 +15,7 @@
       align-items: center;
 
       .untrackButton {
+        position: relative;
         border: 0;
         display: block;
         height: 100%;
@@ -78,15 +79,31 @@
   .successIndicator,
   .failureIndicator {
     position: absolute;
-    top: -8px;
-    right: -8px;
-    width: 28px;
-    height: 28px;
+    top: -6px;
+    right: -6px;
+    width: 24px;
+    height: 24px;
     z-index: 1;
     border-radius: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    animation: notification 0.5s;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: inherit;
+      background-color: inherit;
+      opacity: 0.5;
+      pointer-events: none;
+      animation: notification-ring 0.5s;
+      z-index: -1;
+    }
   }
 
   .count {
@@ -101,5 +118,22 @@
   .failureIndicator {
     background: var(--colorDanger);
     color: #fff;
+  }
+}
+
+@keyframes notification {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes notification-ring {
+  to {
+    transform: scale(3);
+    opacity: 0;
   }
 }

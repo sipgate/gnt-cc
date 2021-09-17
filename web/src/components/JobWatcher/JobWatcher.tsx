@@ -98,6 +98,10 @@ function JobWatcher(): ReactElement | null {
 
   const watcherStatus = getWatcherStatus(jobs);
 
+  const unfinishedJobsCount = jobs.filter(
+    (job) => job.status !== "success" && job.status !== "error"
+  ).length;
+
   return (
     <section className={styles.root}>
       <Dropdown icon={faEye} align={Alignment.CENTER}>
@@ -128,7 +132,7 @@ function JobWatcher(): ReactElement | null {
         ))}
       </Dropdown>
       {watcherStatus === WatcherStatus.InProgress && (
-        <span className={styles.count}>{trackedJobs.length}</span>
+        <span className={styles.count}>{unfinishedJobsCount}</span>
       )}
       {watcherStatus === WatcherStatus.Succeeded && (
         <span className={styles.successIndicator}>

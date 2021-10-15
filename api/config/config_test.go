@@ -13,6 +13,7 @@ func TestGetFuncReturnsLoadedConfig(t *testing.T) {
 		JwtSigningKey:        "test",
 		AuthenticationMethod: "builtin",
 		Bind:                 "127.0.0.1",
+		PublicUrl:            "https://gnt-cc.example.com",
 		Port:                 8000,
 		JwtExpire:            60000000000,
 		Loglevel:             "warning",

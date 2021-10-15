@@ -1,3 +1,4 @@
 ---
+publicUrl: "https://gnt-cc.example.com"
 jwtSigningKey: "test"
 authenticationMethod: "ldap"

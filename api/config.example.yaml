@@ -6,6 +6,7 @@ logLevel: warning
 jwtSigningKey: "weNFEWFWKJEnfWknfewlkjenfFE"
 jwtExpire: "2000m"
 authenticationMethod: "builtin"
+publicUrl: "https://gnt-cc.example.com"
 users:
   - username: "admin"
     password: "admin"
@@ -22,7 +23,7 @@ rapiConfig:
   skipCertificateVerify: false
 clusters:
   - name: "test-cluster"
-    hostname: "test-cluster.examlpe.com"
+    hostname: "test-cluster.example.com"
     port: 5080
     description: "Ganeti Test Cluster"
     username: "gnt-cc"

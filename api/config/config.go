@@ -43,6 +43,7 @@ type Config struct {
 	Bind                 string
 	Port                 int
 	DevelopmentMode      bool
+	PublicUrl            string
 	JwtSigningKey        string
 	JwtExpire            time.Duration
 	AuthenticationMethod string
@@ -139,6 +140,10 @@ func GetClusterConfig(clusterName string) (ClusterConfig, *clusterNotFoundError)
 func validateConfig(config *Config) error {
 	if config.JwtSigningKey == "" {
 		return errors.New("No JWT signing key is set")
+	}
+
+	if config.PublicUrl == "" {
+		return errors.New("no public URL specified")
 	}
 
 	switch config.AuthenticationMethod {

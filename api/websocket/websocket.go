@@ -1,7 +1,6 @@
 package websocket
 
 import (
-	"gnt-cc/config"
 	"net"
 	"net/http"
 	"strconv"
@@ -36,10 +35,10 @@ func PassThrough(w http.ResponseWriter, r *http.Request, host string, port int) 
 		Subprotocols:      []string{"binary"},
 		EnableCompression: false,
 	}
-	if bool(config.Get().DevelopmentMode) {
-		upgrader.CheckOrigin = func(r *http.Request) bool {
-			return true
-		}
+
+	// origin check is done by gin
+	upgrader.CheckOrigin = func(r *http.Request) bool {
+		return true
 	}
 
 	conn, err := upgrader.Upgrade(w, r, nil)

@@ -35,8 +35,6 @@ export const buildApiUrl = (slug: string): string => {
 export const buildWSURL = (slug: string): string => {
   const { hostname, port, protocol } = window.location;
 
-  console.log(protocol);
-
   const wsProtocol = protocol === "http:" ? "ws:" : "wss:";
   return `${wsProtocol}//${hostname}:${port}/api/v1/${stripLeadingSlug(slug)}`;
 };

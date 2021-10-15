@@ -1,6 +1,7 @@
 ---
 jwtSigningKey: "test"
 authenticationMethod: "builtin"
+publicUrl: "https://gnt-cc.example.com"
 users:
   - username: "admin"
     password: "test"

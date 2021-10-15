@@ -16,6 +16,7 @@ import (
 	"time"
 
 	rice "github.com/GeertJohan/go.rice"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -33,6 +34,12 @@ type router struct {
 func New(engine *gin.Engine) *router {
 	engine.Use(gin.Logger())
 	engine.Use(gin.Recovery())
+
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = []string{config.Get().PublicUrl}
+	corsConfig.AllowMethods = []string{"GET", "POST"}
+	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization"}
+	engine.Use(cors.New(corsConfig))
 
 	rapiClient, err := createRAPIClientFromConfig(config.Get().Clusters, config.Get().RapiConfig)
 	if err != nil {

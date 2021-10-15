@@ -6,6 +6,7 @@ require (
 	github.com/GeertJohan/go.rice v1.0.2
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/appleboy/gin-jwt/v2 v2.6.4
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.3
 	github.com/gorilla/websocket v1.4.2
 	github.com/jtblin/go-ldap-client v0.0.0-20170223121919-b73f66626b33

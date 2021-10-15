@@ -14,7 +14,7 @@ const InstanceConsole = (): ReactElement => {
     `/clusters/${clusterName}/instances/${instanceName}/console?token=${authToken}`
   );
 
-  return <VNCConsole url={url} />;
+  return <VNCConsole url={url} instanceName={instanceName} />;
 };
 
 export default InstanceConsole;

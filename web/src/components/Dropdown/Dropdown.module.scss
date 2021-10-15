@@ -19,7 +19,6 @@ $size: 40px;
   .current {
     display: flex;
     align-items: center;
-    z-index: 1;
     padding: 0 $spacingOuter;
     border: 1px solid var(--colorSeparator);
     border-radius: $size / 2;

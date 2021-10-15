@@ -5,6 +5,7 @@ import RFB, {
   SecurityFailureCallback,
 } from "@novnc/novnc/core/rfb.js";
 import React, { ReactElement, useEffect, useRef, useState } from "react";
+import VNCCtrlAltDelConfirmModal from "../../VNCCtrlAltDelConfirmModal/VNCCtrlAltDelConfirmModal";
 import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
@@ -16,6 +17,7 @@ const supportsPasting = () => navigator.clipboard.readText !== undefined;
 
 type Props = {
   url: string;
+  instanceName: string;
 };
 
 enum ConnectionState {
@@ -56,7 +58,7 @@ const createRFB = (
 
 let rfb: RFB | null = null;
 
-const VNCConsole = ({ url }: Props): ReactElement => {
+const VNCConsole = ({ url, instanceName }: Props): ReactElement => {
   const vncContainer = useRef<HTMLDivElement>(null);
 
   const [connectionState, setConnectionState] = useState(
@@ -64,6 +66,7 @@ const VNCConsole = ({ url }: Props): ReactElement => {
   );
   const [connectionError, setConnectionError] = useState<string | null>(null);
   const [credentials, setCredentials] = useState<Credentials>(emptyCredentials);
+  const [confirmingCtrlAltDel, setConfirmingCtrlAltDel] = useState(false);
 
   const onConnect = () => setConnectionState(ConnectionState.CONNECTED);
   const onSecurityFailure: SecurityFailureCallback = () =>
@@ -106,6 +109,10 @@ const VNCConsole = ({ url }: Props): ReactElement => {
     rfb.addEventListener("disconnect", onDisconnect);
     rfb.addEventListener("credentialsrequired", onCredentialsRequired);
   };
+
+  function sendCtrlAltDel() {
+    rfb?.sendCtrlAltDel();
+  }
 
   useEffect(() => {
     if (vncContainer.current !== null) {
@@ -165,12 +172,20 @@ const VNCConsole = ({ url }: Props): ReactElement => {
       {connectionState === ConnectionState.DISCONNECTED && renderDisconnected()}
       {connectionState === ConnectionState.AUTHENTICATION_FAILED &&
         renderPasswordPrompt()}
+
+      <VNCCtrlAltDelConfirmModal
+        isVisible={confirmingCtrlAltDel}
+        onHide={() => setConfirmingCtrlAltDel(false)}
+        onConfirm={sendCtrlAltDel}
+        instanceName={instanceName}
+      />
+
       <VNCControl
         isConnected={connectionState === ConnectionState.CONNECTED}
         enablePowerControl={rfb?.capabilities.power || false}
         enablePasting={supportsPasting()}
         onDisconnect={() => disconnect()}
-        onCtrlAltDel={() => rfb?.sendCtrlAltDel()}
+        onCtrlAltDel={() => setConfirmingCtrlAltDel(true)}
         onClipboardPaste={() =>
           navigator.clipboard
             .readText()

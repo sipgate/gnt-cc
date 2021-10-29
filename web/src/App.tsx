@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useState } from "react";
+import React, { ReactElement, useContext } from "react";
 import {
   BrowserRouter as Router,
   Redirect,
@@ -7,7 +7,6 @@ import {
   Switch,
 } from "react-router-dom";
 import AuthContext from "./api/AuthContext";
-import JobWatchContext from "./contexts/JobWatchContext";
 import AuthProvider from "./providers/AuthProvider";
 import JobWatchProvider from "./providers/JobWatchProvider";
 import ThemeProvider from "./providers/ThemeProvider";

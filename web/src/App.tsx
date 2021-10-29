@@ -1,15 +1,16 @@
-import React, { useContext, useState, useEffect, ReactElement } from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
-  Switch,
+  Redirect,
   Route,
   RouteProps,
-  Redirect,
+  Switch,
 } from "react-router-dom";
-import Login from "./views/Login/Login";
 import AuthContext from "./api/AuthContext";
-import ClusterWrapper from "./views/ClusterWrapper";
 import JobWatchContext from "./contexts/JobWatchContext";
+import ThemeProvider from "./providers/ThemeProvider";
+import ClusterWrapper from "./views/ClusterWrapper";
+import Login from "./views/Login/Login";
 
 const STORAGE_TOKEN_KEY = "gnt-cc-token";
 
@@ -54,42 +55,44 @@ function App(): ReactElement {
 
   return (
     <div className="App">
-      <AuthContext.Provider
-        value={{
-          setToken: setAuthToken,
-          username: tokenPayload ? tokenPayload.id : null,
-          authToken,
-        }}
-      >
-        <JobWatchContext.Provider
+      <ThemeProvider>
+        <AuthContext.Provider
           value={{
-            trackJob(jobID) {
-              if (trackedJobs.includes(jobID)) {
-                return;
-              }
-
-              setTrackedJobs([...trackedJobs, jobID]);
-            },
-            untrackJob(jobID) {
-              setTrackedJobs(trackedJobs.filter((id) => id !== jobID));
-            },
-            trackedJobs,
+            setToken: setAuthToken,
+            username: tokenPayload ? tokenPayload.id : null,
+            authToken,
           }}
         >
-          <Router>
-            <Switch>
-              <Route exact path="/login" component={Login} />
+          <JobWatchContext.Provider
+            value={{
+              trackJob(jobID) {
+                if (trackedJobs.includes(jobID)) {
+                  return;
+                }
 
-              <AuthenticatedRoute
-                path="/:clusterName?"
-                component={ClusterWrapper}
-              />
+                setTrackedJobs([...trackedJobs, jobID]);
+              },
+              untrackJob(jobID) {
+                setTrackedJobs(trackedJobs.filter((id) => id !== jobID));
+              },
+              trackedJobs,
+            }}
+          >
+            <Router>
+              <Switch>
+                <Route exact path="/login" component={Login} />
 
-              <Route render={() => <span>404 Not found</span>}></Route>
-            </Switch>
-          </Router>
-        </JobWatchContext.Provider>
-      </AuthContext.Provider>
+                <AuthenticatedRoute
+                  path="/:clusterName?"
+                  component={ClusterWrapper}
+                />
+
+                <Route render={() => <span>404 Not found</span>}></Route>
+              </Switch>
+            </Router>
+          </JobWatchContext.Provider>
+        </AuthContext.Provider>
+      </ThemeProvider>
     </div>
   );
 }

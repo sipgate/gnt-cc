@@ -53,6 +53,10 @@ func (p *Performer) Perform(client rapi_client.Client, config RequestConfig) ([]
 		return nil, err
 	}
 
+	if httpResponse.Status > 299 {
+		return nil, fmt.Errorf("RAPI returned status code %d", httpResponse.Status)
+	}
+
 	parsedBody, err := parseQueryResponseBody(httpResponse.Body)
 
 	if err != nil {

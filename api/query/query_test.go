@@ -2,13 +2,14 @@ package query_test
 
 import (
 	"errors"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"gnt-cc/mocking"
 	"gnt-cc/query"
 	"gnt-cc/rapi_client"
 	"io/ioutil"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 var performer = &query.Performer{}
@@ -57,6 +58,16 @@ func TestPerformReturnsError_WhenRAPIClientReturnsError(t *testing.T) {
 		Once().Return(rapi_client.Response{}, errors.New("expected"))
 	_, err := performer.Perform(client, createValidConfig())
 	assert.EqualError(t, err, "expected")
+}
+
+func TestPerformReturnsError_WhenRAPIClientReturnsNon200StatusCode(t *testing.T) {
+	client := mocking.NewRAPIClient()
+	client.On("Get", mock.Anything, mock.Anything).
+		Once().Return(rapi_client.Response{
+		Status: 502,
+	}, nil)
+	_, err := performer.Perform(client, createValidConfig())
+	assert.EqualError(t, err, "RAPI returned status code 502")
 }
 
 func TestPerformReturnsError_WhenRAPIClientReturnsInvalidJSONBody(t *testing.T) {

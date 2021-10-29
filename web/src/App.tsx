@@ -8,18 +8,11 @@ import {
 } from "react-router-dom";
 import AuthContext from "./api/AuthContext";
 import JobWatchContext from "./contexts/JobWatchContext";
-import ThemeContext from "./contexts/ThemeContext";
+import ThemeProvider from "./providers/ThemeProvider";
 import ClusterWrapper from "./views/ClusterWrapper";
 import Login from "./views/Login/Login";
 
 const STORAGE_TOKEN_KEY = "gnt-cc-token";
-const LIGHT_CLASS = "light";
-const DARK_THEME_ID = "theme-dark";
-
-const savedThemeState = localStorage.getItem(DARK_THEME_ID);
-const initialState = savedThemeState
-  ? (JSON.parse(savedThemeState) as boolean)
-  : false;
 
 export function AuthenticatedRoute(props: RouteProps): ReactElement {
   const authContext = useContext(AuthContext);
@@ -49,29 +42,6 @@ function App(): ReactElement {
   const storedAuthToken = localStorage.getItem(STORAGE_TOKEN_KEY);
   const [authToken, setAuthToken] = useState(storedAuthToken);
   const [trackedJobs, setTrackedJobs] = useState<number[]>([]);
-  const [isDark, setIsDark] = useState(initialState);
-
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.remove(LIGHT_CLASS);
-    } else {
-      document.documentElement.classList.add(LIGHT_CLASS);
-    }
-  }, [isDark]);
-
-  useEffect(() => {
-    const setPreferredMode = (prefersDark: boolean) => {
-      if (savedThemeState === null) {
-        setIsDark(prefersDark);
-      }
-    };
-
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    setPreferredMode(mediaQuery.matches);
-    mediaQuery.addListener(({ matches: prefersDark }) =>
-      setPreferredMode(prefersDark)
-    );
-  }, []);
 
   useEffect(() => {
     if (authToken) {
@@ -81,25 +51,11 @@ function App(): ReactElement {
     }
   }, [authToken]);
 
-  function setIsDarkPersistent(value: boolean) {
-    setIsDark(value);
-    localStorage.setItem(DARK_THEME_ID, JSON.stringify(value));
-  }
-
-  function toggleTheme() {
-    setIsDarkPersistent(!isDark);
-  }
-
   const tokenPayload = parseJwtPayload(authToken);
 
   return (
     <div className="App">
-      <ThemeContext.Provider
-        value={{
-          isDark,
-          toggleTheme,
-        }}
-      >
+      <ThemeProvider>
         <AuthContext.Provider
           value={{
             setToken: setAuthToken,
@@ -136,7 +92,7 @@ function App(): ReactElement {
             </Router>
           </JobWatchContext.Provider>
         </AuthContext.Provider>
-      </ThemeContext.Provider>
+      </ThemeProvider>
     </div>
   );
 }

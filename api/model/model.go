@@ -13,6 +13,7 @@ type GntNic struct {
 	Name   string `json:"name"`
 	Mac    string `json:"mac"`
 	Bridge string `json:"bridge"`
+	Vlan   string `json:"vlan"`
 }
 
 type GntInstance struct {

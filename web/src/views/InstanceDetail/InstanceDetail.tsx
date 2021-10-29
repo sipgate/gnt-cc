@@ -60,7 +60,7 @@ function NodeCard({ name, primary }: NodeCardProps): ReactElement {
   );
 }
 
-function NicCard({ name, mode, mac, bridge }: GntNic): ReactElement {
+function NicCard({ name, mode, mac, bridge, vlan }: GntNic): ReactElement {
   return (
     <Card
       icon={faNetworkWired}
@@ -68,6 +68,11 @@ function NicCard({ name, mode, mac, bridge }: GntNic): ReactElement {
       badge={<StatusBadge>{mode}</StatusBadge>}
     >
       {bridge.length && <p className={styles.nicBridge}>{bridge}</p>}
+      {vlan && (
+        <p className={styles.nicVlan}>
+          Vlan: <b>{vlan}</b>
+        </p>
+      )}
       <p className={styles.nicMac}>{mac}</p>
     </Card>
   );

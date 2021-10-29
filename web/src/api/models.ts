@@ -11,6 +11,7 @@ export type GntNic = {
   mode: string;
   bridge: string;
   mac: string;
+  vlan: string;
 };
 
 export type GntInstance = {

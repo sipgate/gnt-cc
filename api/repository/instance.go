@@ -157,6 +157,7 @@ func extractNics(instance rapiInstanceResponse) []model.GntNic {
 	for i, uuid := range instance.NicUuids {
 		mode := instance.NicModes[i]
 		mac := instance.NicMacs[i]
+		vlan := instance.CustomNicParams[i].Vlan
 		var name string
 
 		if nicNameAsString, ok := instance.NicNames[i].(string); ok {
@@ -176,6 +177,7 @@ func extractNics(instance rapiInstanceResponse) []model.GntNic {
 			Mac:    mac,
 			Name:   name,
 			Bridge: bridge,
+			Vlan:   vlan,
 		})
 	}
 

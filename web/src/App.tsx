@@ -9,6 +9,7 @@ import {
 import AuthContext from "./api/AuthContext";
 import JobWatchContext from "./contexts/JobWatchContext";
 import AuthProvider from "./providers/AuthProvider";
+import JobWatchProvider from "./providers/JobWatchProvider";
 import ThemeProvider from "./providers/ThemeProvider";
 import ClusterWrapper from "./views/ClusterWrapper";
 import Login from "./views/Login/Login";
@@ -24,27 +25,11 @@ export function AuthenticatedRoute(props: RouteProps): ReactElement {
 }
 
 function App(): ReactElement {
-  const [trackedJobs, setTrackedJobs] = useState<number[]>([]);
-
   return (
     <div className="App">
       <ThemeProvider>
         <AuthProvider>
-          <JobWatchContext.Provider
-            value={{
-              trackJob(jobID) {
-                if (trackedJobs.includes(jobID)) {
-                  return;
-                }
-
-                setTrackedJobs([...trackedJobs, jobID]);
-              },
-              untrackJob(jobID) {
-                setTrackedJobs(trackedJobs.filter((id) => id !== jobID));
-              },
-              trackedJobs,
-            }}
-          >
+          <JobWatchProvider>
             <Router>
               <Switch>
                 <Route exact path="/login" component={Login} />
@@ -57,7 +42,7 @@ function App(): ReactElement {
                 <Route render={() => <span>404 Not found</span>}></Route>
               </Switch>
             </Router>
-          </JobWatchContext.Provider>
+          </JobWatchProvider>
         </AuthProvider>
       </ThemeProvider>
     </div>

@@ -8,8 +8,8 @@ import {
 import { useApi } from "../../api";
 import { GntInstance, GntNode } from "../../api/models";
 import { AuthenticatedRoute } from "../../App";
+import ApiDataRenderer from "../../components/ApiDataRenderer/ApiDataRenderer";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
-import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import TabBar from "../../components/TabBar/TabBar";
 import { useClusterName } from "../../helpers/hooks";
 import NodePrimaryInstances from "../NodePrimaryInstances/NodePrimaryInstances";
@@ -28,17 +28,9 @@ const NodeDetail = (): ReactElement => {
   const { url, path } = useRouteMatch();
   const { pathname } = useLocation();
 
-  const [{ data, isLoading, error }] = useApi<NodeResponse>(
+  const [apiProps] = useApi<NodeResponse>(
     `clusters/${clusterName}/nodes/${nodeName}`
   );
-
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
-  if (!data) {
-    return <div>Failed to load: {error}</div>;
-  }
 
   return (
     <ContentWrapper>
@@ -57,19 +49,24 @@ const NodeDetail = (): ReactElement => {
         </TabBar>
       </div>
 
-      <div className={styles.content}>
-        <AuthenticatedRoute path={`${path}/primary-instances`}>
-          <NodePrimaryInstances instances={data.primaryInstances} />
-        </AuthenticatedRoute>
+      <ApiDataRenderer<NodeResponse>
+        {...apiProps}
+        render={({ primaryInstances, secondaryInstances }) => (
+          <div className={styles.content}>
+            <AuthenticatedRoute path={`${path}/primary-instances`}>
+              <NodePrimaryInstances instances={primaryInstances} />
+            </AuthenticatedRoute>
 
-        <AuthenticatedRoute path={`${path}/secondary-instances`}>
-          <NodeSecondaryInstances instances={data.secondaryInstances} />
-        </AuthenticatedRoute>
+            <AuthenticatedRoute path={`${path}/secondary-instances`}>
+              <NodeSecondaryInstances instances={secondaryInstances} />
+            </AuthenticatedRoute>
 
-        <AuthenticatedRoute path={path} exact>
-          <Redirect to={`${url}/primary-instances`} />
-        </AuthenticatedRoute>
-      </div>
+            <AuthenticatedRoute path={path} exact>
+              <Redirect to={`${url}/primary-instances`} />
+            </AuthenticatedRoute>
+          </div>
+        )}
+      />
     </ContentWrapper>
   );
 };

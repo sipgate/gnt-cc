@@ -1,10 +1,10 @@
 import React, { ReactElement } from "react";
-import InstanceList from "../../components/InstanceList/InstanceList";
-import { useClusterName } from "../../helpers/hooks";
 import { useApi } from "../../api";
 import { GntInstance } from "../../api/models";
-import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
+import ApiDataRenderer from "../../components/ApiDataRenderer/ApiDataRenderer";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
+import InstanceList from "../../components/InstanceList/InstanceList";
+import { useClusterName } from "../../helpers/hooks";
 
 interface InstancesResponse {
   cluster: string;
@@ -15,23 +15,18 @@ interface InstancesResponse {
 const Instances = (): ReactElement => {
   const clusterName = useClusterName();
 
-  const [{ data, isLoading, error }] = useApi<InstancesResponse>(
+  const [apiProps] = useApi<InstancesResponse>(
     `clusters/${clusterName}/instances`
   );
 
-  const renderContent = (): ReactElement => {
-    if (isLoading) {
-      return <LoadingIndicator />;
-    }
-
-    if (!data) {
-      return <div>Failed to load: {error}</div>;
-    }
-
-    return <InstanceList instances={data.instances} />;
-  };
-
-  return <ContentWrapper>{renderContent()}</ContentWrapper>;
+  return (
+    <ContentWrapper>
+      <ApiDataRenderer<InstancesResponse>
+        {...apiProps}
+        render={({ instances }) => <InstanceList instances={instances} />}
+      />
+    </ContentWrapper>
+  );
 };
 
 export default Instances;

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { ReactElement, useEffect } from "react";
 import { useApi } from "../../api";
 import { GntJob } from "../../api/models";
+import ApiDataRenderer from "../../components/ApiDataRenderer/ApiDataRenderer";
 import Button from "../../components/Button/Button";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import JobList from "../../components/JobList/JobList";
@@ -17,7 +18,7 @@ interface JobResponse {
 
 const Jobs = (): ReactElement => {
   const clusterName = useClusterName();
-  const [{ data, isLoading, error }, reload] = useApi<JobResponse>(
+  const [apiProps, reload] = useApi<JobResponse>(
     `clusters/${clusterName}/jobs`
   );
 
@@ -26,27 +27,11 @@ const Jobs = (): ReactElement => {
     return () => clearInterval(intervalID);
   }, [clusterName]);
 
-  const renderContent = (): ReactElement | null => {
-    if (isLoading && !data) {
-      return null;
-    }
-
-    if (!data) {
-      return <div>Failed to load: {error}</div>;
-    }
-
-    return (
-      <>
-        <JobList jobs={data.jobs} />
-      </>
-    );
-  };
-
   return (
     <ContentWrapper>
       <div className={styles.refreshControl}>
         <Button label="Refresh" icon={faRedoAlt} onClick={reload}></Button>
-        {isLoading && (
+        {apiProps.isLoading && (
           <span>
             Refreshing
             <FontAwesomeIcon
@@ -57,7 +42,10 @@ const Jobs = (): ReactElement => {
           </span>
         )}
       </div>
-      {renderContent()}
+      <ApiDataRenderer
+        {...apiProps}
+        render={({ jobs }) => <JobList jobs={jobs} />}
+      />
     </ContentWrapper>
   );
 };

@@ -2,9 +2,9 @@ import React, { ReactElement } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { useApi } from "../../api";
 import { GntNode } from "../../api/models";
+import ApiDataRenderer from "../../components/ApiDataRenderer/ApiDataRenderer";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import CustomDataTable from "../../components/CustomDataTable/CustomDataTable";
-import LoadingIndicator from "../../components/LoadingIndicator/LoadingIndicator";
 import MemoryUtilisation from "../../components/MemoryUtilisation/MemoryUtilisation";
 import PrefixLink from "../../components/PrefixLink";
 import StatusBadge, {
@@ -118,27 +118,22 @@ const columns: IDataTableColumn<GntNode>[] = [
 function NodeList(): ReactElement {
   const clusterName = useClusterName();
 
-  const [{ data, isLoading, error }] = useApi<NodesResponse>(
-    `clusters/${clusterName}/nodes`
+  const [apiProps] = useApi<NodesResponse>(`clusters/${clusterName}/nodes`);
+
+  return (
+    <ContentWrapper>
+      <ApiDataRenderer<NodesResponse>
+        {...apiProps}
+        render={({ nodes }) => (
+          <CustomDataTable
+            columns={columns}
+            data={nodes}
+            defaultSortField="name"
+          />
+        )}
+      />
+    </ContentWrapper>
   );
-
-  const renderContent = (): ReactElement => {
-    if (isLoading) {
-      return <LoadingIndicator />;
-    }
-
-    if (!data) {
-      return <div>Failed to load: {error}</div>;
-    }
-
-    const { nodes } = data;
-
-    return (
-      <CustomDataTable columns={columns} data={nodes} defaultSortField="name" />
-    );
-  };
-
-  return <ContentWrapper>{renderContent()}</ContentWrapper>;
 }
 
 export default NodeList;

@@ -1,7 +1,7 @@
 import React from "react";
 import { ReactElement } from "react";
-import Button from "../components/Button/Button";
-import Modal from "../components/Modal/Modal";
+import Button from "../Button/Button";
+import Modal from "../Modal/Modal";
 import styles from "./VNCCtrlAltDelConfirmModal.module.scss";
 
 type Props = {

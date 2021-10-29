@@ -5,7 +5,7 @@ import RFB, {
   SecurityFailureCallback,
 } from "@novnc/novnc/core/rfb.js";
 import React, { ReactElement, useEffect, useRef, useState } from "react";
-import VNCCtrlAltDelConfirmModal from "../../VNCCtrlAltDelConfirmModal/VNCCtrlAltDelConfirmModal";
+import VNCCtrlAltDelConfirmModal from "../VNCCtrlAltDelConfirmModal/VNCCtrlAltDelConfirmModal";
 import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
 import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";

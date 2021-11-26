@@ -2,6 +2,7 @@ package auth
 
 import (
 	"gnt-cc/config"
+	"net/http"
 	"time"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -26,7 +27,7 @@ func GetMiddleware() (ginJWTMiddleware *jwt.GinJWTMiddleware) {
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*User); ok {
 				return jwt.MapClaims{
-					identityKey: v.UserName,
+					identityKey: v.Username,
 				}
 			}
 			return jwt.MapClaims{}
@@ -34,7 +35,7 @@ func GetMiddleware() (ginJWTMiddleware *jwt.GinJWTMiddleware) {
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
 			return &User{
-				UserName: claims["id"].(string),
+				Username: claims["id"].(string),
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -47,9 +48,7 @@ func GetMiddleware() (ginJWTMiddleware *jwt.GinJWTMiddleware) {
 
 			if validateUser(userID, password) {
 				return &User{
-					UserName:  userID,
-					LastName:  "Not provided",
-					FirstName: "Not Provided",
+					Username: userID,
 				}, nil
 			}
 			return nil, jwt.ErrFailedAuthentication
@@ -68,22 +67,14 @@ func GetMiddleware() (ginJWTMiddleware *jwt.GinJWTMiddleware) {
 				"message": message,
 			})
 		},
-		// TokenLookup is a string in the form of "<source>:<name>" that is used
-		// to extract token from the request.
-		// Optional. Default value "header:Authorization".
-		// Possible values:
-		// - "header:<name>"
-		// - "query:<name>"
-		// - "cookie:<name>"
-		// - "param:<name>"
-		TokenLookup: "header:Authorization, query:token, cookie:jwt, param:token",
-		// TokenLookup: "query:token",
-		// TokenLookup: "cookie:token",
 
-		// TokenHeadName is a string in the header. Default value is "Bearer"
-		TokenHeadName: "Bearer",
+		SendCookie:     true,
+		CookieHTTPOnly: true,
+		SecureCookie:   true,
+		CookieName:     "jwt",
+		TokenLookup:    "cookie:jwt",
+		CookieSameSite: http.SameSiteLaxMode,
 
-		// TimeFunc provides the current time. You can override it to use another time value. This is useful for testing or if your server uses a different time zone than your tokens.
 		TimeFunc: time.Now,
 	})
 

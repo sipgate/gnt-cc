@@ -1,8 +1,7 @@
 import { useFormik } from "formik";
-import React, { ReactElement, useContext, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { buildApiUrl } from "../../api";
-import AuthContext from "../../api/AuthContext";
 import logo from "../../assets/logo.svg";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
@@ -20,7 +19,7 @@ export interface LoginResult {
 
 const performLogin = async (
   credentials: LoginCredentials
-): Promise<LoginResult> => {
+): Promise<Error | undefined> => {
   const response = await fetch(buildApiUrl("login"), {
     method: "POST",
     headers: {
@@ -30,27 +29,15 @@ const performLogin = async (
   });
 
   if (response.status === 401) {
-    return {
-      error: "unauthorized",
-    };
+    return new Error("unauthorized");
   }
 
   if (response.status !== 200) {
-    return {
-      error: "unknown",
-    };
+    return new Error("unknown");
   }
-
-  const json = await response.json();
-
-  return {
-    token: json.token,
-  };
 };
 
 function Login({ history }: RouteComponentProps): ReactElement {
-  const authContext = useContext(AuthContext);
-
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const formik = useFormik({
@@ -76,15 +63,11 @@ function Login({ history }: RouteComponentProps): ReactElement {
     onSubmit: async (values) => {
       setLoginError(null);
 
-      const { token, error: loginError } = await performLogin(values);
-
-      if (token) {
-        authContext.setToken(token);
-        history.replace("/");
-      } else if (loginError) {
-        setLoginError(loginError);
+      const error = await performLogin(values);
+      if (error) {
+        setLoginError(error.message);
       } else {
-        setLoginError("Unknown error");
+        history.replace("/");
       }
     },
   });

@@ -4,46 +4,53 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import AuthContext from "../api/AuthContext";
+import { buildApiUrl } from "../api";
+import AuthContext from "../contexts/AuthContext";
 
-const STORAGE_TOKEN_KEY = "gnt-cc-token";
-
-type JwtPayload = {
-  id: string;
-  exp: number;
-  orig_iat: number;
+type UserResponse = {
+  username: string;
 };
-
-function parseJwtPayload(token: string | null): JwtPayload | null {
-  if (!token) {
-    return null;
-  }
-
-  return JSON.parse(atob(token.split(".")[1]));
-}
 
 export default function AuthProvider({
   children,
 }: PropsWithChildren<unknown>): ReactElement {
-  const storedAuthToken = localStorage.getItem(STORAGE_TOKEN_KEY);
-  const [authToken, setAuthToken] = useState(storedAuthToken);
-
-  const tokenPayload = parseJwtPayload(authToken);
+  const [username, setUsername] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (authToken) {
-      localStorage.setItem(STORAGE_TOKEN_KEY, authToken);
-    } else {
-      localStorage.removeItem(STORAGE_TOKEN_KEY);
-    }
-  }, [authToken]);
+    fetch(buildApiUrl("user"))
+      .then(async (response) => {
+        if (response.status === 200) {
+          const body = (await response.json()) as UserResponse;
+          setUsername(body.username);
+        } else if (response.status === 401) {
+          setUsername(null);
+        } else {
+          const body = await response.json();
+          setError(body.message ? body.message : "unknown error");
+        }
+
+        setIsLoading(false);
+      })
+      .catch((reason) => {
+        setError(reason.message);
+        setIsLoading(false);
+      });
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <AuthContext.Provider
       value={{
-        authToken,
-        setToken: setAuthToken,
-        username: tokenPayload ? tokenPayload.id : null,
+        username,
       }}
     >
       {children}

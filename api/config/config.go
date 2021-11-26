@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"fmt"
+	"gnt-cc/utils"
 	"os"
 	"strings"
 	"time"
@@ -61,6 +62,11 @@ const (
 	ConfigFileEnv = "GNT_CC_CONFIG"
 )
 
+var defaultConfigPaths = [...]string{
+	"./config.yaml",
+	"/etc/gnt-cc/config.yaml",
+}
+
 var c Config
 
 func ClusterExists(clusterName string) bool {
@@ -77,13 +83,15 @@ func Get() Config {
 }
 
 func Init() {
-	configFile, configFileSet := os.LookupEnv(ConfigFileEnv)
+	path, err := getConfigPath()
 
-	if !configFileSet {
-		configFile = "./config.yaml"
+	if err != nil {
+		panic(err)
 	}
 
-	Parse(configFile)
+	log.Info("Using config file ", path)
+
+	Parse(path)
 }
 
 func Parse(configPath string) {
@@ -135,6 +143,32 @@ func GetClusterConfig(clusterName string) (ClusterConfig, *clusterNotFoundError)
 	}
 
 	return ClusterConfig{}, &clusterNotFoundError{clusterName: clusterName}
+}
+
+func getConfigDefaultPath() (string, error) {
+	for _, path := range defaultConfigPaths {
+		if utils.FileExists(path) {
+			return path, nil
+		}
+	}
+
+	looked := strings.Join(defaultConfigPaths[:], "\n")
+
+	return "", fmt.Errorf("cannot find a config file in the following places:\n\n%s", looked)
+}
+
+func getConfigPath() (string, error) {
+	overridePath, overrideSet := os.LookupEnv(ConfigFileEnv)
+
+	if overrideSet {
+		if !utils.FileExists(overridePath) {
+			return "", fmt.Errorf("config override specified, but cannot be found: %s", overridePath)
+		}
+
+		return overridePath, nil
+	}
+
+	return getConfigDefaultPath()
 }
 
 func validateConfig(config *Config) error {

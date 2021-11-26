@@ -41,3 +41,6 @@ nfpms:
     license: Apache 2.0
     formats:
       - deb
+    contents:
+      - src: config.example.yaml
+        dst: /etc/gnt-cc/config.example.yaml

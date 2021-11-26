@@ -36,7 +36,7 @@ Please check the [Github release section](https://github.com/sipgate/gnt-cc/rele
 
 ## Create a configuration file
 
-`gnt-cc` looks for a file named `config.yml` in the current working directory. A sample configuration file ships with every release but is also available [here](api/config.example.yaml). If you are using the systemd unit file provided below, create a folder `/etc/gnt-cc` and touch `config.yml` in that folder. Start your new configuration as you would start any YAML document:
+By default `gnt-cc` looks for a file named `config.yaml` in the current working directory or in `/etc/gnt-cc`. A sample configuration file ships with every release but is also available [here](api/config.example.yaml). If you're using the .deb file, an example config file will also be placed in `/etc/gnt-cc`. When creating a config file, start it as you would do with any YAML document:
 
 ```yaml
 ---
@@ -121,7 +121,6 @@ Description=gnt-cc API server
 [Service]
 Type=simple
 ExecStart=/usr/local/bin/gnt-cc
-WorkingDirectory=/etc/gnt-cc
 
 [Install]
 WantedBy=multi-user.target
@@ -167,3 +166,4 @@ This is a minimalistic example configuration to configure apache as a reverse pr
 ```
 
 The above configuration requires the apache modules `ssl`, `proxy`, `proxy_http` and `proxy_wstunnel` to be enabled.
+

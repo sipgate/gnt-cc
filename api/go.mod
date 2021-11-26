@@ -15,7 +15,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.3.1
-	github.com/swaggo/swag v1.7.0
+	github.com/swaggo/swag v1.7.4
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/ldap.v2 v2.5.1 // indirect
 )

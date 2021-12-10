@@ -17,4 +17,8 @@ type (
 		GetAll(clusterName string) ([]model.GntJob, error)
 		Get(clusterName, jobID string) (model.JobResult, error)
 	}
+
+	instanceActions interface {
+		Reboot(clusterName string, instanceName string) (int, error)
+	}
 )

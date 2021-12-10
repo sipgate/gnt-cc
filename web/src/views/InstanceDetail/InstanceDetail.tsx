@@ -7,10 +7,10 @@ import {
   faTag,
   faTerminal,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { useApi } from "../../api";
-import { GntDisk, GntInstance, GntNic } from "../../api/models";
+import { HttpMethod, useApi } from "../../api";
+import { GntDisk, GntInstance, GntNic, JobIdResponse } from "../../api/models";
 import ApiDataRenderer from "../../components/ApiDataRenderer/ApiDataRenderer";
 import Button from "../../components/Button/Button";
 import Card from "../../components/Card/Card";
@@ -21,6 +21,7 @@ import QuickInfoBanner from "../../components/QuickInfoBanner/QuickInfoBanner";
 import StatusBadge, {
   BadgeStatus,
 } from "../../components/StatusBadge/StatusBadge";
+import JobWatchContext from "../../contexts/JobWatchContext";
 import { useClusterName } from "../../helpers/hooks";
 import { prettyPrintMiB } from "../../helpers/numbers";
 import styles from "./InstanceDetail.module.scss";
@@ -83,12 +84,34 @@ type InstanceResponse = {
 };
 
 const InstanceDetail = (): ReactElement => {
+  const { trackJob } = useContext(JobWatchContext);
   const { instanceName } = useParams<{ instanceName: string }>();
   const clusterName = useClusterName();
 
   const [apiProps] = useApi<InstanceResponse>(
     `clusters/${clusterName}/instances/${instanceName}`
   );
+
+  const [, execute] = useApi<JobIdResponse>(
+    {
+      slug: `/clusters/${clusterName}/instances/${instanceName}2/reboot`,
+      method: HttpMethod.Post,
+    },
+    {
+      manual: true,
+    }
+  );
+
+  async function restart() {
+    const response = await execute();
+
+    if (typeof response === "string") {
+      console.error(response);
+      return;
+    }
+
+    trackJob(response.jobId);
+  }
 
   return (
     <ContentWrapper>
@@ -112,6 +135,9 @@ const InstanceDetail = (): ReactElement => {
                     Offline
                   </StatusBadge>
                 )}
+
+                <Button onClick={restart} label="Restart" />
+
                 {instance.offersVnc && (
                   <PrefixLink
                     className={styles.consoleLink}

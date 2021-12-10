@@ -10,6 +10,7 @@ import (
 
 type InstanceController struct {
 	Repository instanceRepository
+	Actions    instanceActions
 }
 
 // GetAll godoc
@@ -34,6 +35,28 @@ func (controller *InstanceController) GetAll(c *gin.Context) {
 		Cluster:           clusterName,
 		NumberOfInstances: len(instances),
 		Instances:         instances,
+	})
+}
+
+// Reboot godoc
+// @Summary Reboot an instance in a given cluster
+// @Description ...
+// @Produce json
+// @Success 200 {object} model.JobIDResponse
+// @Router /clusters/{cluster}/instances/{instance}/reboot [post]
+func (controller *InstanceController) Reboot(c *gin.Context) {
+	clusterName := c.Param("cluster")
+	instanceName := c.Param("instance")
+
+	jobID, err := controller.Actions.Reboot(clusterName, instanceName)
+
+	if err != nil {
+		abortWithInternalServerError(c, err)
+		return
+	}
+
+	c.JSON(200, model.JobIDResponse{
+		JobID: jobID,
 	})
 }
 

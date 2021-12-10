@@ -2,6 +2,7 @@ package router
 
 import (
 	"crypto/tls"
+	"gnt-cc/actions"
 	auth2 "gnt-cc/auth"
 	"gnt-cc/config"
 	"gnt-cc/controllers"
@@ -47,6 +48,7 @@ func New(engine *gin.Engine) *router {
 	}
 
 	instanceRepository := repository.InstanceRepository{RAPIClient: rapiClient, QueryPerformer: &query.Performer{}}
+	instanceActions := actions.InstanceActions{RAPIClient: rapiClient}
 	groupRepository := repository.GroupRepository{RAPIClient: rapiClient}
 	nodeRepository := repository.NodeRepository{RAPIClient: rapiClient, GroupRepository: groupRepository}
 	jobRepository := repository.JobRepository{RAPIClient: rapiClient}
@@ -58,6 +60,7 @@ func New(engine *gin.Engine) *router {
 	r.clusterController = controllers.ClusterController{}
 	r.instanceController = controllers.InstanceController{
 		Repository: &instanceRepository,
+		Actions:    &instanceActions,
 	}
 	r.nodeController = controllers.NodeController{
 		Repository:         &nodeRepository,
@@ -134,6 +137,7 @@ func (r *router) SetupAPIRoutes() {
 		withCluster.GET("/instances", r.instanceController.GetAll)
 		withCluster.GET("/instances/:instance", r.instanceController.Get)
 		withCluster.GET("/instances/:instance/console", r.instanceController.OpenInstanceConsole)
+		withCluster.POST("/instances/:instance/reboot", r.instanceController.Reboot)
 		withCluster.GET("/statistics", r.statisticsController.Get)
 		withCluster.GET("/jobs", r.jobController.GetAll)
 		withCluster.GET("/jobs/many", r.jobController.GetManyWithLogs)

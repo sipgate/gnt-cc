@@ -38,13 +38,13 @@ type hvParams struct {
 	Cdrom2ImagePath            string `json:"cdrom2_image_path,omitempty"`
 	CdromDiskType              string `json:"cdrom_disk_type,omitempty"`
 	CdromImagePath             string `json:"cdrom_image_path,omitempty"`
-	CPUCap                     string `json:"cpu_cap,omitempty"`
+	CPUCap                     int    `json:"cpu_cap,omitempty"`
 	CPUCores                   int    `json:"cpu_cores,omitempty"`
 	CPUMask                    string `json:"cpu_mask,omitempty"`
 	CPUSockets                 int    `json:"cpu_sockets,omitempty"`
 	CPUThreads                 int    `json:"cpu_threads,omitempty"`
 	CPUType                    string `json:"cpu_type,omitempty"`
-	CPUWeight                  string `json:"cpu_weight,omitempty"`
+	CPUWeight                  int    `json:"cpu_weight,omitempty"`
 	Cpuid                      string `json:"cpuid,omitempty"`
 	DeviceModel                string `json:"device_model,omitempty"`
 	Devices                    string `json:"devices,omitempty"`
@@ -69,7 +69,7 @@ type hvParams struct {
 	MigrationDowntime          int    `json:"migration_downtime,omitempty"`
 	NicType                    string `json:"nic_type,omitempty"`
 	NumTtys                    string `json:"num_ttys,omitempty"`
-	Pae                        string `json:"pae,omitempty"`
+	Pae                        bool   `json:"pae,omitempty"`
 	PciPass                    string `json:"pci_pass,omitempty"`
 	RebootBehavior             string `json:"reboot_behavior,omitempty"`
 	RootPath                   string `json:"root_path,omitempty"`
@@ -100,7 +100,7 @@ type hvParams struct {
 	VhostNet                   bool   `json:"vhost_net,omitempty"`
 	VifScript                  string `json:"vif_script,omitempty"`
 	VifType                    string `json:"vif_type,omitempty"`
-	Viridian                   string `json:"viridian,omitempty"`
+	Viridian                   bool   `json:"viridian,omitempty"`
 	VirtioNetQueues            int    `json:"virtio_net_queues,omitempty"`
 	VncBindAddress             string `json:"vnc_bind_address,omitempty"`
 	VncPasswordFile            string `json:"vnc_password_file,omitempty"`

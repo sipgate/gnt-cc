@@ -30,12 +30,12 @@ func (repo *JobRepository) GetAll(clusterName string) ([]model.GntJob, error) {
 
 	for i := range jobData {
 		job := &jobData[i]
-		timestamps := parseJobTimestamp(job)
+		timestamps := parseJobTimestamps(job)
 
 		jobs[i] = model.GntJob{
 			ID:         job.ID,
-			Summary:    job.Summary[0],
-			ReceivedAt: job.ReceivedTs[0],
+			Summary:    parseJobSummary(job.Summary),
+			ReceivedAt: timestamps.receivedAt,
 			StartedAt:  timestamps.startedAt,
 			EndedAt:    timestamps.endedAt,
 			Status:     job.Status,
@@ -66,7 +66,7 @@ func (repo *JobRepository) Get(clusterName, jobID string) (model.JobResult, erro
 		return model.JobResult{}, err
 	}
 
-	timestamps := parseJobTimestamp(&job)
+	timestamps := parseJobTimestamps(&job)
 	jobLog, err := parseJobLog(&job)
 
 	if err != nil {
@@ -77,8 +77,8 @@ func (repo *JobRepository) Get(clusterName, jobID string) (model.JobResult, erro
 		Found: true,
 		Job: model.GntJob{
 			ID:         job.ID,
-			Summary:    job.Summary[0],
-			ReceivedAt: job.ReceivedTs[0],
+			Summary:    parseJobSummary(job.Summary),
+			ReceivedAt: timestamps.receivedAt,
 			StartedAt:  timestamps.startedAt,
 			EndedAt:    timestamps.endedAt,
 			Status:     job.Status,
@@ -88,13 +88,23 @@ func (repo *JobRepository) Get(clusterName, jobID string) (model.JobResult, erro
 }
 
 type timestamps struct {
-	startedAt int
-	endedAt   int
+	startedAt  int
+	endedAt    int
+	receivedAt int
 }
 
-func parseJobTimestamp(job *rapiJobResponse) timestamps {
+func parseJobSummary(summary []string) string {
+	if len(summary) == 0 {
+		return "no summary provided"
+	}
+
+	return summary[0]
+}
+
+func parseJobTimestamps(job *rapiJobResponse) timestamps {
 	startedAt := -1
 	endedAt := -1
+	receivedAt := -1
 
 	if len(job.StartTs) > 0 {
 		startedAt = job.StartTs[0]
@@ -104,13 +114,22 @@ func parseJobTimestamp(job *rapiJobResponse) timestamps {
 		endedAt = job.EndTs[0]
 	}
 
+	if len(job.ReceivedTs) > 0 {
+		receivedAt = job.ReceivedTs[0]
+	}
+
 	return timestamps{
-		startedAt: startedAt,
-		endedAt:   endedAt,
+		startedAt:  startedAt,
+		endedAt:    endedAt,
+		receivedAt: receivedAt,
 	}
 }
 
 func parseJobLog(job *rapiJobResponse) ([]model.GntJobLogEntry, error) {
+	if len(job.OpLog) == 0 {
+		return []model.GntJobLogEntry{}, nil
+	}
+
 	returnedEntries := job.OpLog[0]
 	opLogEntries := make([]model.GntJobLogEntry, len(returnedEntries))
 

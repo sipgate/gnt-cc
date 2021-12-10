@@ -38,6 +38,28 @@ func (controller *InstanceController) GetAll(c *gin.Context) {
 	})
 }
 
+// Start godoc
+// @Summary Start an instance in a given cluster
+// @Description ...
+// @Produce json
+// @Success 200 {object} model.JobIDResponse
+// @Router /clusters/{cluster}/instances/{instance}/start [post]
+func (controller *InstanceController) Start(c *gin.Context) {
+	clusterName := c.Param("cluster")
+	instanceName := c.Param("instance")
+
+	jobID, err := controller.Actions.Start(clusterName, instanceName)
+
+	if err != nil {
+		abortWithInternalServerError(c, err)
+		return
+	}
+
+	c.JSON(200, model.JobIDResponse{
+		JobID: jobID,
+	})
+}
+
 // Reboot godoc
 // @Summary Reboot an instance in a given cluster
 // @Description ...
@@ -49,6 +71,28 @@ func (controller *InstanceController) Reboot(c *gin.Context) {
 	instanceName := c.Param("instance")
 
 	jobID, err := controller.Actions.Reboot(clusterName, instanceName)
+
+	if err != nil {
+		abortWithInternalServerError(c, err)
+		return
+	}
+
+	c.JSON(200, model.JobIDResponse{
+		JobID: jobID,
+	})
+}
+
+// Shutdown godoc
+// @Summary Shutdown an instance in a given cluster
+// @Description ...
+// @Produce json
+// @Success 200 {object} model.JobIDResponse
+// @Router /clusters/{cluster}/instances/{instance}/shutdown [post]
+func (controller *InstanceController) Shutdown(c *gin.Context) {
+	clusterName := c.Param("cluster")
+	instanceName := c.Param("instance")
+
+	jobID, err := controller.Actions.Shutdown(clusterName, instanceName)
 
 	if err != nil {
 		abortWithInternalServerError(c, err)

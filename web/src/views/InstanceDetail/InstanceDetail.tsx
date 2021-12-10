@@ -92,9 +92,9 @@ const InstanceDetail = (): ReactElement => {
     `clusters/${clusterName}/instances/${instanceName}`
   );
 
-  const [, execute] = useApi<JobIdResponse>(
+  const [, executeRestart] = useApi<JobIdResponse>(
     {
-      slug: `/clusters/${clusterName}/instances/${instanceName}2/reboot`,
+      slug: `/clusters/${clusterName}/instances/${instanceName}/start`,
       method: HttpMethod.Post,
     },
     {
@@ -102,8 +102,50 @@ const InstanceDetail = (): ReactElement => {
     }
   );
 
-  async function restart() {
-    const response = await execute();
+  const [, executeStart] = useApi<JobIdResponse>(
+    {
+      slug: `/clusters/${clusterName}/instances/${instanceName}/reboot`,
+      method: HttpMethod.Post,
+    },
+    {
+      manual: true,
+    }
+  );
+
+  const [, executeShutdown] = useApi<JobIdResponse>(
+    {
+      slug: `/clusters/${clusterName}/instances/${instanceName}/shutdown`,
+      method: HttpMethod.Post,
+    },
+    {
+      manual: true,
+    }
+  );
+
+  async function restartInstance() {
+    const response = await executeRestart();
+
+    if (typeof response === "string") {
+      console.error(response);
+      return;
+    }
+
+    trackJob(response.jobId);
+  }
+
+  async function startInstance() {
+    const response = await executeStart();
+
+    if (typeof response === "string") {
+      console.error(response);
+      return;
+    }
+
+    trackJob(response.jobId);
+  }
+
+  async function shutdownInstance() {
+    const response = await executeShutdown();
 
     if (typeof response === "string") {
       console.error(response);
@@ -136,16 +178,17 @@ const InstanceDetail = (): ReactElement => {
                   </StatusBadge>
                 )}
 
-                <Button onClick={restart} label="Restart" />
+                <div className={styles.actions}>
+                  <Button onClick={startInstance} label="Start" />
+                  <Button onClick={restartInstance} label="Restart" />
+                  <Button onClick={shutdownInstance} label="Shutdown" />
 
-                {instance.offersVnc && (
-                  <PrefixLink
-                    className={styles.consoleLink}
-                    to={`/instances/${instance.name}/console`}
-                  >
-                    <Button label="Open Console" icon={faTerminal} />
-                  </PrefixLink>
-                )}
+                  {instance.offersVnc && (
+                    <PrefixLink to={`/instances/${instance.name}/console`}>
+                      <Button label="Open Console" icon={faTerminal} />
+                    </PrefixLink>
+                  )}
+                </div>
               </header>
 
               <QuickInfoBanner>

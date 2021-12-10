@@ -19,6 +19,8 @@ type (
 	}
 
 	instanceActions interface {
+		Start(clusterName string, instanceName string) (int, error)
 		Reboot(clusterName string, instanceName string) (int, error)
+		Shutdown(clusterName string, instanceName string) (int, error)
 	}
 )

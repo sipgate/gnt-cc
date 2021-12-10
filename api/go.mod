@@ -8,6 +8,7 @@ require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.4
 	github.com/gorilla/websocket v1.4.2
+	github.com/jarcoal/httpmock v1.0.8
 	github.com/jtblin/go-ldap-client v0.0.0-20170223121919-b73f66626b33
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/viper v1.8.1

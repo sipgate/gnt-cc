@@ -3,7 +3,6 @@ package rapi_client_test
 import (
 	"fmt"
 	"gnt-cc/config"
-	"gnt-cc/mocking"
 	"gnt-cc/rapi_client"
 	"io/ioutil"
 	"net/http"
@@ -53,35 +52,32 @@ func makeResponseWithBodyReaderReturningAnError() *http.Response {
 }
 
 func TestCreatingRAPIClientShouldNotBePossible_WhenAClusterConfigHasNoName(t *testing.T) {
-	httpClient := mocking.NewHTTPClient()
-	client, err := rapi_client.New(httpClient, []config.ClusterConfig{{
+	client, err := rapi_client.New([]config.ClusterConfig{{
 		Hostname: "test",
 	}, {
 		Name: "test",
-	}})
+	}}, nil)
 
 	assert.NotNil(t, err)
 	assert.Nil(t, client)
 }
 
 func TestCreatingRAPIClientShouldNotBePossible_WhenClusterNamesAreNotUnique(t *testing.T) {
-	httpClient := mocking.NewHTTPClient()
-	client, err := rapi_client.New(httpClient, []config.ClusterConfig{{
+	client, err := rapi_client.New([]config.ClusterConfig{{
 		Name: "test",
 	}, {
 		Name: "test",
-	}})
+	}}, nil)
 
 	assert.NotNil(t, err)
 	assert.Nil(t, client)
 }
 
 func TestCreatingRAPIClientShouldBePossible_WhenAllClusterConfigsAreValid(t *testing.T) {
-	httpClient := mocking.NewHTTPClient()
-	client, err := rapi_client.New(httpClient, []config.ClusterConfig{
+	client, err := rapi_client.New([]config.ClusterConfig{
 		createTestConfigNoSSL("test1"),
 		createTestConfigSSL("test2"),
-	})
+	}, nil)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, client)

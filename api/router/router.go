@@ -77,23 +77,18 @@ func New(engine *gin.Engine) *router {
 	return &r
 }
 
-func createHTTPClient(skipCertificateVerify bool) *http.Client {
-	transport := &http.Transport{
+func createRAPIClientFromConfig(configs []config.ClusterConfig, rapiConfig config.RapiConfig) (rapi_client.Client, error) {
+	return rapi_client.New(configs, createHTTPTransport(rapiConfig.SkipCertificateVerify))
+}
+
+func createHTTPTransport(skipCertificateVerify bool) *http.Transport {
+	return &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: skipCertificateVerify},
 		Dial: (&net.Dialer{
 			Timeout: 5 * time.Second,
 		}).Dial,
 		TLSHandshakeTimeout: 5 * time.Second,
 	}
-
-	return &http.Client{
-		Timeout:   time.Second * 10,
-		Transport: transport,
-	}
-}
-
-func createRAPIClientFromConfig(configs []config.ClusterConfig, rapiConfig config.RapiConfig) (rapi_client.Client, error) {
-	return rapi_client.New(createHTTPClient(rapiConfig.SkipCertificateVerify), configs)
 }
 
 func (r *router) InitTemplates(box *rice.Box) {

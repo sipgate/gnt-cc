@@ -48,7 +48,7 @@ func (controller *InstanceController) Start(c *gin.Context) {
 	clusterName := c.Param("cluster")
 	instanceName := c.Param("instance")
 
-	jobID, err := controller.Actions.Start(clusterName, instanceName)
+	jobID, err := controller.Actions.PerformSimpleInstanceAction(clusterName, instanceName, "startup")
 
 	if err != nil {
 		abortWithInternalServerError(c, err)
@@ -70,7 +70,7 @@ func (controller *InstanceController) Restart(c *gin.Context) {
 	clusterName := c.Param("cluster")
 	instanceName := c.Param("instance")
 
-	jobID, err := controller.Actions.Restart(clusterName, instanceName)
+	jobID, err := controller.Actions.PerformSimpleInstanceAction(clusterName, instanceName, "reboot")
 
 	if err != nil {
 		abortWithInternalServerError(c, err)
@@ -92,7 +92,7 @@ func (controller *InstanceController) Shutdown(c *gin.Context) {
 	clusterName := c.Param("cluster")
 	instanceName := c.Param("instance")
 
-	jobID, err := controller.Actions.Shutdown(clusterName, instanceName)
+	jobID, err := controller.Actions.PerformSimpleInstanceAction(clusterName, instanceName, "shutdown")
 
 	if err != nil {
 		abortWithInternalServerError(c, err)

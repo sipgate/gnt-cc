@@ -19,8 +19,6 @@ type (
 	}
 
 	instanceActions interface {
-		Start(clusterName string, instanceName string) (int, error)
-		Restart(clusterName string, instanceName string) (int, error)
-		Shutdown(clusterName string, instanceName string) (int, error)
+		PerformSimpleInstanceAction(clusterName string, instanceName string, rapiAction string) (int, error)
 	}
 )

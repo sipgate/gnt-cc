@@ -17,7 +17,7 @@ var rapiActions = []string{
 	"shutdown",
 }
 
-func TestStartMethodReturnsError_WhenRAPIReturnsError(t *testing.T) {
+func TestInstanceMethodReturnsError_WhenRAPIReturnsError(t *testing.T) {
 	client := mocking.NewRAPIClient()
 	client.On("Post", "testClusterName", mock.Anything, nil).
 		Return(rapi_client.Response{}, errors.New("expected error"))
@@ -32,7 +32,7 @@ func TestStartMethodReturnsError_WhenRAPIReturnsError(t *testing.T) {
 	}
 }
 
-func TestRAPIStartupEndpointIsCalled_WhenInvokingStartMethod(t *testing.T) {
+func TestRAPIEndpointIsCalled_WhenInvokingInstanceMethod(t *testing.T) {
 	client := mocking.NewRAPIClient()
 	client.On("Put", "testClusterName", "/2/instances/testInstanceName/startup", nil).
 		Once().Return(rapi_client.Response{

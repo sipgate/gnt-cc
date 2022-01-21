@@ -5,23 +5,20 @@ import {
   faNetworkWired,
   faServer,
   faTag,
-  faTerminal,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement } from "react";
 import { useParams } from "react-router-dom";
-import { HttpMethod, useApi } from "../../api";
-import { GntDisk, GntInstance, GntNic, JobIdResponse } from "../../api/models";
+import { useApi } from "../../api";
+import { GntDisk, GntInstance, GntNic } from "../../api/models";
 import ApiDataRenderer from "../../components/ApiDataRenderer/ApiDataRenderer";
-import Button from "../../components/Button/Button";
 import Card from "../../components/Card/Card";
 import CardGrid from "../../components/CardGrid/CardGrid";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
-import PrefixLink from "../../components/PrefixLink";
+import InstanceActions from "../../components/InstanceActions/InstanceActions";
 import QuickInfoBanner from "../../components/QuickInfoBanner/QuickInfoBanner";
 import StatusBadge, {
   BadgeStatus,
 } from "../../components/StatusBadge/StatusBadge";
-import JobWatchContext from "../../contexts/JobWatchContext";
 import { useClusterName } from "../../helpers/hooks";
 import { prettyPrintMiB } from "../../helpers/numbers";
 import styles from "./InstanceDetail.module.scss";
@@ -84,76 +81,12 @@ type InstanceResponse = {
 };
 
 const InstanceDetail = (): ReactElement => {
-  const { trackJob } = useContext(JobWatchContext);
   const { instanceName } = useParams<{ instanceName: string }>();
   const clusterName = useClusterName();
 
   const [apiProps] = useApi<InstanceResponse>(
     `clusters/${clusterName}/instances/${instanceName}`
   );
-
-  const [, executeRestart] = useApi<JobIdResponse>(
-    {
-      slug: `/clusters/${clusterName}/instances/${instanceName}/start`,
-      method: HttpMethod.Post,
-    },
-    {
-      manual: true,
-    }
-  );
-
-  const [, executeStart] = useApi<JobIdResponse>(
-    {
-      slug: `/clusters/${clusterName}/instances/${instanceName}/reboot`,
-      method: HttpMethod.Post,
-    },
-    {
-      manual: true,
-    }
-  );
-
-  const [, executeShutdown] = useApi<JobIdResponse>(
-    {
-      slug: `/clusters/${clusterName}/instances/${instanceName}/shutdown`,
-      method: HttpMethod.Post,
-    },
-    {
-      manual: true,
-    }
-  );
-
-  async function restartInstance() {
-    const response = await executeRestart();
-
-    if (typeof response === "string") {
-      console.error(response);
-      return;
-    }
-
-    trackJob(response.jobId);
-  }
-
-  async function startInstance() {
-    const response = await executeStart();
-
-    if (typeof response === "string") {
-      console.error(response);
-      return;
-    }
-
-    trackJob(response.jobId);
-  }
-
-  async function shutdownInstance() {
-    const response = await executeShutdown();
-
-    if (typeof response === "string") {
-      console.error(response);
-      return;
-    }
-
-    trackJob(response.jobId);
-  }
 
   return (
     <ContentWrapper>
@@ -178,17 +111,10 @@ const InstanceDetail = (): ReactElement => {
                   </StatusBadge>
                 )}
 
-                <div className={styles.actions}>
-                  <Button onClick={startInstance} label="Start" />
-                  <Button onClick={restartInstance} label="Restart" />
-                  <Button onClick={shutdownInstance} label="Shutdown" />
-
-                  {instance.offersVnc && (
-                    <PrefixLink to={`/instances/${instance.name}/console`}>
-                      <Button label="Open Console" icon={faTerminal} />
-                    </PrefixLink>
-                  )}
-                </div>
+                <InstanceActions
+                  clusterName={clusterName}
+                  instance={instance}
+                />
               </header>
 
               <QuickInfoBanner>

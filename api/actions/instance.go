@@ -19,13 +19,7 @@ func (repo *InstanceActions) Start(clusterName string, instanceName string) (int
 		return 0, err
 	}
 
-	jobID, err := strconv.Atoi(strings.TrimSpace(response.Body))
-
-	if err != nil {
-		return 0, fmt.Errorf("cannot parse RAPI response")
-	}
-
-	return jobID, nil
+	return parseResponse(response)
 }
 
 func (repo *InstanceActions) Restart(clusterName string, instanceName string) (int, error) {
@@ -36,13 +30,7 @@ func (repo *InstanceActions) Restart(clusterName string, instanceName string) (i
 		return 0, err
 	}
 
-	jobID, err := strconv.Atoi(strings.TrimSpace(response.Body))
-
-	if err != nil {
-		return 0, fmt.Errorf("cannot parse RAPI response")
-	}
-
-	return jobID, nil
+	return parseResponse(response)
 }
 
 func (repo *InstanceActions) Shutdown(clusterName string, instanceName string) (int, error) {
@@ -53,6 +41,10 @@ func (repo *InstanceActions) Shutdown(clusterName string, instanceName string) (
 		return 0, err
 	}
 
+	return parseResponse(response)
+}
+
+func parseResponse(response rapi_client.Response) (int, error) {
 	jobID, err := strconv.Atoi(strings.TrimSpace(response.Body))
 
 	if err != nil {

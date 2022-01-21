@@ -60,17 +60,17 @@ func (controller *InstanceController) Start(c *gin.Context) {
 	})
 }
 
-// Reboot godoc
-// @Summary Reboot an instance in a given cluster
+// Restart godoc
+// @Summary Restart an instance in a given cluster
 // @Description ...
 // @Produce json
 // @Success 200 {object} model.JobIDResponse
-// @Router /clusters/{cluster}/instances/{instance}/reboot [post]
-func (controller *InstanceController) Reboot(c *gin.Context) {
+// @Router /clusters/{cluster}/instances/{instance}/restart [post]
+func (controller *InstanceController) Restart(c *gin.Context) {
 	clusterName := c.Param("cluster")
 	instanceName := c.Param("instance")
 
-	jobID, err := controller.Actions.Reboot(clusterName, instanceName)
+	jobID, err := controller.Actions.Restart(clusterName, instanceName)
 
 	if err != nil {
 		abortWithInternalServerError(c, err)

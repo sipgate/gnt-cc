@@ -23,7 +23,7 @@ export default function VNCCtrlAltDelConfirmModal({
 
       <p className={styles.serverName}>{instanceName}</p>
 
-      <p>This might trigger a reboot.</p>
+      <p>This might trigger an instance restart.</p>
 
       <div className={styles.buttons}>
         <Button

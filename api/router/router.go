@@ -133,7 +133,7 @@ func (r *router) SetupAPIRoutes() {
 		withCluster.GET("/instances/:instance", r.instanceController.Get)
 		withCluster.GET("/instances/:instance/console", r.instanceController.OpenInstanceConsole)
 		withCluster.POST("/instances/:instance/start", r.instanceController.Start)
-		withCluster.POST("/instances/:instance/reboot", r.instanceController.Reboot)
+		withCluster.POST("/instances/:instance/restart", r.instanceController.Restart)
 		withCluster.POST("/instances/:instance/shutdown", r.instanceController.Shutdown)
 		withCluster.GET("/statistics", r.statisticsController.Get)
 		withCluster.GET("/jobs", r.jobController.GetAll)

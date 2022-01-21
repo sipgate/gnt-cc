@@ -28,7 +28,7 @@ func (repo *InstanceActions) Start(clusterName string, instanceName string) (int
 	return jobID, nil
 }
 
-func (repo *InstanceActions) Reboot(clusterName string, instanceName string) (int, error) {
+func (repo *InstanceActions) Restart(clusterName string, instanceName string) (int, error) {
 	slug := fmt.Sprintf("/2/instances/%s/reboot", instanceName)
 	response, err := repo.RAPIClient.Post(clusterName, slug, nil)
 

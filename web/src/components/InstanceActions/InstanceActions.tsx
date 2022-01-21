@@ -1,9 +1,10 @@
 import { faTerminal } from "@fortawesome/free-solid-svg-icons";
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement, useContext, useState } from "react";
 import { HttpMethod, useApi } from "../../api";
 import { GntInstance, JobIdResponse } from "../../api/models";
 import JobWatchContext from "../../contexts/JobWatchContext";
 import Button from "../Button/Button";
+import InstanceActionConfirmationModal from "../InstanceActionConfirmationModal/InstanceActionConfirmationModal";
 import PrefixLink from "../PrefixLink";
 import styles from "./InstanceActions.module.scss";
 
@@ -30,7 +31,17 @@ function useInstanceAction(
   return execute;
 }
 
+type ConfirmationState = {
+  actionName: string;
+  action: () => Promise<void>;
+};
+
 function InstanceActions({ clusterName, instance }: Props): ReactElement {
+  const [
+    confirmationState,
+    setConfirmationState,
+  ] = useState<ConfirmationState | null>(null);
+
   const { trackJob } = useContext(JobWatchContext);
 
   const executeStart = useInstanceAction(clusterName, instance.name, "start");
@@ -45,44 +56,70 @@ function InstanceActions({ clusterName, instance }: Props): ReactElement {
     "shutdown"
   );
 
-  async function executeAndTrackJob(
-    action: () => Promise<string | JobIdResponse>
-  ) {
-    const response = await action();
+  function createExecutor(action: () => Promise<string | JobIdResponse>) {
+    return async () => {
+      const response = await action();
 
-    if (typeof response === "string") {
-      alert(`An error occured: ${response}`);
-    } else {
-      trackJob(response.jobId);
+      if (typeof response === "string") {
+        alert(`An error occured: ${response}`);
+      } else {
+        trackJob(response.jobId);
+      }
+    };
+  }
+
+  function onStart() {
+    setConfirmationState({
+      actionName: "start",
+      action: createExecutor(executeStart),
+    });
+  }
+
+  function onRestart() {
+    setConfirmationState({
+      actionName: "restart",
+      action: createExecutor(executeRestart),
+    });
+  }
+
+  function onShutdown() {
+    setConfirmationState({
+      actionName: "shutdown",
+      action: createExecutor(executeShutdown),
+    });
+  }
+
+  async function onActionConfirmed() {
+    if (confirmationState !== null) {
+      await confirmationState.action();
     }
   }
 
-  async function onStart() {
-    await executeAndTrackJob(executeStart);
-  }
-  async function onRestart() {
-    await executeAndTrackJob(executeRestart);
-  }
-  async function onShutdown() {
-    await executeAndTrackJob(executeShutdown);
-  }
-
   return (
-    <section className={styles.wrapper}>
-      {!instance.isRunning && <Button onClick={onStart} label="Start" />}
-      {instance.isRunning && (
-        <>
-          <Button onClick={onRestart} label="Restart" />
-          <Button onClick={onShutdown} label="Shutdown" />
-        </>
-      )}
+    <>
+      <section className={styles.wrapper}>
+        {!instance.isRunning && <Button onClick={onStart} label="Start" />}
+        {instance.isRunning && (
+          <>
+            <Button onClick={onRestart} label="Restart" />
+            <Button onClick={onShutdown} label="Shutdown" />
+          </>
+        )}
 
-      {instance.offersVnc && (
-        <PrefixLink to={`/instances/${instance.name}/console`}>
-          <Button label="Open Console" icon={faTerminal} />
-        </PrefixLink>
-      )}
-    </section>
+        {instance.offersVnc && (
+          <PrefixLink to={`/instances/${instance.name}/console`}>
+            <Button label="Open Console" icon={faTerminal} />
+          </PrefixLink>
+        )}
+      </section>
+      <InstanceActionConfirmationModal
+        isVisible={confirmationState !== null}
+        onHide={() => setConfirmationState(null)}
+        onConfirm={onActionConfirmed}
+        actionName={confirmationState?.actionName || ""}
+        instanceName={instance.name}
+      />
+    </>
   );
 }
 

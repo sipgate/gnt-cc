@@ -1,30 +1,28 @@
-import React from "react";
-import { ReactElement } from "react";
+import React, { ReactElement } from "react";
 import Button from "../Button/Button";
 import Modal from "../Modal/Modal";
 import Name from "../Name/Name";
-import styles from "./VNCCtrlAltDelConfirmModal.module.scss";
+import styles from "./InstanceActionConfirmationModal.module.scss";
 
 type Props = {
   isVisible: boolean;
+  actionName: string;
   instanceName: string;
   onConfirm: () => void;
   onHide: () => void;
 };
 
-export default function VNCCtrlAltDelConfirmModal({
+function InstanceActionConfirmationModal({
   isVisible,
+  actionName,
   instanceName,
   onConfirm,
   onHide,
 }: Props): ReactElement {
   return (
     <Modal hideModal={onHide} isVisible={isVisible}>
-      <p>Are you sure, you would like to send Ctrl + Alt + Del to</p>
-
+      <p>Are you sure you would like to {actionName}</p>
       <Name>{instanceName}</Name>
-
-      <p>This might trigger an instance restart.</p>
 
       <div className={styles.buttons}>
         <Button
@@ -32,11 +30,13 @@ export default function VNCCtrlAltDelConfirmModal({
             onConfirm();
             onHide();
           }}
-          label="Confirm"
-          danger
+          label={actionName}
+          primary
         />
         <Button onClick={onHide} label="Cancel" />
       </div>
     </Modal>
   );
 }
+
+export default InstanceActionConfirmationModal;

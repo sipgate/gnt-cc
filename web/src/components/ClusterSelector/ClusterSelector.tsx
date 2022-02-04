@@ -19,11 +19,9 @@ const ClusterSelector = ({ clusters }: Props): ReactElement => {
     const { pathname } = history.location;
 
     const parts = pathname.split("/");
-    parts.shift(); // remove empty string
+    const slug = parts[2] ? `/${parts[2]}` : "";
 
-    parts.shift(); // remove current cluster name
-
-    history.push(`/${name}/${parts.join("/")}`);
+    history.push(`/${name}${slug}`);
   };
 
   return (

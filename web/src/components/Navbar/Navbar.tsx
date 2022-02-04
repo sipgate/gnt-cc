@@ -11,7 +11,7 @@ import styles from "./Navbar.module.scss";
 
 const links = [
   {
-    to: "/",
+    to: "",
     label: "Dashboard",
     exactActive: true,
   },

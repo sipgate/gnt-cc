@@ -73,7 +73,7 @@ function InstanceActions({ clusterName, instance }: Props): ReactElement {
       if (typeof response === "string") {
         alert(`An error occured: ${response}`);
       } else {
-        trackJob(response.jobId);
+        trackJob({ clusterName, id: response.jobId });
       }
     };
   }

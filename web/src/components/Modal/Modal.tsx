@@ -37,7 +37,7 @@ function Modal({
   }
 
   return createPortal(
-    <div className={styles.root} onClick={hideModal}>
+    <div className={styles.root} onClick={hideModal} role="dialog">
       <div className={styles.content} onClick={(e) => e.stopPropagation()}>
         {children}
         <div className={styles.close}>

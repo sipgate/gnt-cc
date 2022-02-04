@@ -19,6 +19,7 @@ jobs:
         run: |
           cd web
           yarn install
+          yarn test --watchAll=false
           yarn build
 
       - name: Set up Go 1.x

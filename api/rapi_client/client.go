@@ -4,23 +4,19 @@ import (
 	"errors"
 	"fmt"
 	"gnt-cc/config"
-	"io"
 	"net/http"
+	"time"
 )
-
-type HTTPClient interface {
-	Get(url string) (*http.Response, error)
-	Post(url string, contentType string, body io.Reader) (*http.Response, error)
-}
 
 type Client interface {
 	Get(clusterName string, slug string) (Response, error)
 	Post(clusterName string, slug string, body interface{}) (Response, error)
+	Put(clusterName string, slug string, body interface{}) (Response, error)
 }
 
 type rapiClient struct {
 	clusterUrls map[string]string
-	http        HTTPClient
+	http        *http.Client
 }
 
 type Response struct {
@@ -28,7 +24,7 @@ type Response struct {
 	Body   string
 }
 
-func New(httpClient HTTPClient, clusterConfigs []config.ClusterConfig) (*rapiClient, error) {
+func New(clusterConfigs []config.ClusterConfig, transport http.RoundTripper) (*rapiClient, error) {
 	urlMap, err := validateAndCreateClusterUrls(clusterConfigs)
 
 	if err != nil {
@@ -37,7 +33,10 @@ func New(httpClient HTTPClient, clusterConfigs []config.ClusterConfig) (*rapiCli
 
 	return &rapiClient{
 		clusterUrls: urlMap,
-		http:        httpClient,
+		http: &http.Client{
+			Timeout:   time.Second * 10,
+			Transport: transport,
+		},
 	}, nil
 }
 

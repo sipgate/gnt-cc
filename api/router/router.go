@@ -2,6 +2,7 @@ package router
 
 import (
 	"crypto/tls"
+	"gnt-cc/actions"
 	auth2 "gnt-cc/auth"
 	"gnt-cc/config"
 	"gnt-cc/controllers"
@@ -47,6 +48,7 @@ func New(engine *gin.Engine) *router {
 	}
 
 	instanceRepository := repository.InstanceRepository{RAPIClient: rapiClient, QueryPerformer: &query.Performer{}}
+	instanceActions := actions.InstanceActions{RAPIClient: rapiClient}
 	groupRepository := repository.GroupRepository{RAPIClient: rapiClient}
 	nodeRepository := repository.NodeRepository{RAPIClient: rapiClient, GroupRepository: groupRepository}
 	jobRepository := repository.JobRepository{RAPIClient: rapiClient}
@@ -58,6 +60,7 @@ func New(engine *gin.Engine) *router {
 	r.clusterController = controllers.ClusterController{}
 	r.instanceController = controllers.InstanceController{
 		Repository: &instanceRepository,
+		Actions:    &instanceActions,
 	}
 	r.nodeController = controllers.NodeController{
 		Repository:         &nodeRepository,
@@ -74,23 +77,18 @@ func New(engine *gin.Engine) *router {
 	return &r
 }
 
-func createHTTPClient(skipCertificateVerify bool) *http.Client {
-	transport := &http.Transport{
+func createRAPIClientFromConfig(configs []config.ClusterConfig, rapiConfig config.RapiConfig) (rapi_client.Client, error) {
+	return rapi_client.New(configs, createHTTPTransport(rapiConfig.SkipCertificateVerify))
+}
+
+func createHTTPTransport(skipCertificateVerify bool) *http.Transport {
+	return &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: skipCertificateVerify},
 		Dial: (&net.Dialer{
 			Timeout: 5 * time.Second,
 		}).Dial,
 		TLSHandshakeTimeout: 5 * time.Second,
 	}
-
-	return &http.Client{
-		Timeout:   time.Second * 10,
-		Transport: transport,
-	}
-}
-
-func createRAPIClientFromConfig(configs []config.ClusterConfig, rapiConfig config.RapiConfig) (rapi_client.Client, error) {
-	return rapi_client.New(createHTTPClient(rapiConfig.SkipCertificateVerify), configs)
 }
 
 func (r *router) InitTemplates(box *rice.Box) {
@@ -134,6 +132,11 @@ func (r *router) SetupAPIRoutes() {
 		withCluster.GET("/instances", r.instanceController.GetAll)
 		withCluster.GET("/instances/:instance", r.instanceController.Get)
 		withCluster.GET("/instances/:instance/console", r.instanceController.OpenInstanceConsole)
+		withCluster.POST("/instances/:instance/start", r.instanceController.Start)
+		withCluster.POST("/instances/:instance/restart", r.instanceController.Restart)
+		withCluster.POST("/instances/:instance/shutdown", r.instanceController.Shutdown)
+		withCluster.POST("/instances/:instance/migrate", r.instanceController.Migrate)
+		withCluster.POST("/instances/:instance/failover", r.instanceController.Failover)
 		withCluster.GET("/statistics", r.statisticsController.Get)
 		withCluster.GET("/jobs", r.jobController.GetAll)
 		withCluster.GET("/jobs/many", r.jobController.GetManyWithLogs)

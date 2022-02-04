@@ -70,3 +70,7 @@ export type GntJobLogEntry = {
 export type GntJobWithLog = GntJob & {
   log: GntJobLogEntry[];
 };
+
+export type JobIdResponse = {
+  jobId: number;
+};

@@ -24,30 +24,46 @@ func (client rapiClient) Get(clusterName string, slug string) (Response, error) 
 	return parseRAPIResponse(httpResponse)
 }
 
-func (client rapiClient) Post(clusterName string, slug string, postData interface{}) (Response, error) {
+func (client rapiClient) Post(clusterName string, slug string, body interface{}) (Response, error) {
+	return client.modify(clusterName, slug, body, http.MethodPost)
+}
+
+func (client rapiClient) Put(clusterName string, slug string, body interface{}) (Response, error) {
+	return client.modify(clusterName, slug, body, http.MethodPut)
+}
+
+func (client rapiClient) modify(clusterName string, slug string, body interface{}, method string) (Response, error) {
 	clusterURL, exists := client.clusterUrls[clusterName]
 
 	if !exists {
 		return Response{}, fmt.Errorf("cluster not found: %s", clusterName)
 	}
 
-	jsonBody, err := json.Marshal(postData)
+	jsonBody, err := json.Marshal(body)
 
 	if err != nil {
 		return Response{}, fmt.Errorf("could not prepare request: %s", err)
 	}
 
-	httpResponse, err := client.http.Post(
+	request, err := http.NewRequest(
+		method,
 		clusterURL+slug,
-		"application/json",
 		bytes.NewBuffer(jsonBody),
 	)
+
+	if err != nil {
+		return Response{}, err
+	}
+
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err := client.http.Do(request)
 
 	if err != nil {
 		return Response{}, fmt.Errorf("request error: %s", err)
 	}
 
-	return parseRAPIResponse(httpResponse)
+	return parseRAPIResponse(response)
 }
 
 func parseRAPIResponse(httpResponse *http.Response) (Response, error) {

@@ -5,18 +5,16 @@ import {
   faNetworkWired,
   faServer,
   faTag,
-  faTerminal,
 } from "@fortawesome/free-solid-svg-icons";
 import React, { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useApi } from "../../api";
 import { GntDisk, GntInstance, GntNic } from "../../api/models";
 import ApiDataRenderer from "../../components/ApiDataRenderer/ApiDataRenderer";
-import Button from "../../components/Button/Button";
 import Card from "../../components/Card/Card";
 import CardGrid from "../../components/CardGrid/CardGrid";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
-import PrefixLink from "../../components/PrefixLink";
+import InstanceActions from "../../components/InstanceActions/InstanceActions";
 import QuickInfoBanner from "../../components/QuickInfoBanner/QuickInfoBanner";
 import StatusBadge, {
   BadgeStatus,
@@ -112,14 +110,11 @@ const InstanceDetail = (): ReactElement => {
                     Offline
                   </StatusBadge>
                 )}
-                {instance.offersVnc && (
-                  <PrefixLink
-                    className={styles.consoleLink}
-                    to={`/instances/${instance.name}/console`}
-                  >
-                    <Button label="Open Console" icon={faTerminal} />
-                  </PrefixLink>
-                )}
+
+                <InstanceActions
+                  clusterName={clusterName}
+                  instance={instance}
+                />
               </header>
 
               <QuickInfoBanner>

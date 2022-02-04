@@ -7,14 +7,17 @@ require (
 	github.com/appleboy/gin-jwt/v2 v2.7.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.4
+	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/gorilla/websocket v1.4.2
+	github.com/jarcoal/httpmock v1.0.8
 	github.com/jtblin/go-ldap-client v0.0.0-20170223121919-b73f66626b33
+	github.com/shopspring/decimal v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/viper v1.8.1
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.3.1
-	github.com/swaggo/swag v1.7.4
+	github.com/swaggo/swag v1.7.9
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/ldap.v2 v2.5.1 // indirect
 )

@@ -43,6 +43,10 @@ type JobResponse struct {
 	Job     GntJob `json:"job"`
 }
 
+type JobIDResponse struct {
+	JobID int `json:"jobId"`
+}
+
 type ErrorResponse struct {
 	Message string `json:"message"`
 }

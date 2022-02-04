@@ -3,6 +3,7 @@ import React, { ReactElement, useContext, useMemo } from "react";
 import { IDataTableColumn } from "react-data-table-component";
 import { GntJob } from "../../api/models";
 import JobWatchContext from "../../contexts/JobWatchContext";
+import { useClusterName } from "../../helpers/hooks";
 import { durationHumanReadable } from "../../helpers/time";
 import CustomDataTable from "../CustomDataTable/CustomDataTable";
 import IconButton from "../IconButton/IconButton";
@@ -17,6 +18,7 @@ interface Props {
 }
 
 function JobList({ jobs }: Props): ReactElement {
+  const clusterName = useClusterName();
   const { trackJob } = useContext(JobWatchContext);
 
   const columns: IDataTableColumn<GntJob>[] = useMemo(
@@ -70,7 +72,10 @@ function JobList({ jobs }: Props): ReactElement {
         sortable: false,
         width: "120px",
         cell: (row) => (
-          <IconButton icon={faEye} onClick={() => trackJob(row.id)} />
+          <IconButton
+            icon={faEye}
+            onClick={() => trackJob({ clusterName, id: row.id })}
+          />
         ),
       },
     ],

@@ -18,6 +18,8 @@ func (actions *InstanceActions) PerformSimpleInstanceAction(clusterName string, 
 		"startup":  actions.RAPIClient.Put,
 		"reboot":   actions.RAPIClient.Post,
 		"shutdown": actions.RAPIClient.Put,
+		"migrate":  actions.RAPIClient.Put,
+		"failover": actions.RAPIClient.Put,
 	}
 
 	rapiMethod, exists := rapiActionToMethodMapping[rapiAction]

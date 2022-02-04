@@ -45,19 +45,7 @@ func (controller *InstanceController) GetAll(c *gin.Context) {
 // @Success 200 {object} model.JobIDResponse
 // @Router /clusters/{cluster}/instances/{instance}/start [post]
 func (controller *InstanceController) Start(c *gin.Context) {
-	clusterName := c.Param("cluster")
-	instanceName := c.Param("instance")
-
-	jobID, err := controller.Actions.PerformSimpleInstanceAction(clusterName, instanceName, "startup")
-
-	if err != nil {
-		abortWithInternalServerError(c, err)
-		return
-	}
-
-	c.JSON(200, model.JobIDResponse{
-		JobID: jobID,
-	})
+	controller.SimpleAction(c, "startup")
 }
 
 // Restart godoc
@@ -67,19 +55,7 @@ func (controller *InstanceController) Start(c *gin.Context) {
 // @Success 200 {object} model.JobIDResponse
 // @Router /clusters/{cluster}/instances/{instance}/restart [post]
 func (controller *InstanceController) Restart(c *gin.Context) {
-	clusterName := c.Param("cluster")
-	instanceName := c.Param("instance")
-
-	jobID, err := controller.Actions.PerformSimpleInstanceAction(clusterName, instanceName, "reboot")
-
-	if err != nil {
-		abortWithInternalServerError(c, err)
-		return
-	}
-
-	c.JSON(200, model.JobIDResponse{
-		JobID: jobID,
-	})
+	controller.SimpleAction(c, "reboot")
 }
 
 // Shutdown godoc
@@ -89,10 +65,34 @@ func (controller *InstanceController) Restart(c *gin.Context) {
 // @Success 200 {object} model.JobIDResponse
 // @Router /clusters/{cluster}/instances/{instance}/shutdown [post]
 func (controller *InstanceController) Shutdown(c *gin.Context) {
+	controller.SimpleAction(c, "shutdown")
+}
+
+// Migrate godoc
+// @Summary Migrate an instance in a given cluster
+// @Description ...
+// @Produce json
+// @Success 200 {object} model.JobIDResponse
+// @Router /clusters/{cluster}/instances/{instance}/migrate [post]
+func (controller *InstanceController) Migrate(c *gin.Context) {
+	controller.SimpleAction(c, "migrate")
+}
+
+// Failover godoc
+// @Summary Failover an instance in a given cluster
+// @Description ...
+// @Produce json
+// @Success 200 {object} model.JobIDResponse
+// @Router /clusters/{cluster}/instances/{instance}/failover [post]
+func (controller *InstanceController) Failover(c *gin.Context) {
+	controller.SimpleAction(c, "failover")
+}
+
+func (controller *InstanceController) SimpleAction(c *gin.Context, action string) {
 	clusterName := c.Param("cluster")
 	instanceName := c.Param("instance")
 
-	jobID, err := controller.Actions.PerformSimpleInstanceAction(clusterName, instanceName, "shutdown")
+	jobID, err := controller.Actions.PerformSimpleInstanceAction(clusterName, instanceName, action)
 
 	if err != nil {
 		abortWithInternalServerError(c, err)

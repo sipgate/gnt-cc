@@ -16,7 +16,7 @@ type Props = {
 function useInstanceAction(
   clusterName: string,
   instanceName: string,
-  action: "start" | "restart" | "shutdown"
+  action: "start" | "failover" | "migrate" | "restart" | "shutdown"
 ) {
   const [, execute] = useApi<JobIdResponse>(
     {
@@ -45,6 +45,16 @@ function InstanceActions({ clusterName, instance }: Props): ReactElement {
   const { trackJob } = useContext(JobWatchContext);
 
   const executeStart = useInstanceAction(clusterName, instance.name, "start");
+  const executeMigrate = useInstanceAction(
+    clusterName,
+    instance.name,
+    "migrate"
+  );
+  const executeFailover = useInstanceAction(
+    clusterName,
+    instance.name,
+    "failover"
+  );
   const executeRestart = useInstanceAction(
     clusterName,
     instance.name,
@@ -75,6 +85,20 @@ function InstanceActions({ clusterName, instance }: Props): ReactElement {
     });
   }
 
+  function onMigrate() {
+    setConfirmationState({
+      actionName: "migrate",
+      action: createExecutor(executeMigrate),
+    });
+  }
+
+  function onFailover() {
+    setConfirmationState({
+      actionName: "failover",
+      action: createExecutor(executeFailover),
+    });
+  }
+
   function onRestart() {
     setConfirmationState({
       actionName: "restart",
@@ -98,9 +122,11 @@ function InstanceActions({ clusterName, instance }: Props): ReactElement {
   return (
     <>
       <section className={styles.wrapper}>
+        <Button onClick={onFailover} label="Failover" />
         {!instance.isRunning && <Button onClick={onStart} label="Start" />}
         {instance.isRunning && (
           <>
+            <Button onClick={onMigrate} label="Migrate" />
             <Button onClick={onRestart} label="Restart" />
             <Button onClick={onShutdown} label="Shutdown" />
           </>

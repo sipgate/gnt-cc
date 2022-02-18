@@ -25,7 +25,6 @@ import {
 import styles from "./JobWatcher.module.scss";
 
 interface JobResponse {
-  cluster: string;
   numberOfJobs: number;
   jobs: GntJobWithLog[];
 }

@@ -54,6 +54,7 @@ export type GntCluster = {
 
 export type GntJob = {
   id: number;
+  clusterName: string;
   summary: string;
   receivedAt: number;
   startedAt: number;

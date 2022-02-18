@@ -1,0 +1,54 @@
+{
+  "end_ts" : [
+    1645198913,
+    753307
+  ],
+  "start_ts" : [
+    1645198879,
+    599481
+  ],
+  "id" : 12345,
+  "status" : "success",
+  "ops" : [
+    {
+      "debug_level" : 0,
+      "instance_name" : "homer.local",
+      "priority" : 0,
+      "depends" : null,
+      "comment" : null,
+      "ignore_failures" : false,
+      "reason" : [
+        [
+          "gnt:client:gnt-instance",
+          "remove",
+          1645198879038146048
+        ],
+        [
+          "gnt:opcode:instance_remove",
+          "job=12345;index=0",
+          1645198879110317000
+        ]
+      ],
+      "shutdown_timeout" : 120,
+      "OP_ID" : "OP_INSTANCE_REMOVE",
+      "instance_uuid" : "5485880f-c8e8-4610-9487-cd7087da327e",
+      "dry_run" : false
+    }
+  ],
+  "oplog" : [
+    []
+  ],
+  "opstatus" : [
+    "success"
+  ],
+  "opresult" : [
+    null
+  ],
+  "summary" : [
+    "INSTANCE_REMOVE(homer.local)"
+  ],
+  "received_ts" : [
+    1645198879,
+    110317
+  ]
+}

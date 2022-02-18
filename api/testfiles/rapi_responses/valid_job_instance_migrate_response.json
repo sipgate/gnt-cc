@@ -1,0 +1,220 @@
+{
+  "opstatus" : [
+    "success"
+  ],
+  "status" : "success",
+  "end_ts" : [
+    1645197708,
+    191377
+  ],
+  "oplog" : [
+    [
+      [
+        1,
+        [
+          1645197694,
+          309092
+        ],
+        "message",
+        "Migrating instance lisa.local"
+      ],
+      [
+        2,
+        [
+          1645197694,
+          445685
+        ],
+        "message",
+        "* checking disk consistency between source and target"
+      ],
+      [
+        3,
+        [
+          1645197694,
+          876907
+        ],
+        "message",
+        "* closing instance disks on node ganeti-node01.local"
+      ],
+      [
+        4,
+        [
+          1645197695,
+          80666
+        ],
+        "message",
+        "* changing into standalone mode"
+      ],
+      [
+        5,
+        [
+          1645197695,
+          341212
+        ],
+        "message",
+        "* changing disks into dual-master mode"
+      ],
+      [
+        6,
+        [
+          1645197696,
+          452485
+        ],
+        "message",
+        "* wait until resync is done"
+      ],
+      [
+        7,
+        [
+          1645197696,
+          659618
+        ],
+        "message",
+        "* opening instance disks on node ganeti-node02.local in shared mode"
+      ],
+      [
+        8,
+        [
+          1645197696,
+          788751
+        ],
+        "message",
+        "* opening instance disks on node ganeti-node01.local in shared mode"
+      ],
+      [
+        9,
+        [
+          1645197696,
+          959886
+        ],
+        "message",
+        "* preparing ganeti-node01.local to accept the instance"
+      ],
+      [
+        10,
+        [
+          1645197697,
+          333586
+        ],
+        "message",
+        "* migrating instance to ganeti-node01.local"
+      ],
+      [
+        11,
+        [
+          1645197697,
+          406372
+        ],
+        "message",
+        "* starting memory transfer"
+      ],
+      [
+        12,
+        [
+          1645197699,
+          616778
+        ],
+        "message",
+        "* memory transfer complete"
+      ],
+      [
+        13,
+        [
+          1645197704,
+          657382
+        ],
+        "message",
+        "* closing instance disks on node ganeti-node02.local"
+      ],
+      [
+        14,
+        [
+          1645197704,
+          788102
+        ],
+        "message",
+        "* wait until resync is done"
+      ],
+      [
+        15,
+        [
+          1645197704,
+          986764
+        ],
+        "message",
+        "* changing into standalone mode"
+      ],
+      [
+        16,
+        [
+          1645197705,
+          272748
+        ],
+        "message",
+        "* changing disks into single-master mode"
+      ],
+      [
+        17,
+        [
+          1645197706,
+          384158
+        ],
+        "message",
+        "* wait until resync is done"
+      ],
+      [
+        18,
+        [
+          1645197706,
+          602344
+        ],
+        "message",
+        "* done"
+      ]
+    ]
+  ],
+  "opresult" : [
+    null
+  ],
+  "start_ts" : [
+    1645197692,
+    146724
+  ],
+  "summary" : [
+    "INSTANCE_MIGRATE(lisa.local)"
+  ],
+  "received_ts" : [
+    1645197691,
+    583005
+  ],
+  "id" : 12345,
+  "ops" : [
+    {
+      "mode" : "live",
+      "instance_name" : "lisa.local",
+      "priority" : 0,
+      "reason" : [
+        [
+          "gnt:library:rlib2:instances_name_migrate",
+          "",
+          1645197691396567040
+        ],
+        [
+          "gnt:opcode:instance_migrate",
+          "job=12345;index=0",
+          1645197691583005000
+        ]
+      ],
+      "ignore_hvversions" : false,
+      "cleanup" : false,
+      "instance_uuid" : "a2314239-9bec-4e1f-9be4-0fbb10dd6f09",
+      "OP_ID" : "OP_INSTANCE_MIGRATE",
+      "comment" : null,
+      "debug_level" : 0,
+      "depends" : null,
+      "allow_runtime_changes" : true,
+      "ignore_ipolicy" : false,
+      "allow_failover" : false
+    }
+  ]
+}

@@ -1,0 +1,245 @@
+{
+  "oplog" : [
+    []
+  ],
+  "ops" : [
+    {
+      "priority" : 0,
+      "static" : true,
+      "depends" : null,
+      "reason" : [
+        [
+          "gnt:library:rlib2:instances_name_info",
+          "",
+          1645201116711059968
+        ],
+        [
+          "gnt:opcode:instance_query_data",
+          "job=12345;index=0",
+          1645201116784478000
+        ]
+      ],
+      "OP_ID" : "OP_INSTANCE_QUERY_DATA",
+      "comment" : null,
+      "instances" : [
+        "homer.local"
+      ],
+      "debug_level" : 0,
+      "use_locking" : false
+    }
+  ],
+  "status" : "success",
+  "summary" : [
+    "INSTANCE_QUERY_DATA"
+  ],
+  "end_ts" : [
+    1645201118,
+    712735
+  ],
+  "id" : 12345,
+  "opresult" : [
+    {
+      "homer.local" : {
+        "os_actual" : {
+          "ip" : "192.0.2.2",
+          "gateway" : "192.0.2.1",
+          "netmask" : "255.255.255.0"
+        },
+        "nics" : [
+          [
+            null,
+            "28de3bbb-7cee-4b9a-b039-458568ef3a9b",
+            null,
+            "aa:00:00:11:22:33",
+            "bridged",
+            "gnt-bridge",
+            "",
+            null,
+            null
+          ]
+        ],
+        "snodes_group_uuids" : [
+          "2f4bfa7c-c4c9-4197-84b8-5e45e62e3ac9"
+        ],
+        "ctime" : 1580887436.39667,
+        "uuid" : "174b570c-55b4-46de-8022-6a1911c46669",
+        "network_port" : 11443,
+        "name" : "homer.local",
+        "disks" : [
+          {
+            "sstatus" : null,
+            "drbd_info" : {
+              "secondary_node" : "ganeti-node01.local",
+              "primary_minor" : 5,
+              "secondary_minor" : 31,
+              "primary_node" : "ganeti-node02.local",
+              "port" : 11001
+            },
+            "mode" : "rw",
+            "name" : null,
+            "children" : [
+              {
+                "iv_name" : "",
+                "uuid" : "9eebac7c-61b1-476f-a0e6-a3c87fd3ba70",
+                "spindles" : null,
+                "size" : 20480,
+                "pstatus" : null,
+                "dev_type" : "plain",
+                "name" : null,
+                "drbd_info" : null,
+                "mode" : "rw",
+                "logical_id" : [
+                  "vg01",
+                  "5978c5ea-5bed-4b4b-8523-b493dc1155fe.disk0_data"
+                ],
+                "children" : [],
+                "sstatus" : null
+              },
+              {
+                "iv_name" : "",
+                "uuid" : "c0112da8-c404-44a7-8354-e45d89e97194",
+                "spindles" : null,
+                "size" : 128,
+                "pstatus" : null,
+                "dev_type" : "plain",
+                "drbd_info" : null,
+                "name" : null,
+                "mode" : "rw",
+                "logical_id" : [
+                  "vg01",
+                  "5978c5ea-5bed-4b4b-8523-b493dc1155fe.disk0_meta"
+                ],
+                "children" : [],
+                "sstatus" : null
+              }
+            ],
+            "logical_id" : [
+              "59e1a02e-0fd0-41c1-aa70-1eee1ceea634",
+              "254ad94f-b617-400a-9f89-aa6813d40637",
+              11001,
+              31,
+              5,
+              null
+            ],
+            "size" : 20480,
+            "spindles" : null,
+            "uuid" : "a9665e6d-89fd-4a85-8cc1-f09dd5d9e013",
+            "dev_type" : "drbd",
+            "pstatus" : null,
+            "iv_name" : "disk/0"
+          }
+        ],
+        "hypervisor" : "kvm",
+        "be_actual" : {
+          "maxmem" : 2048,
+          "minmem" : 2048,
+          "auto_balance" : true,
+          "spindle_use" : 1,
+          "vcpus" : 2,
+          "always_failover" : false
+        },
+        "mtime" : 1614795080.67785,
+        "hv_actual" : {
+          "spice_ip_version" : 0,
+          "spice_zlib_glz_wan_compression" : "",
+          "vga" : "",
+          "spice_image_compression" : "",
+          "usb_mouse" : "",
+          "acpi" : true,
+          "usb_devices" : "",
+          "virtio_net_queues" : 1,
+          "spice_tls_ciphers" : "HIGH:-DES:-3DES:-EXPORT:-ADH",
+          "user_shutdown" : false,
+          "use_guest_agent" : false,
+          "nic_type" : "paravirtual",
+          "use_localtime" : false,
+          "machine_version" : "",
+          "vnc_tls" : false,
+          "initrd_path" : "",
+          "spice_use_tls" : true,
+          "disk_aio" : "native",
+          "spice_bind" : "0.0.0.0",
+          "kvm_path" : "/usr/bin/kvm",
+          "migration_caps" : "",
+          "migration_downtime" : 30,
+          "kvm_extra" : "",
+          "vnet_hdr" : true,
+          "vnc_x509_verify" : false,
+          "cpu_cores" : 0,
+          "spice_streaming_video" : "",
+          "mem_path" : "",
+          "serial_speed" : 38400,
+          "cdrom_disk_type" : "",
+          "soundhw" : "",
+          "serial_console" : true,
+          "floppy_image_path" : "",
+          "cdrom2_image_path" : "",
+          "disk_cache" : "none",
+          "spice_password_file" : "",
+          "cpu_type" : "host",
+          "cpu_mask" : "all",
+          "root_path" : "/dev/vda1",
+          "disk_discard" : "default",
+          "spice_use_vdagent" : true,
+          "keymap" : "",
+          "vnc_bind_address" : "",
+          "cpu_threads" : 0,
+          "scsi_controller_type" : "lsi",
+          "vnc_x509_path" : "",
+          "use_chroot" : false,
+          "cdrom_image_path" : "",
+          "spice_jpeg_wan_compression" : "",
+          "kvm_flag" : "",
+          "vhost_net" : false,
+          "vnc_password_file" : "",
+          "boot_order" : "disk",
+          "security_model" : "none",
+          "cpu_sockets" : 0,
+          "disk_type" : "paravirtual",
+          "spice_playback_compression" : true,
+          "kernel_args" : "ro",
+          "security_domain" : "",
+          "kvm_pci_reservations" : 12,
+          "kernel_path" : "",
+          "reboot_behavior" : "reboot"
+        },
+        "pnode_group_uuid" : "2f4bfa7c-c4c9-4197-84b8-5e45e62e3ac9",
+        "snodes" : [
+          "ganeti-node01.local"
+        ],
+        "snodes_group_names" : [
+          "default"
+        ],
+        "disk_template" : "drbd",
+        "os_instance" : {
+          "ip" : "192.0.2.2",
+          "gateway" : "192.0.2.1",
+          "netmask" : "255.255.255.0"
+        },
+        "os" : "debootstrap+bullseye",
+        "pnode_group_name" : "default",
+        "pnode" : "ganeti-node02.local",
+        "hv_instance" : {},
+        "serial_no" : 11,
+        "config_state" : "up",
+        "be_instance" : {
+          "maxmem" : 2048,
+          "minmem" : 2048,
+          "vcpus" : 2
+        },
+        "run_state" : null
+      }
+    }
+  ],
+  "start_ts" : [
+    1645201117,
+    302576
+  ],
+  "opstatus" : [
+    "success"
+  ],
+  "received_ts" : [
+    1645201116,
+    784478
+  ]
+}

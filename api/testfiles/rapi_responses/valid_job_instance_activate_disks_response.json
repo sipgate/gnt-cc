@@ -1,0 +1,59 @@
+{
+  "received_ts" : [
+    1645197738,
+    295405
+  ],
+  "summary" : [
+    "INSTANCE_ACTIVATE_DISKS(homer.local)"
+  ],
+  "opstatus" : [
+    "success"
+  ],
+  "id" : 12345,
+  "opresult" : [
+    [
+      [
+        "ganeti-node01.local",
+        "disk/0",
+        "/dev/drbd19"
+      ]
+    ]
+  ],
+  "ops" : [
+    {
+      "instance_name" : "homer.local",
+      "comment" : null,
+      "wait_for_sync" : false,
+      "instance_uuid" : "4eed9718-ace4-4410-9e57-ec19bedd17ed",
+      "depends" : null,
+      "reason" : [
+        [
+          "gnt:watcher",
+          "Activating disks for instance homer.local",
+          1645197738224751872
+        ],
+        [
+          "gnt:opcode:instance_activate_disks",
+          "job=12345;index=0",
+          1645197738295405000
+        ]
+      ],
+      "ignore_size" : false,
+      "debug_level" : 0,
+      "priority" : 0,
+      "OP_ID" : "OP_INSTANCE_ACTIVATE_DISKS"
+    }
+  ],
+  "end_ts" : [
+    1645197741,
+    462349
+  ],
+  "start_ts" : [
+    1645197738,
+    792726
+  ],
+  "oplog" : [
+    []
+  ],
+  "status" : "success"
+}

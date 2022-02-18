@@ -1,0 +1,75 @@
+{
+  "start_ts" : [
+    1645199102,
+    921001
+  ],
+  "id" : 12345,
+  "opresult" : [
+    {
+      "jobs" : [
+        [
+          true,
+          3366634
+        ],
+        [
+          true,
+          3366635
+        ],
+        [
+          true,
+          3366636
+        ],
+        [
+          true,
+          3366637
+        ]
+      ]
+    }
+  ],
+  "summary" : [
+    "CLUSTER_VERIFY"
+  ],
+  "ops" : [
+    {
+      "error_codes" : false,
+      "dry_run" : false,
+      "priority" : 0,
+      "OP_ID" : "OP_CLUSTER_VERIFY",
+      "skip_checks" : [],
+      "debug_simulate_errors" : false,
+      "verify_clutter" : false,
+      "ignore_errors" : [],
+      "depends" : null,
+      "comment" : null,
+      "verbose" : false,
+      "debug_level" : 0,
+      "reason" : [
+        [
+          "gnt:client:gnt-cluster",
+          "verify",
+          1645199102206962944
+        ],
+        [
+          "gnt:opcode:cluster_verify",
+          "job=12345;index=0",
+          1645199102289536000
+        ]
+      ]
+    }
+  ],
+  "oplog" : [
+    []
+  ],
+  "received_ts" : [
+    1645199102,
+    289536
+  ],
+  "status" : "success",
+  "end_ts" : [
+    1645199104,
+    365339
+  ],
+  "opstatus" : [
+    "success"
+  ]
+}

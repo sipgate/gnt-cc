@@ -25,15 +25,13 @@ export function getUnfinishedJobs(jobs: GntJob[]): GntJob[] {
 
 export function groupJobIdsByCluster(
   jobs: TrackedJob[]
-): Record<string, number[]> {
-  const map: Record<string, number[]> = {};
+): Map<string, number[]> {
+  const map: Map<string, number[]> = new Map();
 
   for (const { clusterName, id } of jobs) {
-    if (!map[clusterName]) {
-      map[clusterName] = [];
-    }
+    const existing = map.get(clusterName) || [];
 
-    map[clusterName].push(id);
+    map.set(clusterName, [...existing, id]);
   }
 
   return map;

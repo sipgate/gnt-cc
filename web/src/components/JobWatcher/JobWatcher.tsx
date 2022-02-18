@@ -63,15 +63,17 @@ function JobWatcher(): ReactElement | null {
     async function loadAllJobs() {
       const jobIdsByCluster = groupJobIdsByCluster(trackedJobs);
 
-      const requests = Object.keys(jobIdsByCluster).map((clusterName) =>
-        fetch(
-          buildApiUrl(
-            `clusters/${clusterName}/jobs/many?ids=${jobIdsByCluster[
-              clusterName
-            ].join(",")}`
+      const requests: Promise<Response>[] = [];
+
+      jobIdsByCluster.forEach((ids, clusterName) => {
+        requests.push(
+          fetch(
+            buildApiUrl(
+              `clusters/${clusterName}/jobs/many?ids=${ids.join(",")}`
+            )
           )
-        )
-      );
+        );
+      });
 
       const responses = await Promise.all(requests);
 

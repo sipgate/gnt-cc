@@ -7,7 +7,6 @@ import {
 import classNames from "classnames";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { buildApiUrl } from "../../api";
-import AuthContext from "../../api/AuthContext";
 import { GntJob, GntJobWithLog } from "../../api/models";
 import JobWatchContext, { TrackedJob } from "../../contexts/JobWatchContext";
 import Dropdown, { Alignment } from "../Dropdown/Dropdown";
@@ -71,21 +70,6 @@ function getWatcherStatus(jobs: GntJob[]): WatcherStatus {
   return WatcherStatus.Succeeded;
 }
 
-function initJobsRequest(
-  clusterName: string,
-  jobIds: number[],
-  authToken: string | null
-): Promise<Response> {
-  return fetch(
-    buildApiUrl(`clusters/${clusterName}/jobs/many?ids=${jobIds.join(",")}`),
-    {
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    }
-  );
-}
-
 function createClusterJobsMap(
   trackedJobs: TrackedJob[]
 ): Record<string, number[]> {
@@ -103,7 +87,6 @@ function createClusterJobsMap(
 }
 
 function JobWatcher(): ReactElement | null {
-  const { authToken } = useContext(AuthContext);
   const { trackedJobs, untrackJob } = useContext(JobWatchContext);
   const [jobs, setJobs] = useState<GntJobWithClusterName[]>([]);
 
@@ -151,7 +134,13 @@ function JobWatcher(): ReactElement | null {
       const clusterJobs = createClusterJobsMap(trackedJobs);
 
       const requests = Object.keys(clusterJobs).map((clusterName) =>
-        initJobsRequest(clusterName, clusterJobs[clusterName], authToken)
+        fetch(
+          buildApiUrl(
+            `clusters/${clusterName}/jobs/many?ids=${clusterJobs[
+              clusterName
+            ].join(",")}`
+          )
+        )
       );
 
       const responses = await Promise.all(requests);

@@ -6,13 +6,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { buildApiUrl } from "../../api";
 import { GntJob, GntJobWithLog } from "../../api/models";
 import JobWatchContext from "../../contexts/JobWatchContext";
 import Dropdown, { Alignment } from "../Dropdown/Dropdown";
 import Icon from "../Icon/Icon";
 import JobSummary from "../JobSummary/JobSummary";
-import PrefixLink from "../PrefixLink";
 import {
   getFinishedJobs,
   getUnfinishedJobs,
@@ -133,9 +133,9 @@ function JobWatcher(): ReactElement | null {
               </button>
             </div>
             <div className={styles.content}>
-              <PrefixLink to={`/jobs/${job.id}`}>
+              <Link to={`/${job.clusterName}/jobs/${job.id}`}>
                 <JobSummary summary={job.summary} />
-              </PrefixLink>
+              </Link>
               <div className={styles.step}></div>
             </div>
           </div>

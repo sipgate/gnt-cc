@@ -8,9 +8,7 @@ import (
 )
 
 type User struct {
-	UserName  string
-	FirstName string
-	LastName  string
+	Username string
 }
 
 func validateUser(userID string, password string) bool {

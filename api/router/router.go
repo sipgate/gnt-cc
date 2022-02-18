@@ -3,7 +3,7 @@ package router
 import (
 	"crypto/tls"
 	"gnt-cc/actions"
-	auth2 "gnt-cc/auth"
+	"gnt-cc/auth"
 	"gnt-cc/config"
 	"gnt-cc/controllers"
 	"gnt-cc/middleware"
@@ -108,23 +108,31 @@ func (r *router) InitTemplates(box *rice.Box) {
 }
 
 func (r *router) SetupAPIRoutes() {
-	authMiddleware := auth2.GetMiddleware()
+	authMiddleware := auth.GetMiddleware()
 
 	r.engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1 := r.engine.Group("/api/v1")
 	{
 		v1.POST("/login", authMiddleware.LoginHandler)
+		v1.POST("/logout", authMiddleware.LogoutHandler)
 	}
 
-	auth := v1.Group("")
-	auth.Use(authMiddleware.MiddlewareFunc())
+	authenticated := v1.Group("")
+	authenticated.Use(authMiddleware.MiddlewareFunc())
 	{
-		auth.GET("/refresh_token", authMiddleware.RefreshHandler)
-		auth.GET("/clusters", r.clusterController.GetAll)
+		authenticated.GET("/user", func(c *gin.Context) {
+			user, _ := c.Get(authMiddleware.IdentityKey)
+
+			c.JSON(200, gin.H{
+				"username": user.(*auth.User).Username,
+			})
+		})
+
+		authenticated.GET("/clusters", r.clusterController.GetAll)
 	}
 
-	withCluster := auth.Group("/clusters/:cluster")
+	withCluster := authenticated.Group("/clusters/:cluster")
 	withCluster.Use(middleware.RequireCluster())
 	{
 		withCluster.GET("/nodes", r.nodeController.GetAll)

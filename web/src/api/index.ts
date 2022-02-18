@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState, useCallback } from "react";
-import AuthContext from "./AuthContext";
+import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 export enum HttpMethod {
@@ -39,22 +38,11 @@ export const buildWSURL = (slug: string): string => {
   return `${wsProtocol}//${hostname}:${port}/api/v1/${stripLeadingSlug(slug)}`;
 };
 
-const makeRequestInit = (
-  authToken: string | null,
-  config?: RequestConfig,
-  options?: RequestOptions
-): RequestInit => {
+const makeRequestInit = (config?: RequestConfig): RequestInit => {
   const requestInit: RequestInit = {
     method: config?.method ? config.method : HttpMethod.Get,
     headers: config?.headers,
   };
-
-  if (!options?.noAuth && authToken !== null) {
-    requestInit.headers = {
-      ...requestInit.headers,
-      Authorization: `Bearer ${authToken}`,
-    };
-  }
 
   if (config?.body) {
     requestInit.body = config.body;
@@ -100,7 +88,6 @@ export const useApi = <TData>(
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const auth = useContext(AuthContext);
   const history = useHistory();
 
   const performRequest = async (): Promise<TData | string> => {
@@ -109,17 +96,12 @@ export const useApi = <TData>(
 
     const response = await fetch(
       buildApiUrl((requestConfig as RequestConfig).slug),
-      makeRequestInit(
-        auth.authToken,
-        requestConfig as RequestConfig,
-        options as RequestOptions
-      )
+      makeRequestInit(requestConfig as RequestConfig)
     );
 
     if (response.status === 401) {
       // TODO: try to refresh token
       history.push("/login");
-      auth.setToken(null);
       setIsLoading(false);
 
       return response.statusText;
@@ -142,13 +124,10 @@ export const useApi = <TData>(
     if (!options?.manual) {
       performRequest();
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stringifiedConfig]);
 
   const execute = useCallback(() => {
     return performRequest();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stringifiedConfig]);
 
   return [{ data, isLoading, error }, execute];

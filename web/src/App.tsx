@@ -6,7 +6,7 @@ import {
   RouteProps,
   Switch,
 } from "react-router-dom";
-import AuthContext from "./api/AuthContext";
+import AuthContext from "./contexts/AuthContext";
 import AuthProvider from "./providers/AuthProvider";
 import JobWatchProvider from "./providers/JobWatchProvider";
 import ThemeProvider from "./providers/ThemeProvider";
@@ -16,11 +16,7 @@ import Login from "./views/Login/Login";
 export function AuthenticatedRoute(props: RouteProps): ReactElement {
   const authContext = useContext(AuthContext);
 
-  return authContext?.authToken ? (
-    <Route {...props} />
-  ) : (
-    <Redirect to="/login" />
-  );
+  return authContext.username ? <Route {...props} /> : <Redirect to="/login" />;
 }
 
 function App(): ReactElement {

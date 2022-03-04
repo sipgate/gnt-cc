@@ -13,11 +13,9 @@ type SearchService struct {
 //TODO: Add tests
 func (service *SearchService) Search(query string) (*model.SearchResults, error) {
 	c := config.Get()
-	filteredInstances := []model.SearchResult{}
-	filteredNodes := []model.SearchResult{}
-	filteredClusters := []struct {
-		Name string
-	}{}
+	filteredInstances := []model.ResourceSearchResult{}
+	filteredNodes := []model.ResourceSearchResult{}
+	filteredClusters := []model.ClusterSearchResult{}
 
 	for _, cluster := range c.Clusters {
 		// instances
@@ -33,10 +31,8 @@ func (service *SearchService) Search(query string) (*model.SearchResults, error)
 
 		// clusters
 		if stringContainsIgnoreCase(cluster.Name, query) {
-			filteredClusters = append(filteredClusters, struct {
-				Name string
-			}{
-				cluster.Name,
+			filteredClusters = append(filteredClusters, model.ClusterSearchResult{
+				Name: cluster.Name,
 			})
 		}
 	}
@@ -47,11 +43,11 @@ func (service *SearchService) Search(query string) (*model.SearchResults, error)
 	}, nil
 }
 
-func filterSearchResults(filter string, list []string, clusterName string) []model.SearchResult {
-	var filteredList []model.SearchResult
+func filterSearchResults(filter string, list []string, clusterName string) []model.ResourceSearchResult {
+	var filteredList []model.ResourceSearchResult
 	for _, str := range list {
 		if stringContainsIgnoreCase(str, filter) {
-			filteredList = append(filteredList, model.SearchResult{
+			filteredList = append(filteredList, model.ResourceSearchResult{
 				ClusterName: clusterName,
 				Name:        str,
 			})

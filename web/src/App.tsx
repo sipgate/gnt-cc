@@ -6,6 +6,7 @@ import {
   RouteProps,
   Switch,
 } from "react-router-dom";
+import CommandBar from "./components/CommandBar/CommandBar";
 import AuthContext from "./contexts/AuthContext";
 import AuthProvider from "./providers/AuthProvider";
 import JobWatchProvider from "./providers/JobWatchProvider";
@@ -25,6 +26,7 @@ function App(): ReactElement {
       <ThemeProvider>
         <AuthProvider>
           <JobWatchProvider>
+            <CommandBar />
             <Router>
               <Switch>
                 <Route exact path="/login" component={Login} />

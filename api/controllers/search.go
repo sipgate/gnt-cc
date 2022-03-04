@@ -12,7 +12,7 @@ type SearchController struct {
 // @Summary Search in all known resources
 // @Description ...
 // @Produce json
-// @Success 200 {object} model.SearchResults
+// @Success 200 {object} model.SearchResultsResponse
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 500 {object} model.ErrorResponse
 // @Router /search [get]

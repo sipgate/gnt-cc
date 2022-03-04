@@ -87,6 +87,8 @@ func (repo *InstanceRepository) GetAllNames(clusterName string) ([]string, error
 		return nil, err
 	}
 
+	fmt.Print(response.Body)
+
 	var instanceList rapiInstanceNamesResponse
 	err = json.Unmarshal([]byte(response.Body), &instanceList)
 

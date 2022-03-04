@@ -20,16 +20,3 @@ type JobResult struct {
 	Found bool
 	Job   GntJob
 }
-
-type SearchResult struct {
-	ClusterName string
-	Name        string
-}
-
-type SearchResults struct {
-	Nodes     []SearchResult
-	Instances []SearchResult
-	Clusters  []struct {
-		Name string
-	}
-}

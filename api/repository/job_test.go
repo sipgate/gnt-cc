@@ -1,14 +1,15 @@
 package repository_test
 
 import (
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"gnt-cc/mocking"
 	"gnt-cc/model"
 	"gnt-cc/rapi_client"
 	"gnt-cc/repository"
 	"io/ioutil"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestJobRepoGetFuncReturnsSuccessfulResult_OnValidResponses(t *testing.T) {
@@ -26,7 +27,7 @@ func TestJobRepoGetFuncReturnsSuccessfulResult_OnValidResponses(t *testing.T) {
 			StartedAt:  1644229365,
 			EndedAt:    -1,
 			Status:     "running",
-			Log: []model.GntJobLogEntry{
+			Log: &[]model.GntJobLogEntry{
 				{Serial: 1, Message: " - INFO: Selected nodes for instance bart.local via iallocator hail: ganeti-node01.local, ganeti-node02.local", StartedAt: 1644229367},
 				{Serial: 2, Message: "creating instance disks...", StartedAt: 1644229368},
 				{Serial: 3, Message: "adding instance bart.local to cluster config", StartedAt: 1644229375},
@@ -53,7 +54,7 @@ func TestJobRepoGetFuncReturnsSuccessfulResult_OnValidResponses(t *testing.T) {
 			StartedAt:  1645198960,
 			EndedAt:    1645199064,
 			Status:     "success",
-			Log: []model.GntJobLogEntry{
+			Log: &[]model.GntJobLogEntry{
 				{Serial: 1, Message: " - INFO: Selected nodes for instance homer.local via iallocator hail: ganeti-node01.local, ganeti-node02.local", StartedAt: 1645198964},
 				{Serial: 2, Message: "creating instance disks...", StartedAt: 1645198965},
 				{Serial: 3, Message: "adding instance homer.local to cluster config", StartedAt: 1645198970},
@@ -79,7 +80,7 @@ func TestJobRepoGetFuncReturnsSuccessfulResult_OnValidResponses(t *testing.T) {
 			StartedAt:  1645198879,
 			EndedAt:    1645198913,
 			Status:     "success",
-			Log:        []model.GntJobLogEntry{}},
+			Log:        &[]model.GntJobLogEntry{}},
 	}, {
 		"InstanceMigrate",
 		"../testfiles/rapi_responses/valid_job_instance_migrate_response.json",
@@ -90,7 +91,7 @@ func TestJobRepoGetFuncReturnsSuccessfulResult_OnValidResponses(t *testing.T) {
 			StartedAt:  1645197692,
 			EndedAt:    1645197708,
 			Status:     "success",
-			Log: []model.GntJobLogEntry{
+			Log: &[]model.GntJobLogEntry{
 				{Serial: 1, Message: "Migrating instance lisa.local", StartedAt: 1645197694},
 				{Serial: 2, Message: "checking disk consistency between source and target", StartedAt: 1645197694},
 				{Serial: 3, Message: "closing instance disks on node ganeti-node01.local", StartedAt: 1645197694},
@@ -119,7 +120,7 @@ func TestJobRepoGetFuncReturnsSuccessfulResult_OnValidResponses(t *testing.T) {
 			StartedAt:  1645197738,
 			EndedAt:    1645197741,
 			Status:     "success",
-			Log:        []model.GntJobLogEntry{}},
+			Log:        &[]model.GntJobLogEntry{}},
 	}, {
 		"InstanQueryData",
 		"../testfiles/rapi_responses/valid_job_instance_query_data_response.json",
@@ -130,7 +131,7 @@ func TestJobRepoGetFuncReturnsSuccessfulResult_OnValidResponses(t *testing.T) {
 			StartedAt:  1645201117,
 			EndedAt:    1645201118,
 			Status:     "success",
-			Log:        []model.GntJobLogEntry{}},
+			Log:        &[]model.GntJobLogEntry{}},
 	}, {
 		"ClusterVerify",
 		"../testfiles/rapi_responses/valid_job_cluster_verify_response.json",
@@ -141,22 +142,24 @@ func TestJobRepoGetFuncReturnsSuccessfulResult_OnValidResponses(t *testing.T) {
 			StartedAt:  1645199102,
 			EndedAt:    1645199104,
 			Status:     "success",
-			Log:        []model.GntJobLogEntry{}},
+			Log:        &[]model.GntJobLogEntry{}},
 	}}
 
 	for _, tt := range tests {
-		validResponse, err := ioutil.ReadFile(tt.file)
-		assert.NoError(t, err)
+		t.Run(tt.name, func(t *testing.T) {
+			validResponse, err := ioutil.ReadFile(tt.file)
+			assert.NoError(t, err)
 
-		client := mocking.NewRAPIClient()
-		client.On("Get", mock.Anything, mock.Anything).
-			Once().Return(rapi_client.Response{Status: 200, Body: string(validResponse)}, nil)
-		repo := repository.JobRepository{RAPIClient: client}
-		result, err := repo.Get("test", "12345")
+			client := mocking.NewRAPIClient()
+			client.On("Get", mock.Anything, mock.Anything).
+				Once().Return(rapi_client.Response{Status: 200, Body: string(validResponse)}, nil)
+			repo := repository.JobRepository{RAPIClient: client}
+			result, err := repo.Get("test", "12345")
 
-		assert.NoError(t, err)
-		assert.True(t, result.Found)
-		assert.EqualValues(t, tt.expectedResult,
-			result.Job)
+			assert.NoError(t, err)
+			assert.True(t, result.Found)
+			assert.EqualValues(t, tt.expectedResult,
+				result.Job)
+		})
 	}
 }

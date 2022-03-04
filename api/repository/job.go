@@ -12,8 +12,6 @@ type JobRepository struct {
 	RAPIClient rapi_client.Client
 }
 
-type jobOperationsPayloadType map[string]func(interface{}) (string, error)
-
 func (repo *JobRepository) GetAll(clusterName string) ([]model.GntJob, error) {
 	response, err := repo.RAPIClient.Get(clusterName, "/2/jobs?bulk=1")
 
@@ -69,10 +67,10 @@ func (repo *JobRepository) Get(clusterName, jobID string) (model.JobResult, erro
 	}
 
 	timestamps := parseJobTimestamp(&job)
-	jobLog, err := parseJobLog(&job)
+	jobLog, err := parseToJobLog(job.OpLog)
 
 	if err != nil {
-		return model.JobResult{}, err
+		return model.JobResult{}, makeOpLogParseError(job.ID, err)
 	}
 
 	return model.JobResult{
@@ -112,103 +110,83 @@ func parseJobTimestamp(job *rapiJobResponse) timestamps {
 	}
 }
 
-func parseJobOpMessage(data interface{}) (string, error) {
-	return fmt.Sprintf("%s", data), nil
+func parseToJobLog(log [][]json.RawMessage) (*[]model.GntJobLogEntry, error) {
+	opLogEntries := make([]model.GntJobLogEntry, len(log[0]))
+	for i, entryRaw := range log[0] {
+		entry, err := parseToJobLogEntry(entryRaw)
+
+		if err != nil {
+			return nil, err
+		}
+
+		opLogEntries[i] = entry
+	}
+
+	return &opLogEntries, nil
 }
 
-func castRemoteImportStructureToDiskList(data interface{}) ([]interface{}, error) {
-	dataMap, ok := data.(map[string]interface{})
-	if !ok {
-		return nil, fmt.Errorf("invalid structure received: %v, type: %T", data, data)
+func parseToJobLogEntry(raw json.RawMessage) (model.GntJobLogEntry, error) {
+	var entry rapiOpLogEntry
+	err := entry.parse(raw)
+
+	if err != nil {
+		return model.GntJobLogEntry{}, err
 	}
-	diskList, ok := dataMap["disks"].([]interface{})
-	if !ok {
-		return nil, fmt.Errorf("invalid structure received: %v, type: %T", dataMap["disks"], dataMap["disks"])
+
+	var message string
+	if entry.PayloadType == "message" {
+		message, err = parseOpLogMessage(entry.Payload)
+	} else if entry.PayloadType == "remote-import" {
+		message, err = parseOpLogRemoteImport(entry.Payload)
+	} else {
+		message = fmt.Sprintf("unknown oplog payload type %s", entry.PayloadType)
 	}
-	return diskList, nil
+
+	if err != nil {
+		return model.GntJobLogEntry{}, err
+	}
+
+	return model.GntJobLogEntry{
+		Serial:    entry.Serial,
+		StartedAt: entry.Timestamps[0],
+		Message:   strings.TrimPrefix(message, "* "),
+	}, nil
 }
 
-func parseJobOpRemoteImport(data interface{}) (string, error) {
-	var disks []string
+func parseOpLogMessage(payload json.RawMessage) (string, error) {
+	var message string
+	err := json.Unmarshal(payload, &message)
 
-	diskList, err := castRemoteImportStructureToDiskList(data)
 	if err != nil {
 		return "", err
 	}
 
-	for _, diskEntry := range diskList {
-		diskEntryCasted, ok := diskEntry.([]interface{})
-		if !ok {
-			return "", fmt.Errorf("invalid structure received: %v", diskEntry)
-		}
-		ip, ok := diskEntryCasted[0].(string)
-		if !ok {
-			return "", fmt.Errorf("invalid remote disk IP: %v", diskEntryCasted[0])
-		}
-		port, ok := diskEntryCasted[1].(float64)
-		if !ok {
-			return "", fmt.Errorf("invalid remote disk port: %v", diskEntryCasted[1])
-		}
-		disks = append(disks, fmt.Sprintf("%s:%.0f", ip, port))
+	return strings.TrimPrefix(message, "* "), nil
+}
+
+func parseOpLogRemoteImport(payload json.RawMessage) (string, error) {
+	var parsed rapiRemoteImportPayload
+	err := json.Unmarshal(payload, &parsed)
+
+	if err != nil {
+		return "", err
 	}
+
+	var disks []string
+	for _, v := range parsed.Disks {
+		var disk rapiRemoteImportDisk
+		err = disk.parse(v)
+
+		if err != nil {
+			return "", err
+		}
+
+		disks = append(disks, fmt.Sprintf("%s:%d", disk.IpAddress, disk.Port))
+	}
+
 	return fmt.Sprintf("Importing Disks from: %v", disks), nil
 }
 
-func parseJobOpUnknownType(data interface{}) (string, error) {
-	return fmt.Sprintf("Received unknown data: '%v'", data), nil
-}
-
-func parseJobLog(job *rapiJobResponse) ([]model.GntJobLogEntry, error) {
-	returnedEntries := job.OpLog[0]
-	opLogEntries := make([]model.GntJobLogEntry, len(returnedEntries))
-	jobOpTypesMap := jobOperationsPayloadType{
-		"message":       parseJobOpMessage,
-		"remote-import": parseJobOpRemoteImport,
-	}
-
-	for i, logEntry := range returnedEntries {
-		serial, ok := logEntry[0].(float64)
-		if !ok {
-			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("serial not a float64, but a %T", logEntry[0]))
-		}
-
-		timings, ok := logEntry[1].([]interface{})
-		if !ok {
-			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("timings not an array, but a %T", logEntry[1]))
-		}
-
-		timingsStart, ok := timings[0].(float64)
-		if !ok {
-			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("timingsStart not a float64, but a %T", timings[0]))
-		}
-
-		msgType, ok := logEntry[2].(string)
-		if !ok {
-			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("message-type not a string, but a %T", logEntry[3]))
-		}
-
-		parser, exists := jobOpTypesMap[msgType]
-		var err error
-		var msg string
-		if !exists {
-			msg, err = parseJobOpUnknownType(logEntry[3])
-		} else {
-			msg, err = parser(logEntry[3])
-		}
-		if err != nil {
-			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("failed to parse oplog message payload: %e", err))
-		}
-
-		opLogEntries[i] = model.GntJobLogEntry{
-			Serial:    int(serial),
-			StartedAt: int(timingsStart),
-			Message:   strings.TrimPrefix(msg, "* "),
-		}
-	}
-
-	return opLogEntries, nil
-}
-
-func makeOpLogParseError(jobID int, reason string) error {
-	return fmt.Errorf("cannot parse oplog of job [%d]: %s", jobID, reason)
+func makeOpLogParseError(jobID int, err error) error {
+	return fmt.Errorf("cannot parse oplog of job [%d]: %e", jobID, err)
 }

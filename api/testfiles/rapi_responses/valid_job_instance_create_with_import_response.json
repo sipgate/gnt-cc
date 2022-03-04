@@ -1,0 +1,273 @@
+{
+  "id": 12345,
+  "ops": [
+    {
+      "dry_run": false,
+      "debug_level": 0,
+      "priority": 0,
+      "depends": null,
+      "comment": null,
+      "reason": [
+        [
+          "gnt:library:rlib2:instances",
+          "",
+          1644229365374086400
+        ],
+        [
+          "gnt:opcode:instance_create",
+          "job=12345;index=0",
+          1644229365422581000
+        ]
+      ],
+      "OP_ID": "OP_INSTANCE_CREATE",
+      "instance_name": "bart.local",
+      "force_variant": false,
+      "wait_for_sync": true,
+      "name_check": true,
+      "ignore_ipolicy": false,
+      "opportunistic_locking": true,
+      "beparams": {
+        "maxmem": 6144,
+        "minmem": 6144,
+        "vcpus": 4
+      },
+      "disks": [
+        {
+          "size": 40960,
+          "mode": "rw",
+          "name": "None"
+        }
+      ],
+      "disk_template": "drbd",
+      "hvparams": {
+        "kernel_path": "",
+        "machine_version": "pc",
+        "nic_type": "paravirtual"
+      },
+      "hypervisor": "kvm",
+      "iallocator": "hail",
+      "identify_defaults": false,
+      "ip_check": false,
+      "conflicts_check": true,
+      "mode": "remote-import",
+      "nics": [
+        {
+          "mac": "aa:00:00:11:22:33",
+          "mode": "bridged",
+          "link": "gnt-bridge",
+          "vlan": ".200"
+        },
+        {
+          "mac": "aa:00:00:11:22:44",
+          "mode": "bridged",
+          "link": "gnt-bridge",
+          "vlan": ".200"
+        }
+      ],
+      "osparams": {},
+      "osparams_private": {},
+      "osparams_secret": {},
+      "os_type": "noop",
+      "pnode": "ganeti-node01.local",
+      "pnode_uuid": "8704cefd-3665-46da-846a-ca390bc2e914",
+      "snode": "ganeti-node02.local",
+      "snode_uuid": "ca646bfd-d202-4a7f-8427-23c84c78f19c",
+      "source_handshake": [
+        0,
+        "0a6fadc16bbbbf289566b0f67ee4e0bc5b81b449",
+        "cdc111266d5549fa"
+      ],
+      "source_instance_name": "bart.local",
+      "source_shutdown_timeout": 120,
+      "source_x509_ca": "X-Ganeti-Signature: REDACTED\n\n-----BEGIN CERTIFICATE-----\nREDACTED\n-----END CERTIFICATE-----\n",
+      "compress": "none",
+      "start": false,
+      "forthcoming": false,
+      "commit": false,
+      "tags": [
+        "fancy_tag"
+      ],
+      "instance_communication": false,
+      "helper_startup_timeout": 300,
+      "helper_shutdown_timeout": 7200
+    }
+  ],
+  "status": "running",
+  "summary": [
+    "INSTANCE_CREATE(bart.local)"
+  ],
+  "opstatus": [
+    "running"
+  ],
+  "received_ts": [
+    1644229365,
+    422581
+  ],
+  "start_ts": [
+    1644229365,
+    684221
+  ],
+  "end_ts": null,
+  "oplog": [
+    [
+      [
+        1,
+        [
+          1644229367,
+          153038
+        ],
+        "message",
+        " - INFO: Selected nodes for instance bart.local via iallocator hail: ganeti-node01.local, ganeti-node02.local"
+      ],
+      [
+        2,
+        [
+          1644229368,
+          149583
+        ],
+        "message",
+        "* creating instance disks..."
+      ],
+      [
+        3,
+        [
+          1644229375,
+          197236
+        ],
+        "message",
+        "adding instance bart.local to cluster config"
+      ],
+      [
+        4,
+        [
+          1644229375,
+          325485
+        ],
+        "message",
+        "adding disks to cluster config"
+      ],
+      [
+        5,
+        [
+          1644229375,
+          459448
+        ],
+        "message",
+        "* wiping instance disks..."
+      ],
+      [
+        6,
+        [
+          1644229375,
+          766796
+        ],
+        "message",
+        " - INFO: * Wiping disk 0"
+      ],
+      [
+        7,
+        [
+          1644229377,
+          979762
+        ],
+        "message",
+        " - INFO:  - done: 2.5% ETA: 1m 26s"
+      ],
+      [
+        8,
+        [
+          1644229439,
+          330284
+        ],
+        "message",
+        " - INFO:  - done: 70.0% ETA: 27s"
+      ],
+      [
+        9,
+        [
+          1644229467,
+          566946
+        ],
+        "message",
+        " - INFO: Waiting for instance bart.local to sync disks"
+      ],
+      [
+        10,
+        [
+          1644229467,
+          854413
+        ],
+        "message",
+        " - INFO: Instance bart.local's disks are in sync"
+      ],
+      [
+        11,
+        [
+          1644229467,
+          855942
+        ],
+        "message",
+        " - INFO: Waiting for instance bart.local to sync disks"
+      ],
+      [
+        12,
+        [
+          1644229468,
+          185319
+        ],
+        "message",
+        " - INFO: Instance bart.local's disks are in sync"
+      ],
+      [
+        13,
+        [
+          1644229468,
+          252416
+        ],
+        "message",
+        "* preparing remote import..."
+      ],
+      [
+        14,
+        [
+          1644229471,
+          793900
+        ],
+        "message",
+        "Disk 0 is now listening"
+      ],
+      [
+        15,
+        [
+          1644229471,
+          795125
+        ],
+        "remote-import",
+        {
+          "disks": [
+            [
+              "192.0.2.1",
+              42443,
+              "6295d34786992e34a43155dfe7e5c25d2adf2f23",
+              "1aa037e1dfef401a65f3034b94c1cf8a97b4e421",
+              "35211cf01e4f7814"
+            ]
+          ],
+          "x509_ca": "X-Ganeti-Signature: REDACTED\n\n-----BEGIN CERTIFICATE-----\nREDACTED\n-----END CERTIFICATE-----\n"
+        }
+      ],
+      [
+        16,
+        [
+          1644229479,
+          369259
+        ],
+        "message",
+        "Disk 0 is now receiving data"
+      ]
+    ]
+  ],
+  "opresult": [
+    null
+  ]
+}

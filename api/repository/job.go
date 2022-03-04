@@ -68,10 +68,10 @@ func (repo *JobRepository) Get(clusterName, jobID string) (model.JobResult, erro
 	}
 
 	timestamps := parseJobTimestamp(&job)
-	jobLog, err := parseJobLog(&job)
+	jobLog, err := parseToJobLog(job.OpLog)
 
 	if err != nil {
-		return model.JobResult{}, err
+		return model.JobResult{}, makeOpLogParseError(job.ID, err)
 	}
 
 	return model.JobResult{
@@ -112,41 +112,83 @@ func parseJobTimestamp(job *rapiJobResponse) timestamps {
 	}
 }
 
-func parseJobLog(job *rapiJobResponse) ([]model.GntJobLogEntry, error) {
-	returnedEntries := job.OpLog[0]
-	opLogEntries := make([]model.GntJobLogEntry, len(returnedEntries))
+func parseToJobLog(log [][]json.RawMessage) (*[]model.GntJobLogEntry, error) {
+	opLogEntries := make([]model.GntJobLogEntry, len(log[0]))
+	for i, entryRaw := range log[0] {
+		entry, err := parseToJobLogEntry(entryRaw)
 
-	for i, logEntry := range returnedEntries {
-		serial, ok := logEntry[0].(float64)
-		if !ok {
-			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("serial not a float64, but a %T", logEntry[0]))
+		if err != nil {
+			return nil, err
 		}
 
-		timings, ok := logEntry[1].([]interface{})
-		if !ok {
-			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("timings not an array, but a %T", logEntry[1]))
-		}
-
-		timingsStart, ok := timings[0].(float64)
-		if !ok {
-			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("timingsStart not a float64, but a %T", timings[0]))
-		}
-
-		msg, ok := logEntry[3].(string)
-		if !ok {
-			return []model.GntJobLogEntry{}, makeOpLogParseError(job.ID, fmt.Sprintf("message not a string, but a %T", logEntry[3]))
-		}
-
-		opLogEntries[i] = model.GntJobLogEntry{
-			Serial:    int(serial),
-			StartedAt: int(timingsStart),
-			Message:   strings.TrimPrefix(msg, "* "),
-		}
+		opLogEntries[i] = entry
 	}
 
-	return opLogEntries, nil
+	return &opLogEntries, nil
 }
 
-func makeOpLogParseError(jobID int, reason string) error {
-	return fmt.Errorf("cannot parse oplog of job [%d]: %s", jobID, reason)
+func parseToJobLogEntry(raw json.RawMessage) (model.GntJobLogEntry, error) {
+	var entry rapiOpLogEntry
+	err := entry.parse(raw)
+
+	if err != nil {
+		return model.GntJobLogEntry{}, err
+	}
+
+	var message string
+	if entry.PayloadType == "message" {
+		message, err = parseOpLogMessage(entry.Payload)
+	} else if entry.PayloadType == "remote-import" {
+		message, err = parseOpLogRemoteImport(entry.Payload)
+	} else {
+		message = fmt.Sprintf("unknown oplog payload type %s", entry.PayloadType)
+	}
+
+	if err != nil {
+		return model.GntJobLogEntry{}, err
+	}
+
+	return model.GntJobLogEntry{
+		Serial:    entry.Serial,
+		StartedAt: entry.Timestamps[0],
+		Message:   strings.TrimPrefix(message, "* "),
+	}, nil
+}
+
+func parseOpLogMessage(payload json.RawMessage) (string, error) {
+	var message string
+	err := json.Unmarshal(payload, &message)
+
+	if err != nil {
+		return "", err
+	}
+
+	return strings.TrimPrefix(message, "* "), nil
+}
+
+func parseOpLogRemoteImport(payload json.RawMessage) (string, error) {
+	var parsed rapiRemoteImportPayload
+	err := json.Unmarshal(payload, &parsed)
+
+	if err != nil {
+		return "", err
+	}
+
+	var disks []string
+	for _, v := range parsed.Disks {
+		var disk rapiRemoteImportDisk
+		err = disk.parse(v)
+
+		if err != nil {
+			return "", err
+		}
+
+		disks = append(disks, fmt.Sprintf("%s:%d", disk.IpAddress, disk.Port))
+	}
+
+	return fmt.Sprintf("Importing Disks from: %v", disks), nil
+}
+
+func makeOpLogParseError(jobID int, err error) error {
+	return fmt.Errorf("cannot parse oplog of job [%d]: %e", jobID, err)
 }

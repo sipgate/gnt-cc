@@ -1,0 +1,241 @@
+{
+  "id" : 12345,
+  "end_ts" : [
+    1645199064,
+    480019
+  ],
+  "opresult" : [
+    [
+      "ganeti-node01.local",
+      "ganeti-node02.local"
+    ]
+  ],
+  "opstatus" : [
+    "success"
+  ],
+  "ops" : [
+    {
+      "no_install" : false,
+      "osparams_secret" : {},
+      "hypervisor" : "kvm",
+      "debug_level" : 0,
+      "beparams" : {
+        "vcpus" : 1,
+        "minmem" : 2048,
+        "maxmem" : 2048
+      },
+      "compress" : "none",
+      "identify_defaults" : false,
+      "priority" : 0,
+      "reason" : [
+        [
+          "gnt:library:rlib2:instances",
+          "",
+          1645198959144476928
+        ],
+        [
+          "gnt:opcode:instance_create",
+          "job=12345;index=0",
+          1645198959217738000
+        ]
+      ],
+      "pnode" : "ganeti-node01.local",
+      "conflicts_check" : false,
+      "mode" : "create",
+      "snode" : "ganeti-node02.local",
+      "ignore_ipolicy" : false,
+      "comment" : null,
+      "tags" : [],
+      "opportunistic_locking" : false,
+      "instance_communication" : false,
+      "osparams_private" : {},
+      "hvparams" : {},
+      "depends" : null,
+      "start" : true,
+      "dry_run" : false,
+      "name_check" : false,
+      "nics" : [
+        {
+          "link" : "br290",
+          "mac" : "generate"
+        }
+      ],
+      "instance_name" : "homer.local",
+      "helper_startup_timeout" : 300,
+      "disks" : [
+        {
+          "size" : 15360
+        }
+      ],
+      "source_shutdown_timeout" : 120,
+      "iallocator" : "hail",
+      "os_type" : "debootstrap+bullseye",
+      "commit" : false,
+      "snode_uuid" : "59e1a02e-0fd0-41c1-aa70-1eee1ceea634",
+      "wait_for_sync" : false,
+      "helper_shutdown_timeout" : 7200,
+      "force_variant" : false,
+      "ip_check" : false,
+      "OP_ID" : "OP_INSTANCE_CREATE",
+      "pnode_uuid" : "6ee64456-365d-4745-ac57-b708eaad0d25",
+      "disk_template" : "drbd",
+      "forthcoming" : false,
+      "osparams" : {
+        "ip" : "192.0.2.2",
+        "gateway" : "192.0.2.1",
+        "netmask" : "255.255.255.0"
+      }
+    }
+  ],
+  "start_ts" : [
+    1645198960,
+    742255
+  ],
+  "oplog" : [
+    [
+      [
+        1,
+        [
+          1645198964,
+          145351
+        ],
+        "message",
+        " - INFO: Selected nodes for instance homer.local via iallocator hail: ganeti-node01.local, ganeti-node02.local"
+      ],
+      [
+        2,
+        [
+          1645198965,
+          591131
+        ],
+        "message",
+        "* creating instance disks..."
+      ],
+      [
+        3,
+        [
+          1645198970,
+          196653
+        ],
+        "message",
+        "adding instance homer.local to cluster config"
+      ],
+      [
+        4,
+        [
+          1645198970,
+          351785
+        ],
+        "message",
+        "adding disks to cluster config"
+      ],
+      [
+        5,
+        [
+          1645198970,
+          788974
+        ],
+        "message",
+        "* wiping instance disks..."
+      ],
+      [
+        6,
+        [
+          1645198971,
+          3687
+        ],
+        "message",
+        " - INFO: * Wiping disk 0"
+      ],
+      [
+        7,
+        [
+          1645198974,
+          42723
+        ],
+        "message",
+        " - INFO:  - done: 6.7% ETA: 43s"
+      ],
+      [
+        8,
+        [
+          1645199011,
+          156578
+        ],
+        "message",
+        "* checking mirrors status"
+      ],
+      [
+        9,
+        [
+          1645199011,
+          323805
+        ],
+        "message",
+        " - INFO: Instance homer.local's disks are in sync"
+      ],
+      [
+        10,
+        [
+          1645199011,
+          324687
+        ],
+        "message",
+        "* checking mirrors status"
+      ],
+      [
+        11,
+        [
+          1645199011,
+          488500
+        ],
+        "message",
+        " - INFO: Instance homer.local's disks are in sync"
+      ],
+      [
+        12,
+        [
+          1645199011,
+          541921
+        ],
+        "message",
+        "* pausing disk sync to install instance OS"
+      ],
+      [
+        13,
+        [
+          1645199011,
+          723193
+        ],
+        "message",
+        "* running the instance OS create scripts..."
+      ],
+      [
+        14,
+        [
+          1645199041,
+          261384
+        ],
+        "message",
+        "* resuming disk sync"
+      ],
+      [
+        15,
+        [
+          1645199063,
+          794107
+        ],
+        "message",
+        "* starting instance..."
+      ]
+    ]
+  ],
+  "received_ts" : [
+    1645198959,
+    217738
+  ],
+  "status" : "success",
+  "summary" : [
+    "INSTANCE_CREATE(homer.local)"
+  ]
+}

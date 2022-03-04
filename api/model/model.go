@@ -73,6 +73,7 @@ type GntJobLogEntry struct {
 
 type GntJob struct {
 	ID         int               `json:"id"`
+  ClusterName string           `json:"clusterName"`
 	Summary    string            `json:"summary"`
 	ReceivedAt int               `json:"receivedAt"`
 	StartedAt  int               `json:"startedAt"`

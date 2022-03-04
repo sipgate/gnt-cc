@@ -33,12 +33,13 @@ func (repo *JobRepository) GetAll(clusterName string) ([]model.GntJob, error) {
 		timestamps := parseJobTimestamp(job)
 
 		jobs[i] = model.GntJob{
-			ID:         job.ID,
-			Summary:    job.Summary[0],
-			ReceivedAt: job.ReceivedTs[0],
-			StartedAt:  timestamps.startedAt,
-			EndedAt:    timestamps.endedAt,
-			Status:     job.Status,
+			ID:          job.ID,
+			ClusterName: clusterName,
+			Summary:     job.Summary[0],
+			ReceivedAt:  job.ReceivedTs[0],
+			StartedAt:   timestamps.startedAt,
+			EndedAt:     timestamps.endedAt,
+			Status:      job.Status,
 		}
 	}
 
@@ -76,13 +77,14 @@ func (repo *JobRepository) Get(clusterName, jobID string) (model.JobResult, erro
 	return model.JobResult{
 		Found: true,
 		Job: model.GntJob{
-			ID:         job.ID,
-			Summary:    job.Summary[0],
-			ReceivedAt: job.ReceivedTs[0],
-			StartedAt:  timestamps.startedAt,
-			EndedAt:    timestamps.endedAt,
-			Status:     job.Status,
-			Log:        jobLog,
+			ID:          job.ID,
+			ClusterName: clusterName,
+			Summary:     job.Summary[0],
+			ReceivedAt:  job.ReceivedTs[0],
+			StartedAt:   timestamps.startedAt,
+			EndedAt:     timestamps.endedAt,
+			Status:      job.Status,
+			Log:         jobLog,
 		},
 	}, nil
 }

@@ -5,25 +5,28 @@ import {
   faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
-import React, { ReactElement, useContext, useEffect } from "react";
-import { useApi } from "../../api";
-import { GntJobWithLog } from "../../api/models";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { buildApiUrl } from "../../api";
+import { GntJob, GntJobWithLog } from "../../api/models";
 import JobWatchContext from "../../contexts/JobWatchContext";
-import { useClusterName } from "../../helpers/hooks";
 import Dropdown, { Alignment } from "../Dropdown/Dropdown";
 import Icon from "../Icon/Icon";
 import JobSummary from "../JobSummary/JobSummary";
-import PrefixLink from "../PrefixLink";
+import {
+  getFinishedJobs,
+  getUnfinishedJobs,
+  getWatcherStatus,
+  groupJobIdsByCluster,
+  joinJobListsUnique,
+  sortJobs,
+  WatcherStatus,
+} from "./helpers";
 import styles from "./JobWatcher.module.scss";
 
 interface JobResponse {
+  numberOfJobs: number;
   jobs: GntJobWithLog[];
-}
-
-enum WatcherStatus {
-  InProgress,
-  Succeeded,
-  HasFailures,
 }
 
 function getJobStatusStyles(status: string) {
@@ -40,72 +43,80 @@ function getJobStatusStyles(status: string) {
   return styles.running;
 }
 
-function getJobStatusTitle(status: string) {
-  return `Job status: ${status}`;
-}
-
-function getWatcherStatus(jobs: GntJobWithLog[]): WatcherStatus {
-  for (const job of jobs) {
-    if (job.status !== "error" && job.status !== "success") {
-      return WatcherStatus.InProgress;
-    }
-  }
-
-  for (const job of jobs) {
-    if (job.status === "error") {
-      return WatcherStatus.HasFailures;
-    }
-  }
-
-  return WatcherStatus.Succeeded;
-}
-
 function JobWatcher(): ReactElement | null {
-  const clusterName = useClusterName();
   const { trackedJobs, untrackJob } = useContext(JobWatchContext);
-
-  const [{ data, error }, loadJobs] = useApi<JobResponse>(
-    `clusters/${clusterName}/jobs/many?ids=${trackedJobs.join(",")}`,
-    { manual: true }
-  );
+  const [jobs, setJobs] = useState<GntJob[]>([]);
 
   useEffect(() => {
-    function updateJobs() {
-      if (trackedJobs.length > 0) {
-        loadJobs();
+    async function processResponse(
+      response: Response
+    ): Promise<JobResponse | string> {
+      if (response.status !== 200) {
+        const body = await response.text();
+        return body || "unknown error";
+      }
+
+      const body = await response.json();
+      return body as JobResponse;
+    }
+
+    async function loadAllJobs() {
+      const jobIdsByCluster = groupJobIdsByCluster(trackedJobs);
+
+      const requests: Promise<Response>[] = [];
+
+      jobIdsByCluster.forEach((ids, clusterName) => {
+        requests.push(
+          fetch(
+            buildApiUrl(
+              `clusters/${clusterName}/jobs/many?ids=${ids.join(",")}`
+            )
+          )
+        );
+      });
+
+      const responses = await Promise.all(requests);
+
+      for (const response of responses) {
+        const result = await processResponse(response);
+
+        if (typeof result === "string") {
+          console.warn(result);
+        } else {
+          // remove finished jobs from track list,
+          // but keep in jobs list
+          getFinishedJobs(result.jobs).forEach(untrackJob);
+          setJobs((jobs) => joinJobListsUnique(jobs, result.jobs));
+        }
       }
     }
 
-    const interval = setInterval(updateJobs, 2000);
-    updateJobs();
+    function checkForUpdates() {
+      if (trackedJobs.length > 0) {
+        loadAllJobs();
+      }
+    }
+
+    const interval = setInterval(checkForUpdates, 2000);
+    checkForUpdates();
 
     return () => {
       clearInterval(interval);
     };
   }, [trackedJobs]);
 
-  if (error) {
-    return <span>Error</span>;
-  }
-
-  if (trackedJobs.length === 0) {
+  if (jobs.length === 0) {
     return null;
   }
 
-  const jobs = data
-    ? data.jobs.filter((job) => trackedJobs.includes(job.id)).reverse()
-    : [];
-
   const watcherStatus = getWatcherStatus(jobs);
-
-  const unfinishedJobsCount = jobs.filter(
-    (job) => job.status !== "success" && job.status !== "error"
-  ).length;
+  const unfinishedJobs = getUnfinishedJobs(jobs);
+  const sortedJobs = sortJobs(jobs);
 
   return (
     <section className={styles.root}>
       <Dropdown icon={faEye} align={Alignment.CENTER}>
-        {jobs.map((job) => (
+        {sortedJobs.map((job) => (
           <div
             className={classNames(styles.job, getJobStatusStyles(job.status))}
             key={job.id}
@@ -115,24 +126,24 @@ function JobWatcher(): ReactElement | null {
                 className={styles.untrackButton}
                 onClick={(ev) => {
                   ev.stopPropagation();
-                  untrackJob(job.id);
+                  untrackJob(job);
                 }}
-                title={getJobStatusTitle(job.status)}
+                title={`Job status: ${job.status}`}
               >
                 <Icon icon={faEyeSlash} />
               </button>
             </div>
             <div className={styles.content}>
-              <PrefixLink to={`/jobs/${job.id}`}>
+              <Link to={`/${job.clusterName}/jobs/${job.id}`}>
                 <JobSummary summary={job.summary} />
-              </PrefixLink>
+              </Link>
               <div className={styles.step}></div>
             </div>
           </div>
         ))}
       </Dropdown>
       {watcherStatus === WatcherStatus.InProgress && (
-        <span className={styles.count}>{unfinishedJobsCount}</span>
+        <span className={styles.count}>{unfinishedJobs.length}</span>
       )}
       {watcherStatus === WatcherStatus.Succeeded && (
         <span className={styles.successIndicator}>

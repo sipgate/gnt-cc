@@ -95,7 +95,10 @@ each([
     fireEvent.click(confirmButton);
 
     await waitFor(() => {
-      expect(mockTrackJob).toHaveBeenCalledWith(jobIds[name]);
+      expect(mockTrackJob).toHaveBeenCalledWith({
+        clusterName: "testClusterName",
+        id: jobIds[name],
+      });
     });
   }
 );

@@ -36,7 +36,6 @@ func (controller *JobController) GetAll(c *gin.Context) {
 	}
 
 	c.JSON(200, model.AllJobsResponse{
-		Cluster:      clusterName,
 		NumberOfJobs: len(jobs),
 		Jobs:         jobs,
 	})
@@ -73,7 +72,6 @@ func (controller *JobController) GetManyWithLogs(c *gin.Context) {
 	}
 
 	c.JSON(200, model.AllJobsResponse{
-		Cluster:      clusterName,
 		NumberOfJobs: len(jobs),
 		Jobs:         jobs,
 	})
@@ -110,7 +108,6 @@ func (controller *JobController) Get(c *gin.Context) {
 	}
 
 	c.JSON(200, model.JobResponse{
-		Cluster: clusterName,
-		Job:     result.Job,
+		Job: result.Job,
 	})
 }

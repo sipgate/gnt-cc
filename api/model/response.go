@@ -33,14 +33,12 @@ type NodeResponse struct {
 }
 
 type AllJobsResponse struct {
-	Cluster      string   `json:"cluster"`
 	NumberOfJobs int      `json:"numberOfJobs"`
 	Jobs         []GntJob `json:"jobs"`
 }
 
 type JobResponse struct {
-	Cluster string `json:"cluster"`
-	Job     GntJob `json:"job"`
+	Job GntJob `json:"job"`
 }
 
 type JobIDResponse struct {

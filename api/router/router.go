@@ -10,6 +10,7 @@ import (
 	"gnt-cc/query"
 	"gnt-cc/rapi_client"
 	"gnt-cc/repository"
+	"gnt-cc/services"
 	"html/template"
 	"net"
 	"net/http"
@@ -30,6 +31,7 @@ type router struct {
 	statisticsController controllers.StatisticsController
 	nodeController       controllers.NodeController
 	jobController        controllers.JobController
+	searchController     controllers.SearchController
 }
 
 func New(engine *gin.Engine) *router {
@@ -52,6 +54,7 @@ func New(engine *gin.Engine) *router {
 	groupRepository := repository.GroupRepository{RAPIClient: rapiClient}
 	nodeRepository := repository.NodeRepository{RAPIClient: rapiClient, GroupRepository: groupRepository}
 	jobRepository := repository.JobRepository{RAPIClient: rapiClient}
+	searchService := services.SearchService{InstanceRepository: &instanceRepository}
 
 	r := router{
 		engine: engine,
@@ -72,6 +75,9 @@ func New(engine *gin.Engine) *router {
 	}
 	r.jobController = controllers.JobController{
 		Repository: &jobRepository,
+	}
+	r.searchController = controllers.SearchController{
+		SearchService: &searchService,
 	}
 
 	return &r
@@ -131,6 +137,8 @@ func (r *router) SetupAPIRoutes() {
 
 		authenticated.GET("/clusters", r.clusterController.GetAll)
 	}
+
+	authenticated.GET("/search", r.searchController.Search)
 
 	withCluster := authenticated.Group("/clusters/:cluster")
 	withCluster.Use(middleware.RequireCluster())

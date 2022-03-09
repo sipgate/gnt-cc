@@ -8,6 +8,7 @@ import (
 
 type SearchService struct {
 	InstanceRepository instanceRepository
+	NodeRepository     nodeRepository
 }
 
 //TODO: Add tests
@@ -27,7 +28,12 @@ func (service *SearchService) Search(query string) (*model.SearchResults, error)
 		filteredInstances = append(filteredInstances, filterSearchResults(query, results, cluster.Name)...)
 
 		// nodes
-		//TODO: add node search
+		//TODO: make this resilient against failing clusters
+		results, err = service.NodeRepository.GetAllNames(cluster.Name)
+		if err != nil {
+			return nil, err
+		}
+		filteredNodes = append(filteredNodes, filterSearchResults(query, results, cluster.Name)...)
 
 		// clusters
 		if stringContainsIgnoreCase(cluster.Name, query) {

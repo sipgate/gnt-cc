@@ -1,6 +1,7 @@
 package services
 
 import (
+	log "github.com/sirupsen/logrus"
 	"gnt-cc/config"
 	"gnt-cc/model"
 	"strings"
@@ -20,20 +21,20 @@ func (service *SearchService) Search(query string) (*model.SearchResults, error)
 
 	for _, cluster := range c.Clusters {
 		// instances
-		//TODO: make this resilient against failing clusters
 		results, err := service.InstanceRepository.GetAllNames(cluster.Name)
 		if err != nil {
-			return nil, err
+			log.Errorf("search service: error talking to cluster '%s': %e", cluster.Name, err)
+		} else {
+			filteredInstances = append(filteredInstances, filterSearchResults(query, results, cluster.Name)...)
 		}
-		filteredInstances = append(filteredInstances, filterSearchResults(query, results, cluster.Name)...)
 
 		// nodes
-		//TODO: make this resilient against failing clusters
 		results, err = service.NodeRepository.GetAllNames(cluster.Name)
 		if err != nil {
-			return nil, err
+			log.Errorf("search service: error talking to cluster '%s': %e", cluster.Name, err)
+		} else {
+			filteredNodes = append(filteredNodes, filterSearchResults(query, results, cluster.Name)...)
 		}
-		filteredNodes = append(filteredNodes, filterSearchResults(query, results, cluster.Name)...)
 
 		// clusters
 		if stringContainsIgnoreCase(cluster.Name, query) {

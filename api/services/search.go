@@ -5,6 +5,7 @@ import (
 	"gnt-cc/config"
 	"gnt-cc/model"
 	"strings"
+	"time"
 )
 
 type SearchService struct {
@@ -21,27 +22,34 @@ func (service *SearchService) Search(query string) (*model.SearchResults, error)
 
 	for _, cluster := range c.Clusters {
 		// instances
+		instanceStart := time.Now()
 		results, err := service.InstanceRepository.GetAllNames(cluster.Name)
 		if err != nil {
 			log.Errorf("search service: error talking to cluster '%s': %e", cluster.Name, err)
 		} else {
 			filteredInstances = append(filteredInstances, filterSearchResults(query, results, cluster.Name)...)
 		}
+		instanceElapsed := time.Since(instanceStart)
 
 		// nodes
+		nodeStart := time.Now()
 		results, err = service.NodeRepository.GetAllNames(cluster.Name)
 		if err != nil {
 			log.Errorf("search service: error talking to cluster '%s': %e", cluster.Name, err)
 		} else {
 			filteredNodes = append(filteredNodes, filterSearchResults(query, results, cluster.Name)...)
 		}
+		nodeElapsed := time.Since(nodeStart)
 
 		// clusters
+		clusterStart := time.Now()
 		if stringContainsIgnoreCase(cluster.Name, query) {
 			filteredClusters = append(filteredClusters, model.ClusterSearchResult{
 				Name: cluster.Name,
 			})
 		}
+		clusterElapsed := time.Since(clusterStart)
+		log.Debugf("search service stats for '%s': Instances: %s, Nodes: %s, Clusters: %s", cluster.Name, instanceElapsed, nodeElapsed, clusterElapsed)
 	}
 	return &model.SearchResults{
 		Nodes:     filteredNodes,

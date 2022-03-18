@@ -10,7 +10,7 @@
   }
 
   .separator {
-    color: var(--colorEmphasisMedium);
+    color: var(--color-emphasis-medium);
     font-weight: bold;
   }
 
@@ -21,7 +21,7 @@
     bottom: 0;
     height: 3px;
     opacity: 0.5;
-    background-color: var(--colorSeparator);
+    background-color: var(--color-separator);
 
     .progress {
       position: absolute;
@@ -32,14 +32,14 @@
   }
 
   &.critical .indicator .progress {
-    background: var(--colorDanger);
+    background: var(--color-danger);
   }
 
   &.warn .indicator .progress {
-    background: var(--colorWarning);
+    background: var(--color-warning);
   }
 
   &.ok .indicator .progress {
-    background: var(--colorSuccess);
+    background: var(--color-success);
   }
 }

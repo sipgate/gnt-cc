@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid var(--colorEmphasisLow);
+  border: 1px solid var(--color-emphasis-low);
   padding: 0 0.75rem;
   border-radius: 0.75rem;
   text-transform: uppercase;
@@ -12,25 +12,25 @@
 
   &.success {
     color: white;
-    border-color: var(--colorSuccess);
-    background-color: var(--colorSuccess);
+    border-color: var(--color-success);
+    background-color: var(--color-success);
   }
 
   &.warning {
     color: black;
-    border-color: var(--colorWarning);
-    background-color: var(--colorWarning);
+    border-color: var(--color-warning);
+    background-color: var(--color-warning);
   }
 
   &.failure {
     color: white;
-    border-color: var(--colorDanger);
-    background-color: var(--colorDanger);
+    border-color: var(--color-danger);
+    background-color: var(--color-danger);
   }
 
   &.primary {
     color: white;
-    border-color: var(--colorPrimary);
-    background-color: var(--colorPrimary);
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
   }
 }

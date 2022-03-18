@@ -58,19 +58,19 @@
     }
 
     &.running .actions .untrackButton {
-      background-color: var(--colorPrimary);
+      background-color: var(--color-primary);
     }
 
     &.error .actions .untrackButton {
-      background-color: var(--colorDanger);
+      background-color: var(--color-danger);
     }
 
     &.success .actions .untrackButton {
-      background-color: var(--colorSuccess);
+      background-color: var(--color-success);
     }
 
     &.pending .actions .untrackButton {
-      background-color: var(--colorWarning);
+      background-color: var(--color-warning);
       color: #000;
     }
   }
@@ -91,7 +91,7 @@
     animation: notification 0.5s;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
@@ -107,16 +107,16 @@
   }
 
   .count {
-    background: var(--colorPrimary);
+    background: var(--color-primary);
   }
 
   .successIndicator {
-    background: var(--colorSuccess);
+    background: var(--color-success);
     color: #fff;
   }
 
   .failureIndicator {
-    background: var(--colorDanger);
+    background: var(--color-danger);
     color: #fff;
   }
 }

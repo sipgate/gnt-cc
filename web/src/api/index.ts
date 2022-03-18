@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 
 export enum HttpMethod {
   Get = "GET",
@@ -88,8 +87,6 @@ export const useApi = <TData>(
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const history = useHistory();
-
   const performRequest = async (): Promise<TData | string> => {
     setError(null);
     setIsLoading(true);
@@ -101,7 +98,6 @@ export const useApi = <TData>(
 
     if (response.status === 401) {
       // TODO: try to refresh token
-      history.push("/login");
       setIsLoading(false);
 
       return response.statusText;

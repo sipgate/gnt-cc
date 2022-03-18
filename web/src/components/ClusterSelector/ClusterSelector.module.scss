@@ -6,7 +6,7 @@
     text-decoration: none;
     padding: 1rem;
     min-width: 260px;
-    color: var(--colorEmphasisMedium);
+    color: var(--color-emphasis-medium);
     opacity: 0.8;
     transition: color 0.2s;
     border-left: 6px solid transparent;
@@ -30,8 +30,8 @@
     }
 
     &:hover {
-      border-color: var(--colorPrimary);
-      color: var(--colorEmphasisHigh);
+      border-color: var(--color-primary);
+      color: var(--color-emphasis-high);
     }
   }
 }

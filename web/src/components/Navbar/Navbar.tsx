@@ -1,8 +1,8 @@
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import React, { ReactElement } from "react";
-import { useHistory } from "react-router-dom";
+import React, { ReactElement, useContext } from "react";
 import { buildApiUrl, HttpMethod } from "../../api";
 import { GntCluster } from "../../api/models";
+import AuthContext from "../../contexts/AuthContext";
 import Button from "../Button/Button";
 import ClusterSelector from "../ClusterSelector/ClusterSelector";
 import JobWatcher from "../JobWatcher/JobWatcher";
@@ -38,11 +38,11 @@ interface Props {
 }
 
 const Navbar = function ({ clusters }: Props): ReactElement {
-  const history = useHistory();
+  const { setUsername } = useContext(AuthContext);
 
   async function logout() {
     await fetch(buildApiUrl("logout"), { method: HttpMethod.Post });
-    history.push("/login");
+    setUsername(null);
   }
 
   return (

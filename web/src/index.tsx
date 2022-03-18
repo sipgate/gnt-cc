@@ -6,37 +6,37 @@ import App from "./App";
 
 createTheme("default", {
   text: {
-    primary: "var(--colorEmphasisHigh)",
-    secondary: "var(--colorEmphasisMedium)",
+    primary: "var(--color-emphasis-high)",
+    secondary: "var(--color-emphasis-medium)",
   },
   background: {
-    default: "var(--colorElevationLow)",
+    default: "var(--color-elevation-low)",
   },
   context: {
-    background: "var(--colorElevationMedium)",
-    text: "var(--colorEmphasisHigh)",
-    hover: "var(--colorEmphasisHigh)",
+    background: "var(--color-elevation-medium)",
+    text: "var(--color-emphasis-high)",
+    hover: "var(--color-emphasis-high)",
   },
   divider: {
-    default: "var(--colorSeparator)",
+    default: "var(--color-separator)",
   },
   button: {
-    default: "var(--colorEmphasisMedium)",
-    focus: "var(--colorInteractionBackground)",
-    hover: "var(--colorInteractionBackground)",
-    disabled: "var(--colorEmphasisLow)",
+    default: "var(--color-emphasis-medium)",
+    focus: "var(--color-interaction-background)",
+    hover: "var(--color-interaction-background)",
+    disabled: "var(--color-emphasis-low)",
   },
   action: {
-    button: "var(--colorEmphasisMedium)",
-    hover: "var(--colorEmphasisHigh)",
-    disabled: "var(--colorSeparator)",
+    button: "var(--color-emphasis-medium)",
+    hover: "var(--color-emphasis-high)",
+    disabled: "var(--color-separator)",
   },
   highlightOnHover: {
-    default: "var(--colorInteractionBackground)",
-    text: "var(--colorEmphasisHigh)",
+    default: "var(--color-interaction-background)",
+    text: "var(--color-emphasis-high)",
   },
   sortFocus: {
-    default: "var(--colorEmphasisHigh)",
+    default: "var(--color-emphasis-high)",
   },
 });
 

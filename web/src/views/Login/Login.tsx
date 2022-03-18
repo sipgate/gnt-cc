@@ -1,10 +1,10 @@
 import { useFormik } from "formik";
-import React, { ReactElement, useState } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import React, { ReactElement, useContext, useState } from "react";
 import { buildApiUrl } from "../../api";
 import logo from "../../assets/logo.svg";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
+import AuthContext from "../../contexts/AuthContext";
 import styles from "./Login.module.scss";
 
 export interface LoginCredentials {
@@ -37,7 +37,12 @@ const performLogin = async (
   }
 };
 
-function Login({ history }: RouteComponentProps): ReactElement {
+type UserResponse = {
+  username: string;
+};
+
+function Login(): ReactElement {
+  const { setUsername } = useContext(AuthContext);
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const formik = useFormik({
@@ -67,7 +72,9 @@ function Login({ history }: RouteComponentProps): ReactElement {
       if (error) {
         setLoginError(error.message);
       } else {
-        history.replace("/");
+        const response = await fetch(buildApiUrl("user"));
+        const { username } = (await response.json()) as UserResponse;
+        setUsername(username);
       }
     },
   });

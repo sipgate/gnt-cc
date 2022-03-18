@@ -37,10 +37,8 @@ type ConfirmationState = {
 };
 
 function InstanceActions({ clusterName, instance }: Props): ReactElement {
-  const [
-    confirmationState,
-    setConfirmationState,
-  ] = useState<ConfirmationState | null>(null);
+  const [confirmationState, setConfirmationState] =
+    useState<ConfirmationState | null>(null);
 
   const { trackJob } = useContext(JobWatchContext);
 

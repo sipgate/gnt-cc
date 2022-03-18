@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { IDataTableColumn } from "react-data-table-component";
+import { TableColumn } from "react-data-table-component";
 import { useApi } from "../../api";
 import { GntNode } from "../../api/models";
 import ApiDataRenderer from "../../components/ApiDataRenderer/ApiDataRenderer";
@@ -22,8 +22,9 @@ interface NodesResponse {
   cluster: string;
 }
 
-const columns: IDataTableColumn<GntNode>[] = [
+const columns: TableColumn<GntNode>[] = [
   {
+    id: "name",
     name: "Name",
     sortable: true,
     selector: (row) => row.name,
@@ -47,6 +48,7 @@ const columns: IDataTableColumn<GntNode>[] = [
     ),
   },
   {
+    id: "group",
     name: "Group",
     sortable: true,
     selector: (row) => row.groupName,
@@ -57,6 +59,7 @@ const columns: IDataTableColumn<GntNode>[] = [
     ),
   },
   {
+    id: "primary_instances",
     name: "Primary Instances",
     sortable: true,
     selector: (row) => row.primaryInstancesCount,
@@ -67,6 +70,7 @@ const columns: IDataTableColumn<GntNode>[] = [
     ),
   },
   {
+    id: "secondary_instances",
     name: "Secondary Instances",
     sortable: true,
     selector: (row) => row.secondaryInstancesCount,
@@ -77,11 +81,13 @@ const columns: IDataTableColumn<GntNode>[] = [
     ),
   },
   {
+    id: "cpu_cores",
     name: "CPU Cores",
     sortable: true,
     selector: (row) => row.cpuCount,
   },
   {
+    id: "memory_utilisation",
     name: "Memory Utilisation",
     sortable: true,
     selector: (row) => row.memoryTotal - row.memoryFree,
@@ -98,6 +104,7 @@ const columns: IDataTableColumn<GntNode>[] = [
     },
   },
   {
+    id: "disk_utilisation",
     name: "Disk Utilisation",
     sortable: true,
     selector: (row) => row.diskTotal - row.diskFree,
@@ -128,7 +135,7 @@ function NodeList(): ReactElement {
           <CustomDataTable
             columns={columns}
             data={nodes}
-            defaultSortField="name"
+            defaultSortFieldId="name"
           />
         )}
       />

@@ -12,7 +12,7 @@ const InstanceConsole = (): ReactElement => {
     `/clusters/${clusterName}/instances/${instanceName}/console`
   );
 
-  return <VNCConsole url={url} instanceName={instanceName} />;
+  return <VNCConsole url={url} instanceName={instanceName || ""} />;
 };
 
 export default InstanceConsole;

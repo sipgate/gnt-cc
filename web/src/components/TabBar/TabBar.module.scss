@@ -1,13 +1,13 @@
 .tabBar {
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--colorEmphasisLow);
+  border: 1px solid var(--color-emphasis-low);
   height: 48px;
   border-radius: 24px;
   overflow: hidden;
 
   .tab {
-    color: var(--colorEmphasisHigh);
+    color: var(--color-emphasis-high);
     text-decoration: none;
     padding: 1rem;
     transition: all 0.2s;
@@ -21,13 +21,13 @@
     }
 
     &:not(:first-child) {
-      border-left: 1px solid var(--colorEmphasisLow);
+      border-left: 1px solid var(--color-emphasis-low);
     }
 
     &:hover,
     &.active {
       box-shadow: inset 0 2px 3px rgba(#000, 0.2);
-      background: var(--colorInteractionBackground);
+      background: var(--color-interaction-background);
     }
   }
 }

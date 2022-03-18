@@ -1,11 +1,11 @@
 $padding: 0.5rem;
-$transitionDuration: 0.1s;
+$transition-duration: 0.1s;
 
 .inputWrapper {
   position: relative;
   overflow: hidden;
   border-radius: 3px;
-  background-color: var(--colorInteractionBackground);
+  background-color: var(--color-interaction-background);
 
   // focus overlay
   &::after {
@@ -31,9 +31,9 @@ $transitionDuration: 0.1s;
     outline: 0;
     font-size: 1rem;
     padding: 2 * $padding $padding;
-    transition: transform $transitionDuration;
+    transition: transform $transition-duration;
     background: transparent;
-    color: var(--colorEmphasisHigh);
+    color: var(--color-emphasis-high);
   }
 
   .label,
@@ -46,19 +46,19 @@ $transitionDuration: 0.1s;
   .label {
     top: -0.2rem;
     left: $padding;
-    color: var(--colorEmphasisMedium);
+    color: var(--color-emphasis-medium);
     opacity: 0;
-    transition: opacity $transitionDuration, transform $transitionDuration;
+    transition: opacity $transition-duration, transform $transition-duration;
   }
 
   .error {
-    color: var(--colorDanger);
+    color: var(--color-danger);
     top: 0.3rem;
   }
 
   &.hasError,
   &.hasError.isFocused {
-    border-color: var(--colorDanger);
+    border-color: var(--color-danger);
   }
 
   &.hasContent {

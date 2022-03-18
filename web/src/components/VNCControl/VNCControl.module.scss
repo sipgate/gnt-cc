@@ -1,5 +1,5 @@
-$toggleButtonRadius: 24px;
-$containerPadding: 4px;
+$toggle-button-radius: 24px;
+$container-padding: 4px;
 
 .wrapper {
   position: relative;
@@ -10,11 +10,11 @@ $containerPadding: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: $toggleButtonRadius * 2;
-  height: $toggleButtonRadius * 2;
-  border-radius: $toggleButtonRadius;
-  background: var(--colorElevationHigh);
-  box-shadow: var(--dropShadowElevationHigh);
+  width: $toggle-button-radius * 2;
+  height: $toggle-button-radius * 2;
+  border-radius: $toggle-button-radius;
+  background: var(--color-elevation-high);
+  box-shadow: var(--drop-shadow);
   cursor: pointer;
   z-index: 1;
 }
@@ -24,8 +24,8 @@ $containerPadding: 4px;
   bottom: calc(100% + 16px);
   right: 0;
   border-radius: 4px;
-  background: var(--colorElevationHigh);
-  box-shadow: var(--dropShadowElevationHigh);
+  background: var(--color-elevation-high);
+  box-shadow: var(--drop-shadow);
 
   &::before {
     position: absolute;
@@ -34,7 +34,7 @@ $containerPadding: 4px;
     width: 16px;
     height: 16px;
     bottom: -8px;
-    right: $toggleButtonRadius - 8px;
+    right: $toggle-button-radius - 8px;
     transform: rotate(45deg);
   }
 
@@ -50,7 +50,7 @@ $containerPadding: 4px;
       padding: 1rem;
 
       &:hover {
-        background: var(--colorInteractionBackground);
+        background: var(--color-interaction-background);
       }
 
       .actionAside {

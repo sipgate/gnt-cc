@@ -1,12 +1,12 @@
-@import "../../styles/vars.scss";
+@import "../../styles/vars";
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 1rem;
-  background: var(--colorElevationMedium);
-  height: $navbarHeight;
+  background: var(--color-elevation-medium);
+  height: $navbar-height;
 
   .begin {
     display: flex;
@@ -32,11 +32,11 @@
       .item {
         display: block;
         font-weight: bold;
-        color: var(--colorEmphasisHigh);
+        color: var(--color-emphasis-high);
         padding: 1rem;
 
         &.active {
-          color: var(--colorPrimary);
+          color: var(--color-primary);
         }
       }
     }

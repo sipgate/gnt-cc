@@ -23,6 +23,6 @@ type (
 	}
 
 	searchService interface {
-		Search(query string) (*model.SearchResults, error)
+		Search(query string) (model.SearchResults, error)
 	}
 )

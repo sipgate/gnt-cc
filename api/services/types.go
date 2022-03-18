@@ -8,4 +8,10 @@ type (
 	nodeRepository interface {
 		GetAllNames(clusterName string) ([]string, error)
 	}
+
+	clusterSearchResults struct {
+		clusterName    string
+		nodesNames     []string
+		instancesNames []string
+	}
 )

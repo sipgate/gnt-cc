@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import React, { ReactElement, PropsWithChildren } from "react";
 import { NavLink } from "react-router-dom";
 import { useClusterName } from "../helpers/hooks";
@@ -11,12 +12,20 @@ interface Props {
 const PrefixNavLink = ({
   to,
   children,
-  ...rest
+  className,
+  activeClassName,
+  exact,
 }: PropsWithChildren<Props>): ReactElement => {
   const clusterName = useClusterName();
 
   return (
-    <NavLink {...rest} to={`/${clusterName}${to}`}>
+    <NavLink
+      className={({ isActive }) =>
+        isActive ? classNames(className, activeClassName) : className
+      }
+      to={`/${clusterName}${to}`}
+      end={exact}
+    >
       {children}
     </NavLink>
   );

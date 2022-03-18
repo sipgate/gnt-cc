@@ -3,7 +3,7 @@ import styles from "./ClusterSelector.module.scss";
 import Dropdown from "../Dropdown/Dropdown";
 import { faServer } from "@fortawesome/free-solid-svg-icons";
 import { GntCluster } from "../../api/models";
-import { useHistory } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import { useClusterName } from "../../helpers/hooks";
 
@@ -13,15 +13,16 @@ interface Props {
 
 const ClusterSelector = ({ clusters }: Props): ReactElement => {
   const clusterName = useClusterName();
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const selectCluster = (name: string): void => {
-    const { pathname } = history.location;
+    const { pathname } = location;
 
     const parts = pathname.split("/");
     const slug = parts[2] ? `/${parts[2]}` : "";
 
-    history.push(`/${name}${slug}`);
+    navigate(`/${name}${slug}`);
   };
 
   return (

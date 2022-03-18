@@ -1,6 +1,6 @@
 import { faTerminal } from "@fortawesome/free-solid-svg-icons";
 import React, { ChangeEvent, ReactElement, useMemo, useState } from "react";
-import { IDataTableColumn } from "react-data-table-component";
+import { TableColumn } from "react-data-table-component";
 import { GntInstance } from "../../api/models";
 import { prettyPrintMiB } from "../../helpers";
 import StatusBadge, { BadgeStatus } from "../StatusBadge/StatusBadge";
@@ -12,7 +12,7 @@ import Tag from "../Tag/Tag";
 import { filterInstances } from "./filters";
 import styles from "./InstanceList.module.scss";
 
-const columns: IDataTableColumn<GntInstance>[] = [
+const columns: TableColumn<GntInstance>[] = [
   {
     name: "Name",
     sortable: true,
@@ -31,6 +31,7 @@ const columns: IDataTableColumn<GntInstance>[] = [
     ),
   },
   {
+    id: "primary_node",
     name: "Primary Node",
     sortable: true,
     selector: (row) => row.primaryNode,
@@ -54,15 +55,17 @@ const columns: IDataTableColumn<GntInstance>[] = [
     ),
   },
   {
+    id: "vcpus",
     name: "vCPUs",
-    width: "60px",
+    width: "120px",
     selector: (row) => row.cpuCount,
     sortable: true,
     right: true,
   },
   {
+    id: "memory",
     name: "Memory",
-    width: "90px",
+    width: "120px",
     sortable: true,
     selector: (row) => row.memoryTotal,
     cell: (row) => prettyPrintMiB(row.memoryTotal),
@@ -88,10 +91,10 @@ interface Props {
 function InstanceList({ instances }: Props): ReactElement {
   const [filter, setFilter] = useState("");
 
-  const filteredInstances = useMemo(() => filterInstances(instances, filter), [
-    instances,
-    filter,
-  ]);
+  const filteredInstances = useMemo(
+    () => filterInstances(instances, filter),
+    [instances, filter]
+  );
 
   return (
     <div className={styles.instanceList}>
@@ -121,7 +124,7 @@ function InstanceList({ instances }: Props): ReactElement {
         columns={columns}
         data={filteredInstances}
         keyField="name"
-        defaultSortField="name"
+        defaultSortFieldId="name"
       />
     </div>
   );

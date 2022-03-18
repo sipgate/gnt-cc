@@ -1,14 +1,14 @@
-$transitionDuration: 0.15s;
+$transition-duration: 0.15s;
 $height: 26px;
 $width: 54px;
-$outerSpacing: 12px;
+$outer-spacing: 12px;
 $padding: 2px;
-$knobSize: $height - ($padding * 2);
+$knob-size: $height - ($padding * 2);
 
 .toggle {
   position: relative;
-  border: 1px solid var(--colorSeparator);
-  border-radius: $height / 2;
+  border: 1px solid var(--color-separator);
+  border-radius: calc($height / 2);
   height: $height;
   width: $width;
   cursor: pointer;
@@ -16,23 +16,23 @@ $knobSize: $height - ($padding * 2);
   justify-content: space-around;
   align-items: center;
   box-sizing: content-box;
-  background: var(--colorElevationLow);
+  background: var(--color-elevation-low);
 
   .knob {
     position: absolute;
-    width: $knobSize;
-    height: $knobSize;
-    border-radius: $knobSize / 2;
-    background: var(--colorEmphasisMedium);
+    width: $knob-size;
+    height: $knob-size;
+    border-radius: calc($knob-size / 2);
+    background: var(--color-emphasis-medium);
     left: $padding;
     top: $padding;
     bottom: $padding;
-    transition: transform $transitionDuration;
+    transition: transform $transition-duration;
   }
 
   &.isDark {
     .knob {
-      transform: translateX($width - $knobSize - (2 * $padding));
+      transform: translateX($width - $knob-size - (2 * $padding));
     }
   }
 }

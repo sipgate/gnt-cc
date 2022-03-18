@@ -1,10 +1,10 @@
-@import "../../styles/vars.scss";
+@import "../../styles/vars";
 
 .root {
   padding: 0.75rem 0;
-  height: $breadcrumbsHeight;
-  background: var(--colorPrimaryShade);
-  color: var(--colorElevationLow);
+  height: $breadcrumbs-height;
+  background: var(--color-primary-shade);
+  color: var(--color-elevation-low);
 
   .crumbs {
     display: inline-flex;

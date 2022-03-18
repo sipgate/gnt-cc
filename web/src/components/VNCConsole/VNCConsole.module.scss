@@ -1,9 +1,9 @@
-@import "../../styles/vars.scss";
+@import "../../styles/vars";
 
 .vncConsole {
   position: relative;
   width: 100%;
-  height: calc(100vh - #{$navbarHeight} - #{$breadcrumbsHeight});
+  height: calc(100vh - #{$navbar-height} - #{$breadcrumbs-height});
 
   .control {
     position: absolute;
@@ -29,7 +29,7 @@
     left: 0;
     right: 0;
     margin: auto;
-    background: var(--colorDanger);
+    background: var(--color-danger);
     color: #fff;
     text-align: center;
     display: inline-block;

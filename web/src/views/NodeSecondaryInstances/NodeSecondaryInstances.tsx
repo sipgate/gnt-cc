@@ -1,17 +1,15 @@
 import React, { ReactElement } from "react";
+import { useOutletContext } from "react-router-dom";
 import { GntInstance } from "../../api/models";
 import InstanceList from "../../components/InstanceList/InstanceList";
 
-type Props = {
-  instances: GntInstance[];
-};
+export default function NodeSecondaryInstances(): ReactElement {
+  const { secondaryInstances } =
+    useOutletContext<{ secondaryInstances: GntInstance[] }>();
 
-export default function NodeSecondaryInstances({
-  instances,
-}: Props): ReactElement {
   return (
     <div>
-      <InstanceList instances={instances} />
+      <InstanceList instances={secondaryInstances} />
     </div>
   );
 }

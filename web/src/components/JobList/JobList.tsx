@@ -1,6 +1,6 @@
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import React, { ReactElement, useContext, useMemo } from "react";
-import { IDataTableColumn } from "react-data-table-component";
+import { TableColumn } from "react-data-table-component";
 import { GntJob } from "../../api/models";
 import JobWatchContext from "../../contexts/JobWatchContext";
 import { useClusterName } from "../../helpers/hooks";
@@ -21,9 +21,10 @@ function JobList({ jobs }: Props): ReactElement {
   const clusterName = useClusterName();
   const { trackJob } = useContext(JobWatchContext);
 
-  const columns: IDataTableColumn<GntJob>[] = useMemo(
+  const columns: TableColumn<GntJob>[] = useMemo(
     () => [
       {
+        id: "id",
         name: "ID",
         sortable: true,
         selector: (row) => row.id,
@@ -31,6 +32,7 @@ function JobList({ jobs }: Props): ReactElement {
         width: "120px",
       },
       {
+        id: "status",
         name: "Status",
         sortable: true,
         selector: (row) => row.status,
@@ -38,6 +40,7 @@ function JobList({ jobs }: Props): ReactElement {
         cell: (row) => <JobStatus status={row.status} />,
       },
       {
+        id: "summary",
         name: "Summary",
         sortable: true,
         selector: (row) => row.summary,
@@ -48,6 +51,7 @@ function JobList({ jobs }: Props): ReactElement {
         ),
       },
       {
+        id: "start",
         name: "Start",
         sortable: true,
         selector: (row) => row.startedAt,
@@ -89,7 +93,7 @@ function JobList({ jobs }: Props): ReactElement {
         data={jobs}
         keyField="id"
         defaultSortAsc={false}
-        defaultSortField="id"
+        defaultSortFieldId="id"
       />
     </div>
   );

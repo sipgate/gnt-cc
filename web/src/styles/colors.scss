@@ -1,39 +1,37 @@
-@mixin whenLight {
+@mixin when-light {
   html.light & {
     @content;
   }
 }
 
 body {
-  --colorEmphasisHigh: #f5f5f5;
-  --colorEmphasisMedium: #a4aa9d;
-  --colorEmphasisLow: #505050;
-  --colorSeparator: #464646;
-  --colorInteractionBackground: #303030;
-  --colorElevationLow: #262626;
-  --colorElevationMedium: #303030;
-  --colorElevationHigh: #3b3b3b;
-  --dropShadowElevationLow: 0 0.125rem 0.25rem 0 #111;
-  --dropShadowElevationHigh: 0 0.25rem 1rem #000;
-  --overlay: rgba(255, 255, 255, 0.1);
-  --colorPrimaryShade: #7cb0dc;
-  --colorPrimary: #67a0d5;
-  --colorWarning: #febc2c;
-  --colorSuccess: #5cb85c;
-  --colorDanger: #f84c48;
+  --color-emphasis-high: #f5f5f5;
+  --color-emphasis-medium: #a4aa9d;
+  --color-emphasis-low: #505050;
+  --color-separator: #464646;
+  --color-interaction-background: #303030;
+  --color-elevation-low: #262626;
+  --color-elevation-medium: #303030;
+  --color-elevation-high: #3b3b3b;
+  --drop-shadow: 0 0.25rem 1rem #000;
+  --overlay: rgb(255 255 255 / 10%);
+  --color-primary-shade: #7cb0dc;
+  --color-primary: #67a0d5;
+  --color-warning: #febc2c;
+  --color-success: #5cb85c;
+  --color-danger: #f84c48;
 
-  @include whenLight {
-    --colorEmphasisHigh: #000;
-    --colorEmphasisMedium: #333;
-    --colorEmphasisLow: #505050;
-    --colorSeparator: #e3e3e3;
-    --colorInteractionBackground: rgb(235, 235, 235);
-    --colorElevationLow: #fff;
-    --colorElevationMedium: #fff;
-    --colorElevationHigh: #fff;
-    --colorPrimaryShade: #4672af;
-    --dropShadowElevationLow: 0 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.3);
-    --dropShadowElevationHigh: 0 0.25rem 1rem rgba(0, 0, 0, 0.5);
-    --overlay: rgba(0, 0, 0, 0.05);
+  @include when-light {
+    --color-emphasis-high: #000;
+    --color-emphasis-medium: #333;
+    --color-emphasis-low: #505050;
+    --color-separator: #e3e3e3;
+    --color-interaction-background: rgb(235 235 235);
+    --color-elevation-low: #fff;
+    --color-elevation-medium: #fff;
+    --color-elevation-high: #fff;
+    --color-primary-shade: #4672af;
+    --drop-shadow: 0 0.25rem 1rem rgb(0 0 0 / 50%);
+    --overlay: rgb(0 0 0 / 5%);
   }
 }

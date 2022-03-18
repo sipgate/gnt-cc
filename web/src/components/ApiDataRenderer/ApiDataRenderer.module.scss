@@ -18,11 +18,11 @@
     .robot {
       width: 6rem;
       height: 6rem;
-      color: var(--colorPrimary);
+      color: var(--color-primary);
     }
 
     .bolt {
-      color: var(--colorDanger);
+      color: var(--color-danger);
       position: absolute;
       bottom: 0.25rem;
       right: -0.75rem;
@@ -32,6 +32,6 @@
   }
 
   h1 {
-    color: var(--colorEmphasisMedium);
+    color: var(--color-emphasis-medium);
   }
 }

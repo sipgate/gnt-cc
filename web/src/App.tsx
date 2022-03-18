@@ -1,22 +1,40 @@
 import React, { ReactElement, useContext } from "react";
 import {
   BrowserRouter as Router,
-  Redirect,
+  Navigate,
+  Outlet,
   Route,
-  RouteProps,
-  Switch,
+  Routes,
 } from "react-router-dom";
 import AuthContext from "./contexts/AuthContext";
 import AuthProvider from "./providers/AuthProvider";
 import JobWatchProvider from "./providers/JobWatchProvider";
 import ThemeProvider from "./providers/ThemeProvider";
 import ClusterWrapper from "./views/ClusterWrapper";
+import Dashboard from "./views/Dashboard/Dashboard";
+import InstanceConsole from "./views/InstanceConsole/InstanceConsole";
+import InstanceDetail from "./views/InstanceDetail/InstanceDetail";
+import Instances from "./views/Instances/Instances";
+import JobDetail from "./views/JobDetail/JobDetail";
+import Jobs from "./views/Jobs/Jobs";
 import Login from "./views/Login/Login";
+import NodeDetail from "./views/NodeDetail/NodeDetail";
+import NodeList from "./views/NodeList/NodeList";
+import NodePrimaryInstances from "./views/NodePrimaryInstances/NodePrimaryInstances";
+import NodeSecondaryInstances from "./views/NodeSecondaryInstances/NodeSecondaryInstances";
 
-export function AuthenticatedRoute(props: RouteProps): ReactElement {
+function AuthenticatedWrapper() {
   const authContext = useContext(AuthContext);
+  const isAuthenticated = !!authContext.username;
 
-  return authContext.username ? <Route {...props} /> : <Redirect to="/login" />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+}
+
+function UnauthenticatedWrapper() {
+  const authContext = useContext(AuthContext);
+  const isAuthenticated = !!authContext.username;
+
+  return isAuthenticated ? <Navigate to="/" /> : <Outlet />;
 }
 
 function App(): ReactElement {
@@ -26,16 +44,48 @@ function App(): ReactElement {
         <AuthProvider>
           <JobWatchProvider>
             <Router>
-              <Switch>
-                <Route exact path="/login" component={Login} />
+              <Routes>
+                <Route element={<UnauthenticatedWrapper />}>
+                  <Route path="/login" element={<Login />} />
+                </Route>
 
-                <AuthenticatedRoute
-                  path="/:clusterName?"
-                  component={ClusterWrapper}
-                />
+                <Route element={<AuthenticatedWrapper />}>
+                  <Route path="/" element={<ClusterWrapper />} />
+                  <Route path="/:clusterName" element={<ClusterWrapper />}>
+                    <Route index element={<Dashboard />} />
+                    <Route
+                      path="instances/:instanceName/console"
+                      element={<InstanceConsole />}
+                    />
+                    <Route
+                      path="instances/:instanceName"
+                      element={<InstanceDetail />}
+                    />
+                    <Route path="instances" element={<Instances />} />
+                    <Route path="nodes/:nodeName/*" element={<NodeDetail />}>
+                      <Route
+                        index
+                        element={<Navigate to={`primary-instances`} />}
+                      />
 
-                <Route render={() => <span>404 Not found</span>}></Route>
-              </Switch>
+                      <Route
+                        path="primary-instances"
+                        element={<NodePrimaryInstances />}
+                      />
+
+                      <Route
+                        path="secondary-instances"
+                        element={<NodeSecondaryInstances />}
+                      />
+                    </Route>
+                    <Route path="nodes" element={<NodeList />} />
+                    <Route path="jobs/:jobID" element={<JobDetail />} />
+                    <Route path="jobs" element={<Jobs />} />
+                  </Route>
+                </Route>
+
+                <Route path="*" element={<span>404 Not found</span>} />
+              </Routes>
             </Router>
           </JobWatchProvider>
         </AuthProvider>

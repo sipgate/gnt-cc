@@ -51,6 +51,7 @@ export default function AuthProvider({
     <AuthContext.Provider
       value={{
         username,
+        setUsername,
       }}
     >
       {children}

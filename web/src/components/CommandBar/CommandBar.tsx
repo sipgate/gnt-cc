@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { buildApiUrl } from "../../api";
-import Input from "../Input/Input";
 import styles from "./CommandBar.module.scss";
 
 type Instance = {

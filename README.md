@@ -9,6 +9,26 @@ gnt-cc is a web-based frontend for [Ganeti](https://github.com/ganeti/ganeti/) c
 
 ![gnt-cc-screenshot-light](https://user-images.githubusercontent.com/22923578/123422533-a691af00-d5be-11eb-909a-a884b7e0c6bc.png)
 
+# Features
+
+This is an incomplete list of available/upcoming features.
+
+- [x] Builtin and LDAP based authentication
+- [x] Multiple Ganeti clusters
+- [x] Overview dashboard per cluster
+- [x] List nodes, instances, jobs
+- [x] Instance details
+- [x] Track job status in frontend
+- [x] Start/stop/restart/migrate/failover instances
+- [x] VNC web console
+- [ ] Search resources (nodes, instances) across all clusters
+- [ ] Spice web console
+- [ ] Create instances
+- [ ] Configure instances
+- [ ] Cluster details
+- [ ] Configure clusters
+- [ ] Node details
+
 # Development
 
 For build/test/development information, please check the relevant READMEs for [frontend](web/README.md) and [backend](api/README.md).

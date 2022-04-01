@@ -83,6 +83,7 @@ function useSearchResults(): [
 
 export default function (): ReactElement | null {
   const [isVisible, setIsVisible] = useState(false);
+  const [selectionIndex, setSelectionIndex] = useState(0);
 
   const [{ query, results, isLoading }, setQuery] = useSearchResults();
 
@@ -104,58 +105,96 @@ export default function (): ReactElement | null {
         setIsVisible(!isVisible);
       }
 
+      if (!isVisible) {
+        return;
+      }
+
       if (event.key === "Escape") {
-        if (isVisible) {
-          event.stopPropagation();
-          setIsVisible(false);
-        }
+        event.stopPropagation();
+        setIsVisible(false);
+      }
+
+      const { clusters, instances, nodes } = results;
+      const totalResults = clusters.length + instances.length + nodes.length;
+
+      if (totalResults === 0) {
+        return;
+      }
+
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setSelectionIndex((selectionIndex) => {
+          const index = selectionIndex + 1;
+          return index === totalResults ? 0 : index;
+        });
+      }
+
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setSelectionIndex((selectionIndex) => {
+          const index = selectionIndex - 1;
+          return index === -1 ? totalResults - 1 : index;
+        });
+      }
+
+      if (event.key === "Enter") {
+        document.querySelector<HTMLElement>('[data-selected="true"]')?.click();
       }
     }
 
+    setSelectionIndex(0);
+
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isVisible]);
+  }, [isVisible, results]);
 
   if (!isVisible) {
     return null;
   }
+
+  const { clusters, instances, nodes } = results;
 
   return (
     <div className={styles.root} onClick={(e) => e.stopPropagation()}>
       <SearchInput value={query} isLoading={isLoading} onChange={setQuery} />
 
       <div className={styles.resultsWrapper}>
-        {results.clusters.length > 0 && (
-          <SearchResults headline="Clusters">
-            {results.clusters.map((result) => (
-              <SearchResult
-                key={result.name}
-                name={result.name}
-                url={`/${result.name}`}
-                onClick={() => setIsVisible(false)}
-              />
-            ))}
-          </SearchResults>
-        )}
-        {results.instances.length > 0 && (
+        {instances.length > 0 && (
           <SearchResults headline="Instances">
-            {results.instances.map((result) => (
+            {instances.map((result, i) => (
               <SearchResult
                 key={result.name}
                 name={result.name}
                 url={`/${result.clusterName}/instances/${result.name}`}
+                selected={i === selectionIndex}
                 onClick={() => setIsVisible(false)}
               />
             ))}
           </SearchResults>
         )}
-        {results.nodes.length > 0 && (
+        {clusters.length > 0 && (
+          <SearchResults headline="Clusters">
+            {clusters.map((result, i) => (
+              <SearchResult
+                key={result.name}
+                name={result.name}
+                url={`/${result.name}`}
+                selected={i + instances.length === selectionIndex}
+                onClick={() => setIsVisible(false)}
+              />
+            ))}
+          </SearchResults>
+        )}
+        {nodes.length > 0 && (
           <SearchResults headline="Nodes">
-            {results.nodes.map((result) => (
+            {nodes.map((result, i) => (
               <SearchResult
                 key={result.name}
                 name={result.name}
                 url={`/${result.clusterName}/nodes/${result.name}`}
+                selected={
+                  i + instances.length + clusters.length === selectionIndex
+                }
                 onClick={() => setIsVisible(false)}
               />
             ))}

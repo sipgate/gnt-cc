@@ -1,11 +1,12 @@
 .searchResult {
   display: block;
   padding: 1rem 2rem;
+  outline: 0;
   
   &:hover,
-  &:focus {
-    outline: 0;
-    text-decoration: none;
+  &:focus,
+  &.selected {
     background: var(--color-interaction-background);
+    text-decoration: none;
   }
 }

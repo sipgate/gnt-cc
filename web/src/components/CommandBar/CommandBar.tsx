@@ -208,5 +208,5 @@ export default function (): ReactElement | null {
 export function isModKey(
   event: KeyboardEvent | MouseEvent | React.KeyboardEvent
 ) {
-  return event.ctrlKey;
+  return event.metaKey || event.ctrlKey;
 }

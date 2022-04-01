@@ -82,17 +82,17 @@ type GntJob struct {
 	Log         *[]GntJobLogEntry `json:"log"`
 }
 
-type ResourceSearchResult struct {
+type ClusterResource struct {
 	ClusterName string `json:"clusterName"`
 	Name        string `json:"name"`
 }
 
-type ClusterSearchResult struct {
+type Resource struct {
 	Name string `json:"name"`
 }
 
 type SearchResults struct {
-	Nodes     []ResourceSearchResult `json:"nodes"`
-	Instances []ResourceSearchResult `json:"instances"`
-	Clusters  []ClusterSearchResult  `json:"clusters"`
+	Nodes     []ClusterResource `json:"nodes"`
+	Instances []ClusterResource `json:"instances"`
+	Clusters  []Resource        `json:"clusters"`
 }

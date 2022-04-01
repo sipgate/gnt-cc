@@ -29,12 +29,7 @@ func (controller *SearchController) Search(c *gin.Context) {
 		return
 	}
 
-	results, err := controller.SearchService.Search(query)
-
-	if err != nil {
-		abortWithInternalServerError(c, err)
-		return
-	}
+	results := controller.SearchService.Search(query)
 
 	c.JSON(200, results)
 }

@@ -1,5 +1,7 @@
 package services
 
+import "gnt-cc/model"
+
 type (
 	instanceRepository interface {
 		GetAllNames(clusterName string) ([]string, error)
@@ -9,9 +11,13 @@ type (
 		GetAllNames(clusterName string) ([]string, error)
 	}
 
-	clusterSearchResults struct {
-		clusterName    string
-		nodesNames     []string
-		instancesNames []string
+	CollectResults struct {
+		Instances []model.ClusterResource
+		Nodes     []model.ClusterResource
+		Clusters  []model.Resource
+	}
+
+	resourcesService interface {
+		CollectAll() CollectResults
 	}
 )

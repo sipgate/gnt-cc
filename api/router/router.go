@@ -54,7 +54,8 @@ func New(engine *gin.Engine) *router {
 	groupRepository := repository.GroupRepository{RAPIClient: rapiClient}
 	nodeRepository := repository.NodeRepository{RAPIClient: rapiClient, GroupRepository: groupRepository}
 	jobRepository := repository.JobRepository{RAPIClient: rapiClient}
-	searchService := services.SearchService{InstanceRepository: &instanceRepository, NodeRepository: &nodeRepository}
+	resourcesService := services.ResourcesService{InstanceRepository: &instanceRepository, NodeRepository: &nodeRepository}
+	searchService := services.SearchService{ResourcesService: &resourcesService}
 
 	r := router{
 		engine: engine,

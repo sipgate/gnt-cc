@@ -2,8 +2,8 @@ package services
 
 import (
 	"fmt"
-	"gnt-cc/config"
 	"gnt-cc/model"
+	"sort"
 	"sync"
 	"time"
 
@@ -11,6 +11,7 @@ import (
 )
 
 type ResourcesService struct {
+	ClusterRepository  clusterRepository
 	InstanceRepository instanceRepository
 	NodeRepository     nodeRepository
 }
@@ -22,7 +23,7 @@ type clusterResources struct {
 }
 
 func (s *ResourcesService) CollectAll() CollectResults {
-	c := config.Get()
+	clusterNames := s.ClusterRepository.GetAllNames()
 	channel := make(chan clusterResources)
 	var wg sync.WaitGroup
 
@@ -32,12 +33,12 @@ func (s *ResourcesService) CollectAll() CollectResults {
 		Clusters:  []model.Resource{},
 	}
 
-	for _, cluster := range c.Clusters {
+	for _, cluster := range clusterNames {
 		wg.Add(1)
-		go s.asyncCollectFromCluster(cluster.Name, channel, &wg)
+		go s.asyncCollectFromCluster(cluster, channel, &wg)
 
 		results.Clusters = append(results.Clusters, model.Resource{
-			Name: cluster.Name,
+			Name: cluster,
 		})
 	}
 
@@ -62,7 +63,19 @@ func (s *ResourcesService) CollectAll() CollectResults {
 		}
 	}
 
+	sortResourcesAlphabeticallyInPlace(results.Instances)
+	sortResourcesAlphabeticallyInPlace(results.Nodes)
+
 	return results
+}
+
+func sortResourcesAlphabeticallyInPlace(resources []model.ClusterResource) {
+	sort.Slice(resources, func(i int, j int) bool {
+		if resources[i].Name == resources[j].Name {
+			return resources[i].ClusterName < resources[j].ClusterName
+		}
+		return resources[i].Name < resources[j].Name
+	})
 }
 
 func (s *ResourcesService) asyncCollectFromCluster(clusterName string, c chan clusterResources, wg *sync.WaitGroup) {
@@ -93,8 +106,9 @@ func (s *ResourcesService) collectFromCluster(clusterName string) (clusterResour
 	log.Debugf("collected resources from cluster %s: Instances %s, Nodes: %s", clusterName, durationInstances, durationNodes)
 
 	return clusterResources{
-		instances: instances,
-		nodes:     nodes,
+		instances:   instances,
+		nodes:       nodes,
+		clusterName: clusterName,
 	}, nil
 
 }

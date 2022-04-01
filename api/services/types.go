@@ -3,6 +3,10 @@ package services
 import "gnt-cc/model"
 
 type (
+	clusterRepository interface {
+		GetAllNames() []string
+	}
+
 	instanceRepository interface {
 		GetAllNames(clusterName string) ([]string, error)
 	}

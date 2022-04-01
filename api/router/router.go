@@ -49,12 +49,13 @@ func New(engine *gin.Engine) *router {
 		panic(err)
 	}
 
+	clusterRepository := repository.ClusterRepository{}
 	instanceRepository := repository.InstanceRepository{RAPIClient: rapiClient, QueryPerformer: &query.Performer{}}
 	instanceActions := actions.InstanceActions{RAPIClient: rapiClient}
 	groupRepository := repository.GroupRepository{RAPIClient: rapiClient}
 	nodeRepository := repository.NodeRepository{RAPIClient: rapiClient, GroupRepository: groupRepository}
 	jobRepository := repository.JobRepository{RAPIClient: rapiClient}
-	resourcesService := services.ResourcesService{InstanceRepository: &instanceRepository, NodeRepository: &nodeRepository}
+	resourcesService := services.ResourcesService{ClusterRepository: &clusterRepository, InstanceRepository: &instanceRepository, NodeRepository: &nodeRepository}
 	searchService := services.SearchService{ResourcesService: &resourcesService}
 
 	r := router{

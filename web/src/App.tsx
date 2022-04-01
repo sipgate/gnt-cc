@@ -6,7 +6,6 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import CommandBar from "./components/CommandBar/CommandBar";
 import AuthContext from "./contexts/AuthContext";
 import AuthProvider from "./providers/AuthProvider";
 import JobWatchProvider from "./providers/JobWatchProvider";

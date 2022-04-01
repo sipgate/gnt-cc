@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { ReactElement, useEffect, useRef } from "react";
+import React, { ReactElement } from "react";
 import { Link } from "react-router-dom";
 import styles from "./SearchResult.module.scss";
 
@@ -16,13 +16,6 @@ export default function SearchResult({
   selected,
   onClick,
 }: Props): ReactElement {
-  // const ref = useRef<HTMLAnchorElement>(null);
-  // useEffect(() => {
-  //   if (ref.current !== null && selected) {
-  //     ref.current.focus();
-  //   }
-  // }, [ref.current, selected]);
-
   return (
     <Link
       to={url}

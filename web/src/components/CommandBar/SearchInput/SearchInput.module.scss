@@ -1,0 +1,16 @@
+.searchInput {
+  color: var(--color-emphasis-high);
+  display: flex;
+  padding: 0 2rem;
+  
+  > input {
+    display: block;
+    background: transparent;
+    color: inherit;
+    border: 0;
+    outline: 0;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+}

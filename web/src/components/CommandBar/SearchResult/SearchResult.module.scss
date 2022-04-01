@@ -1,0 +1,11 @@
+.searchResult {
+  display: block;
+  padding: 1rem 2rem;
+  
+  &:hover,
+  &:focus {
+    outline: 0;
+    text-decoration: none;
+    background: var(--color-interaction-background);
+  }
+}

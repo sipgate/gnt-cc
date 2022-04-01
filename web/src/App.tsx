@@ -44,7 +44,6 @@ function App(): ReactElement {
       <ThemeProvider>
         <AuthProvider>
           <JobWatchProvider>
-            <CommandBar />
             <Router>
               <Routes>
                 <Route element={<UnauthenticatedWrapper />}>

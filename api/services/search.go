@@ -2,12 +2,14 @@ package services
 
 import (
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"gnt-cc/config"
 	"gnt-cc/model"
+	"sort"
 	"strings"
 	"sync"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type SearchService struct {
@@ -15,11 +17,16 @@ type SearchService struct {
 	NodeRepository     nodeRepository
 }
 
-//TODO: Add tests
+const RESULTS_LIMIT = 5
+
 func (service *SearchService) Search(query string) (model.SearchResults, error) {
 	c := config.Get()
 
-	var results model.SearchResults
+	results := model.SearchResults{
+		Nodes:     []model.ResourceSearchResult{},
+		Instances: []model.ResourceSearchResult{},
+		Clusters:  []model.ClusterSearchResult{},
+	}
 
 	channel := make(chan clusterSearchResults)
 	var waitGroup sync.WaitGroup
@@ -56,7 +63,14 @@ func (service *SearchService) Search(query string) (model.SearchResults, error) 
 		}
 	}
 
-	return results, nil
+	sortResourcesAlphabeticallyInPlace(results.Instances)
+	sortResourcesAlphabeticallyInPlace(results.Nodes)
+
+	return model.SearchResults{
+		Nodes:     results.Nodes[0:min(len(results.Nodes), RESULTS_LIMIT)],
+		Instances: results.Instances[0:min(len(results.Instances), RESULTS_LIMIT)],
+		Clusters:  results.Clusters[0:min(len(results.Clusters), RESULTS_LIMIT)],
+	}, nil
 }
 
 func (service *SearchService) asyncSearchInCluster(query string, clusterName string, channel chan clusterSearchResults, waitGroup *sync.WaitGroup) {
@@ -96,6 +110,12 @@ func (service *SearchService) searchInCluster(query string, clusterName string) 
 	return results, nil
 }
 
+func sortResourcesAlphabeticallyInPlace(resources []model.ResourceSearchResult) {
+	sort.Slice(resources, func(i int, j int) bool {
+		return resources[i].Name < resources[j].Name
+	})
+}
+
 func filterSearchResults(filter string, list []string) []string {
 	var filteredList []string
 	for _, str := range list {
@@ -103,6 +123,7 @@ func filterSearchResults(filter string, list []string) []string {
 			filteredList = append(filteredList, str)
 		}
 	}
+
 	return filteredList
 }
 
@@ -111,4 +132,11 @@ func stringContainsIgnoreCase(a string, b string) bool {
 		strings.ToLower(a),
 		strings.ToLower(b),
 	)
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }

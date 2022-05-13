@@ -1,0 +1,14 @@
+[
+  {
+    "id": "homer",
+    "uri": "/2/nodes/homer"
+  },
+  {
+    "id": "marge",
+    "uri": "/2/nodes/marge"
+  },
+  {
+    "id": "bart",
+    "uri": "/2/nodes/bart"
+  }
+]

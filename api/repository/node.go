@@ -3,10 +3,11 @@ package repository
 import (
 	"encoding/json"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"gnt-cc/model"
 	"gnt-cc/rapi_client"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type NodeRepository struct {
@@ -116,7 +117,6 @@ func (repo *NodeRepository) GetAll(clusterName string) ([]model.GntNode, error) 
 	return nodes, nil
 }
 
-//TODO: Add Tests
 func (repo *NodeRepository) GetAllNames(clusterName string) ([]string, error) {
 	response, err := repo.RAPIClient.Get(clusterName, "/2/nodes")
 

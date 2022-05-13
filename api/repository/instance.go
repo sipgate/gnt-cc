@@ -79,7 +79,6 @@ func (repo *InstanceRepository) GetAll(clusterName string) ([]model.GntInstance,
 	return parseInstanceResourceArray(resources)
 }
 
-//TODO: Add Tests
 func (repo *InstanceRepository) GetAllNames(clusterName string) ([]string, error) {
 	response, err := repo.RAPIClient.Get(clusterName, "/2/instances")
 

@@ -128,10 +128,10 @@ func TestNodeRepoGetAllFuncReturnsNodes(t *testing.T) {
 }
 
 func TestNodeRepoGetAllNamesFuncReturnsNodes(t *testing.T) {
-	validNodeNamessResponse, _ := ioutil.ReadFile("../testfiles/rapi_responses/valid_node_names_response.json")
+	validNodeNamesResponse, _ := ioutil.ReadFile("../testfiles/rapi_responses/valid_names_response.json")
 	client := mocking.NewRAPIClient()
 	client.On("Get", mock.Anything, "/2/nodes").
-		Once().Return(rapi_client.Response{Status: 200, Body: string(validNodeNamessResponse)}, nil)
+		Once().Return(rapi_client.Response{Status: 200, Body: string(validNodeNamesResponse)}, nil)
 	groupRepo := repository.GroupRepository{RAPIClient: client}
 	repo := repository.NodeRepository{RAPIClient: client, GroupRepository: groupRepo}
 	nodes, err := repo.GetAllNames("test")

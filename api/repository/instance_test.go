@@ -2,8 +2,6 @@ package repository_test
 
 import (
 	"errors"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"gnt-cc/mocking"
 	"gnt-cc/model"
 	"gnt-cc/query"
@@ -11,6 +9,9 @@ import (
 	"gnt-cc/repository"
 	"io/ioutil"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestInstanceRepoGetAllFuncReturnsError_WhenRAPIClientReturnsError(t *testing.T) {
@@ -19,6 +20,16 @@ func TestInstanceRepoGetAllFuncReturnsError_WhenRAPIClientReturnsError(t *testin
 		Once().Return([]query.Resource{}, errors.New("expected error"))
 	repo := repository.InstanceRepository{QueryPerformer: queryPerformer}
 	_, err := repo.GetAll("test")
+
+	assert.EqualError(t, err, "expected error")
+}
+
+func TestInstanceRepoGetAllNamesFuncReturnsError_WhenRAPIClientReturnsError(t *testing.T) {
+	client := mocking.NewRAPIClient()
+	client.On("Get", mock.Anything, mock.Anything).
+		Once().Return(rapi_client.Response{}, errors.New("expected error"))
+	repo := repository.InstanceRepository{RAPIClient: client}
+	_, err := repo.GetAllNames("test")
 
 	assert.EqualError(t, err, "expected error")
 }
@@ -50,6 +61,16 @@ func TestInstanceRepoGetAllFuncReturnsError_OnInvalidResourceReturned(t *testing
 		Once().Return([]query.Resource{{"Name": func() {}}}, nil)
 	repo := repository.InstanceRepository{QueryPerformer: queryPerformer}
 	_, err := repo.GetAll("test")
+
+	assert.Error(t, err)
+}
+
+func TestInstanceRepoGetAllNamesFuncReturnsError_OnInvalidResourceReturned(t *testing.T) {
+	client := mocking.NewRAPIClient()
+	client.On("Get", mock.Anything, mock.Anything).
+		Once().Return(rapi_client.Response{Status: 200, Body: "{"}, nil)
+	repo := repository.InstanceRepository{RAPIClient: client}
+	_, err := repo.GetAllNames("test")
 
 	assert.Error(t, err)
 }
@@ -147,4 +168,20 @@ func TestInstanceRepoGetAllFuncCorrectlyReturnsInstances_WhenAValidRAPIResponseW
 			IsRunning:      true,
 		},
 	}, allInstances)
+}
+
+func TestInstanceRepoGetAllNamesFuncReturnsInstances(t *testing.T) {
+	validNodeNamesResponse, _ := ioutil.ReadFile("../testfiles/rapi_responses/valid_names_response.json")
+	client := mocking.NewRAPIClient()
+	client.On("Get", mock.Anything, "/2/instances").
+		Once().Return(rapi_client.Response{Status: 200, Body: string(validNodeNamesResponse)}, nil)
+	repo := repository.InstanceRepository{RAPIClient: client}
+	instances, err := repo.GetAllNames("test")
+
+	assert.NoError(t, err)
+	assert.EqualValues(t, []string{
+		"homer",
+		"marge",
+		"bart",
+	}, instances)
 }

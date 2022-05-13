@@ -79,6 +79,28 @@ func (repo *InstanceRepository) GetAll(clusterName string) ([]model.GntInstance,
 	return parseInstanceResourceArray(resources)
 }
 
+func (repo *InstanceRepository) GetAllNames(clusterName string) ([]string, error) {
+	response, err := repo.RAPIClient.Get(clusterName, "/2/instances")
+
+	if err != nil {
+		return nil, err
+	}
+
+	var instanceList rapiInstanceNamesResponse
+	err = json.Unmarshal([]byte(response.Body), &instanceList)
+
+	if err != nil {
+		return nil, err
+	}
+
+	instanceNames := make([]string, len(instanceList))
+	for i, instance := range instanceList {
+		instanceNames[i] = instance.ID
+	}
+
+	return instanceNames, nil
+}
+
 func parseInstanceResourceArray(resources []query.Resource) ([]model.GntInstance, error) {
 	instances := make([]model.GntInstance, len(resources))
 

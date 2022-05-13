@@ -21,4 +21,8 @@ type (
 	instanceActions interface {
 		PerformSimpleInstanceAction(clusterName string, instanceName string, rapiAction string) (int, error)
 	}
+
+	searchService interface {
+		Search(query string) model.SearchResults
+	}
 )

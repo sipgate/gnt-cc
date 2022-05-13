@@ -24,3 +24,8 @@ func (mock *instanceRepository) GetAll(clusterName string) ([]model.GntInstance,
 
 	return args.Get(0).([]model.GntInstance), args.Error(1)
 }
+
+func (mock *instanceRepository) GetAllNames(clusterName string) ([]string, error) {
+	args := mock.Called(clusterName)
+	return args.Get(0).([]string), args.Error(1)
+}

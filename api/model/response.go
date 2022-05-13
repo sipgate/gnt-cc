@@ -60,3 +60,5 @@ type StatisticsResponse struct {
 	Nodes     StatisticsElement `json:"nodes"`
 	Master    string            `json:"master"`
 }
+
+type SearchResultsResponse SearchResults

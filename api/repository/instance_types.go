@@ -147,3 +147,7 @@ type rapiInstanceResponse struct {
 	HvParams         hvParams      `json:"hvparams"`
 	CustomHvParams   hvParams      `json:"custom_hvparams"`
 }
+
+type rapiInstanceNamesResponse []struct {
+	ID string `json:"id"`
+}

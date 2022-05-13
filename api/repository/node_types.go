@@ -42,3 +42,7 @@ type rapiNodeResponse struct {
 		OobProgram       string `json:"oob_program"`
 	} `json:"ndparams"`
 }
+
+type rapiNodeNamesResponse []struct {
+	ID string `json:"id"`
+}

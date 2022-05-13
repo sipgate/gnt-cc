@@ -2,14 +2,15 @@ package repository_test
 
 import (
 	"errors"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"gnt-cc/mocking"
 	"gnt-cc/model"
 	"gnt-cc/rapi_client"
 	"gnt-cc/repository"
 	"io/ioutil"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestNodeRepoGetAllFuncReturnsError_WhenRAPIClientReturnsError(t *testing.T) {
@@ -18,6 +19,16 @@ func TestNodeRepoGetAllFuncReturnsError_WhenRAPIClientReturnsError(t *testing.T)
 		Once().Return(rapi_client.Response{}, errors.New("expected error"))
 	repo := repository.NodeRepository{RAPIClient: client}
 	_, err := repo.GetAll("test")
+
+	assert.EqualError(t, err, "expected error")
+}
+
+func TestNodeRepoGetAllNamesFuncReturnsError_WhenRAPIClientReturnsError(t *testing.T) {
+	client := mocking.NewRAPIClient()
+	client.On("Get", mock.Anything, mock.Anything).
+		Once().Return(rapi_client.Response{}, errors.New("expected error"))
+	repo := repository.NodeRepository{RAPIClient: client}
+	_, err := repo.GetAllNames("test")
 
 	assert.EqualError(t, err, "expected error")
 }
@@ -63,6 +74,16 @@ func TestNodeRepoGetAllFuncReturnsError_WhenJSONResponseIsInvalid(t *testing.T) 
 	assert.NotNil(t, err)
 }
 
+func TestNodeRepoGetAllNamesFuncReturnsError_WhenJSONResponseIsInvalid(t *testing.T) {
+	client := mocking.NewRAPIClient()
+	client.On("Get", mock.Anything, mock.Anything).
+		Once().Return(rapi_client.Response{Status: 200, Body: "{"}, nil)
+	repo := repository.NodeRepository{RAPIClient: client}
+	_, err := repo.GetAllNames("test")
+
+	assert.NotNil(t, err)
+}
+
 func TestNodeRepoGetAllFuncReturnsNodes(t *testing.T) {
 	validNodesResponse, _ := ioutil.ReadFile("../testfiles/rapi_responses/valid_nodes_response.json")
 	validGroupsResponse, _ := ioutil.ReadFile("../testfiles/rapi_responses/valid_groups_response.json")
@@ -104,6 +125,23 @@ func TestNodeRepoGetAllFuncReturnsNodes(t *testing.T) {
 		SecondaryInstancesCount: 2,
 		GroupName:               "groupname2",
 	}}, nodes)
+}
+
+func TestNodeRepoGetAllNamesFuncReturnsNodes(t *testing.T) {
+	validNodeNamesResponse, _ := ioutil.ReadFile("../testfiles/rapi_responses/valid_names_response.json")
+	client := mocking.NewRAPIClient()
+	client.On("Get", mock.Anything, "/2/nodes").
+		Once().Return(rapi_client.Response{Status: 200, Body: string(validNodeNamesResponse)}, nil)
+	groupRepo := repository.GroupRepository{RAPIClient: client}
+	repo := repository.NodeRepository{RAPIClient: client, GroupRepository: groupRepo}
+	nodes, err := repo.GetAllNames("test")
+
+	assert.NoError(t, err)
+	assert.EqualValues(t, []string{
+		"homer",
+		"marge",
+		"bart",
+	}, nodes)
 }
 
 func TestNodeRepoGetFuncReturnsNode(t *testing.T) {

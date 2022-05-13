@@ -4,6 +4,7 @@ import { useApi } from "../api";
 import { GntCluster } from "../api/models";
 import Breadcrumbs from "../components/Breadcrumbs/Breadcrumbs";
 import ClusterNotFound from "../components/ClusterNotFound/ClusterNotFound";
+import CommandBar from "../components/CommandBar/CommandBar";
 import LoadingIndicator from "../components/LoadingIndicator/LoadingIndicator";
 import Navbar from "../components/Navbar/Navbar";
 
@@ -38,6 +39,7 @@ const ClusterWrapper = (): ReactElement => {
               <Navbar clusters={clusterData.clusters} />
               <Breadcrumbs />
               <Outlet />
+              <CommandBar />
             </>
           )}
         </>

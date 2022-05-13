@@ -24,3 +24,9 @@ func (mock *nodeRepository) GetAll(clusterName string) ([]model.GntNode, error) 
 
 	return args.Get(0).([]model.GntNode), args.Error(1)
 }
+
+func (mock *nodeRepository) GetAllNames(clusterName string) ([]string, error) {
+	args := mock.Called(clusterName)
+
+	return args.Get(0).([]string), args.Error(1)
+}

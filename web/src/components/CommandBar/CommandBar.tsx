@@ -20,6 +20,8 @@ type SearchResultsResponse = {
   nodes: ResourceSearchResult[];
 };
 
+const QUERY_EXPIRY_TIME = 5 * 60 * 1000;
+
 const initialState = {
   clusters: [],
   instances: [],
@@ -86,6 +88,20 @@ export default function (): ReactElement | null {
   const [selectionIndex, setSelectionIndex] = useState(0);
 
   const [{ query, results, isLoading }, setQuery] = useSearchResults();
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    if (!isVisible) {
+      timeout = setTimeout(() => {
+        if (!isVisible) {
+          setQuery("");
+        }
+      }, QUERY_EXPIRY_TIME);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [isVisible]);
 
   useEffect(() => {
     window.addEventListener("click", () => {

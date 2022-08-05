@@ -11,7 +11,7 @@ export default createContext<SearchBarContextProps>({
   toggleVisibility: () => {
     throw new Error("Not implemented");
   },
-  setVisible: (boolean) => {
+  setVisible: () => {
     throw new Error("Not implemented");
   },
 });

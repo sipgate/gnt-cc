@@ -5,6 +5,7 @@ import { GntCluster } from "../../api/models";
 import AuthContext from "../../contexts/AuthContext";
 import Button from "../Button/Button";
 import ClusterSelector from "../ClusterSelector/ClusterSelector";
+import FakeSearchBar from "../FakeSearchBar/FakeSearchBar";
 import JobWatcher from "../JobWatcher/JobWatcher";
 import PrefixNavLink from "../PrefixNavLink";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle";
@@ -49,7 +50,6 @@ const Navbar = function ({ clusters }: Props): ReactElement {
     <nav className={styles.navbar}>
       <div className={styles.begin}>
         <ClusterSelector clusters={clusters} />
-
         <div className={styles.items}>
           {links.map((link) => (
             <PrefixNavLink
@@ -63,6 +63,7 @@ const Navbar = function ({ clusters }: Props): ReactElement {
             </PrefixNavLink>
           ))}
         </div>
+        <FakeSearchBar className={styles.searchBar} />
       </div>
       <div className={styles.end}>
         <JobWatcher />

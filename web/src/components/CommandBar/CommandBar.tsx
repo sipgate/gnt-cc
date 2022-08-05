@@ -1,5 +1,6 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { buildApiUrl } from "../../api";
+import SearchBarContext from "../../contexts/SearchBarContext";
 import styles from "./CommandBar.module.scss";
 import SearchInput from "./SearchInput/SearchInput";
 import SearchResult from "./SearchResult/SearchResult";
@@ -84,7 +85,7 @@ function useSearchResults(): [
 }
 
 export default function (): ReactElement | null {
-  const [isVisible, setIsVisible] = useState(false);
+  const { isVisible, setVisible } = useContext(SearchBarContext);
   const [selectionIndex, setSelectionIndex] = useState(0);
 
   const [{ query, results, isLoading }, setQuery] = useSearchResults();
@@ -105,7 +106,7 @@ export default function (): ReactElement | null {
 
   useEffect(() => {
     window.addEventListener("click", () => {
-      setIsVisible(false);
+      setVisible(false);
     });
   }, [isVisible]);
 
@@ -118,7 +119,7 @@ export default function (): ReactElement | null {
       ) {
         event.preventDefault();
 
-        setIsVisible(!isVisible);
+        setVisible(!isVisible);
       }
 
       if (!isVisible) {
@@ -127,7 +128,7 @@ export default function (): ReactElement | null {
 
       if (event.key === "Escape") {
         event.stopPropagation();
-        setIsVisible(false);
+        setVisible(false);
       }
 
       const { clusters, instances, nodes } = results;
@@ -183,7 +184,7 @@ export default function (): ReactElement | null {
                 name={result.name}
                 url={`/${result.clusterName}/instances/${result.name}`}
                 selected={i === selectionIndex}
-                onClick={() => setIsVisible(false)}
+                onClick={() => setVisible(false)}
               />
             ))}
           </SearchResults>
@@ -196,7 +197,7 @@ export default function (): ReactElement | null {
                 name={result.name}
                 url={`/${result.name}`}
                 selected={i + instances.length === selectionIndex}
-                onClick={() => setIsVisible(false)}
+                onClick={() => setVisible(false)}
               />
             ))}
           </SearchResults>
@@ -211,12 +212,13 @@ export default function (): ReactElement | null {
                 selected={
                   i + instances.length + clusters.length === selectionIndex
                 }
-                onClick={() => setIsVisible(false)}
+                onClick={() => setVisible(false)}
               />
             ))}
           </SearchResults>
         )}
       </div>
+      <div className={styles.footer}>Use CTRL-K or ⌘-K to open this search</div>
     </div>
   );
 }

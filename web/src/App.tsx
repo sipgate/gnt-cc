@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import AuthContext from "./contexts/AuthContext";
 import AuthProvider from "./providers/AuthProvider";
+import CommandBarProvider from "./providers/CommandBarProvider";
 import JobWatchProvider from "./providers/JobWatchProvider";
 import ThemeProvider from "./providers/ThemeProvider";
 import ClusterWrapper from "./views/ClusterWrapper";
@@ -43,50 +44,52 @@ function App(): ReactElement {
       <ThemeProvider>
         <AuthProvider>
           <JobWatchProvider>
-            <Router>
-              <Routes>
-                <Route element={<UnauthenticatedWrapper />}>
-                  <Route path="/login" element={<Login />} />
-                </Route>
-
-                <Route element={<AuthenticatedWrapper />}>
-                  <Route path="/" element={<ClusterWrapper />} />
-                  <Route path="/:clusterName" element={<ClusterWrapper />}>
-                    <Route index element={<Dashboard />} />
-                    <Route
-                      path="instances/:instanceName/console"
-                      element={<InstanceConsole />}
-                    />
-                    <Route
-                      path="instances/:instanceName"
-                      element={<InstanceDetail />}
-                    />
-                    <Route path="instances" element={<Instances />} />
-                    <Route path="nodes/:nodeName/*" element={<NodeDetail />}>
-                      <Route
-                        index
-                        element={<Navigate to={`primary-instances`} />}
-                      />
-
-                      <Route
-                        path="primary-instances"
-                        element={<NodePrimaryInstances />}
-                      />
-
-                      <Route
-                        path="secondary-instances"
-                        element={<NodeSecondaryInstances />}
-                      />
-                    </Route>
-                    <Route path="nodes" element={<NodeList />} />
-                    <Route path="jobs/:jobID" element={<JobDetail />} />
-                    <Route path="jobs" element={<Jobs />} />
+            <CommandBarProvider>
+              <Router>
+                <Routes>
+                  <Route element={<UnauthenticatedWrapper />}>
+                    <Route path="/login" element={<Login />} />
                   </Route>
-                </Route>
 
-                <Route path="*" element={<span>404 Not found</span>} />
-              </Routes>
-            </Router>
+                  <Route element={<AuthenticatedWrapper />}>
+                    <Route path="/" element={<ClusterWrapper />} />
+                    <Route path="/:clusterName" element={<ClusterWrapper />}>
+                      <Route index element={<Dashboard />} />
+                      <Route
+                        path="instances/:instanceName/console"
+                        element={<InstanceConsole />}
+                      />
+                      <Route
+                        path="instances/:instanceName"
+                        element={<InstanceDetail />}
+                      />
+                      <Route path="instances" element={<Instances />} />
+                      <Route path="nodes/:nodeName/*" element={<NodeDetail />}>
+                        <Route
+                          index
+                          element={<Navigate to={`primary-instances`} />}
+                        />
+
+                        <Route
+                          path="primary-instances"
+                          element={<NodePrimaryInstances />}
+                        />
+
+                        <Route
+                          path="secondary-instances"
+                          element={<NodeSecondaryInstances />}
+                        />
+                      </Route>
+                      <Route path="nodes" element={<NodeList />} />
+                      <Route path="jobs/:jobID" element={<JobDetail />} />
+                      <Route path="jobs" element={<Jobs />} />
+                    </Route>
+                  </Route>
+
+                  <Route path="*" element={<span>404 Not found</span>} />
+                </Routes>
+              </Router>
+            </CommandBarProvider>
           </JobWatchProvider>
         </AuthProvider>
       </ThemeProvider>

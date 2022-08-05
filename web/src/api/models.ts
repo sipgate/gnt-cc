@@ -25,6 +25,7 @@ export type GntInstance = {
   disks: GntDisk[];
   nics: GntNic[];
   tags: string[];
+  OS: string;
 };
 
 export type GntNode = {

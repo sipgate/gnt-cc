@@ -27,6 +27,7 @@ type GntInstance struct {
 	Disks          []GntDisk `json:"disks"`
 	Nics           []GntNic  `json:"nics"`
 	Tags           []string  `json:"tags"`
+	OS             string    `json:"OS"`
 }
 
 type GntCluster struct {

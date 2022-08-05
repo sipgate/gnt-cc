@@ -138,7 +138,7 @@ type rapiInstanceResponse struct {
 	NicUuids         []string      `json:"nic.uuids"`
 	OperRAM          interface{}   `json:"oper_ram"`
 	OperVcpus        interface{}   `json:"oper_vcpus"`
-	Os               string        `json:"os"`
+	OS               string        `json:"os"`
 	SerialNo         int           `json:"serial_no"`
 	Tags             []string      `json:"tags"`
 	UUID             string        `json:"uuid"`

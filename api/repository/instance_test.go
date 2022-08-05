@@ -106,6 +106,7 @@ func TestInstanceRepoGetFuncReturnsSuccessfulResult_OnValidResponse(t *testing.T
 		Nics:           []model.GntNic{},
 		Disks:          []model.GntDisk{},
 		Tags:           []string{"tag1"},
+		OS:             "noop",
 	}, result.Instance)
 }
 

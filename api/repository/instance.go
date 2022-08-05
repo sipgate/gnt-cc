@@ -54,6 +54,7 @@ func (repo *InstanceRepository) Get(clusterName string, instanceName string) (mo
 			Disks:          extractDisks(parsedInstance),
 			Nics:           extractNics(parsedInstance),
 			Tags:           parsedInstance.Tags,
+			OS:             parsedInstance.OS,
 		},
 	}, nil
 }

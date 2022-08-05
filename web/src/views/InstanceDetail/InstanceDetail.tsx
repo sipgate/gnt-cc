@@ -1,4 +1,5 @@
 import {
+  faComputer,
   faHdd,
   faMemory,
   faMicrochip,
@@ -80,6 +81,10 @@ type InstanceResponse = {
   instance: GntInstance;
 };
 
+function OSCard({ os }: { os: string }): ReactElement {
+  return <Card icon={faComputer} title={os} />;
+}
+
 const InstanceDetail = (): ReactElement => {
   const { instanceName } = useParams<{ instanceName: string }>();
   const clusterName = useClusterName();
@@ -160,6 +165,9 @@ const InstanceDetail = (): ReactElement => {
                   {instance.tags.map((tag) => (
                     <TagCard key={tag} tag={tag} />
                   ))}
+                </CardGrid.Section>
+                <CardGrid.Section headline="Operating System">
+                  <OSCard os={instance.OS} />
                 </CardGrid.Section>
               </CardGrid>
             </>

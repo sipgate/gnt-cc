@@ -58,6 +58,7 @@ function createMockInstance(overrideParams: Partial<GntInstance>): GntInstance {
     primaryNode: "",
     secondaryNodes: [],
     tags: [],
+    OS: "noop",
     ...overrideParams,
   };
 }

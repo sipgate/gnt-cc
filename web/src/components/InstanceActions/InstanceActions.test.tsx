@@ -54,6 +54,10 @@ function createMockInstance(overrideParams: Partial<GntInstance>): GntInstance {
     isRunning: true,
     memoryTotal: 1024,
     nics: [],
+    nicInfo: {
+      nicTypeFriendly: "Realtek RTL8139",
+      nicType: "rtl8139",
+    },
     offersVnc: false,
     primaryNode: "",
     secondaryNodes: [],

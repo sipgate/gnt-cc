@@ -14,6 +14,11 @@ export type GntNic = {
   vlan: string;
 };
 
+export type GntNicInfo = {
+  nicType: string;
+  nicTypeFriendly: string;
+};
+
 export type GntInstance = {
   name: string;
   primaryNode: string;
@@ -24,6 +29,7 @@ export type GntInstance = {
   offersVnc: boolean;
   disks: GntDisk[];
   nics: GntNic[];
+  nicInfo: GntNicInfo;
   tags: string[];
   OS: string;
 };

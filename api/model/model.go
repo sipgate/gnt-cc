@@ -16,18 +16,24 @@ type GntNic struct {
 	Vlan   string `json:"vlan"`
 }
 
+type GntNicInfo struct {
+	NicType         string `json:"nicType"`
+	NicTypeFriendly string `json:"nicTypeFriendly"`
+}
+
 type GntInstance struct {
-	Name           string    `json:"name"`
-	PrimaryNode    string    `json:"primaryNode"`
-	SecondaryNodes []string  `json:"secondaryNodes"`
-	CpuCount       int       `json:"cpuCount"`
-	MemoryTotal    int       `json:"memoryTotal"`
-	IsRunning      bool      `json:"isRunning"`
-	OffersVNC      bool      `json:"offersVnc"`
-	Disks          []GntDisk `json:"disks"`
-	Nics           []GntNic  `json:"nics"`
-	Tags           []string  `json:"tags"`
-	OS             string    `json:"OS"`
+	Name           string     `json:"name"`
+	PrimaryNode    string     `json:"primaryNode"`
+	SecondaryNodes []string   `json:"secondaryNodes"`
+	CpuCount       int        `json:"cpuCount"`
+	MemoryTotal    int        `json:"memoryTotal"`
+	IsRunning      bool       `json:"isRunning"`
+	OffersVNC      bool       `json:"offersVnc"`
+	Disks          []GntDisk  `json:"disks"`
+	Nics           []GntNic   `json:"nics"`
+	NicInfo        GntNicInfo `json:"nicInfo"`
+	Tags           []string   `json:"tags"`
+	OS             string     `json:"OS"`
 }
 
 type GntCluster struct {

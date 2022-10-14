@@ -19,6 +19,20 @@ type (
 	}
 )
 
+var (
+	nicTypeMapping = map[string]string{
+		"e1000":       "Intel E1000",
+		"i82551":      "Intel 82551",
+		"i82559er":    "Intel I82559ER",
+		"i82557b":     "Intel I82557B",
+		"ne2k_isa":    "NE2000 (ISA)",
+		"ne2k_pci":    "NE2000 (PCI)",
+		"paravirtual": "VirtIO",
+		"pcnet":       "AMD PCnet",
+		"rtl8139":     "Realtek RTL8139",
+	}
+)
+
 func (repo *InstanceRepository) Get(clusterName string, instanceName string) (model.InstanceResult, error) {
 	slug := fmt.Sprintf("/2/instances/%s", instanceName)
 	response, err := repo.RAPIClient.Get(clusterName, slug)
@@ -53,8 +67,12 @@ func (repo *InstanceRepository) Get(clusterName string, instanceName string) (mo
 			OffersVNC:      parsedInstance.HvParams.VncBindAddress != "",
 			Disks:          extractDisks(parsedInstance),
 			Nics:           extractNics(parsedInstance),
-			Tags:           parsedInstance.Tags,
-			OS:             parsedInstance.OS,
+			NicInfo: model.GntNicInfo{
+				NicType:         parsedInstance.HvParams.NicType,
+				NicTypeFriendly: getNicFriendlyType(parsedInstance.HvParams.NicType),
+			},
+			Tags: parsedInstance.Tags,
+			OS:   parsedInstance.OS,
 		},
 	}, nil
 }
@@ -205,4 +223,12 @@ func extractNics(instance rapiInstanceResponse) []model.GntNic {
 	}
 
 	return nics
+}
+
+func getNicFriendlyType(nicType string) string {
+	friendlyType, ok := nicTypeMapping[nicType]
+	if !ok {
+		return nicType
+	}
+	return friendlyType
 }

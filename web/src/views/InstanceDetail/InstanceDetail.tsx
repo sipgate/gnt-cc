@@ -1,5 +1,6 @@
 import {
   faComputer,
+  faEthernet,
   faHdd,
   faMemory,
   faMicrochip,
@@ -7,10 +8,10 @@ import {
   faServer,
   faTag,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { ReactElement } from "react";
+import React, { PropsWithChildren, ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useApi } from "../../api";
-import { GntDisk, GntInstance, GntNic } from "../../api/models";
+import { GntDisk, GntInstance, GntNic, GntNicInfo } from "../../api/models";
 import ApiDataRenderer from "../../components/ApiDataRenderer/ApiDataRenderer";
 import Card from "../../components/Card/Card";
 import CardGrid from "../../components/CardGrid/CardGrid";
@@ -62,7 +63,7 @@ function NodeCard({ name, primary }: NodeCardProps): ReactElement {
 function NicCard({ name, mode, mac, bridge, vlan }: GntNic): ReactElement {
   return (
     <Card
-      icon={faNetworkWired}
+      icon={faEthernet}
       title={name}
       badge={<StatusBadge>{mode}</StatusBadge>}
     >
@@ -73,6 +74,22 @@ function NicCard({ name, mode, mac, bridge, vlan }: GntNic): ReactElement {
         </p>
       )}
       <p className={styles.nicMac}>{mac}</p>
+    </Card>
+  );
+}
+
+function NetworkCard({
+  nicType,
+  nicTypeFriendly: nicFriendlyType,
+}: GntNicInfo): ReactElement {
+  return (
+    <Card icon={faNetworkWired} title={"Info"}>
+      <ul className={styles.nicParamList}>
+        <li>
+          <span>NIC Type</span>
+          <span title={nicType}>{nicFriendlyType}</span>
+        </li>
+      </ul>
     </Card>
   );
 }
@@ -147,6 +164,7 @@ const InstanceDetail = (): ReactElement => {
                   ))}
                 </CardGrid.Section>
                 <CardGrid.Section headline="Networking">
+                  <NetworkCard {...instance.nicInfo} />
                   {instance.nics.map((nic) => (
                     <NicCard key={nic.name} {...nic} />
                   ))}

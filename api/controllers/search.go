@@ -16,7 +16,7 @@ type SearchController struct {
 // @Failure 400 {object} model.ErrorResponse
 // @Failure 500 {object} model.ErrorResponse
 // @Router /search [get]
-//TODO: Add Tests
+// TODO: Add Tests
 func (controller *SearchController) Search(c *gin.Context) {
 	query, exists := c.GetQuery("query")
 	if !exists {

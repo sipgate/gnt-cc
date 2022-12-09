@@ -7,3 +7,18 @@
 .text {
   color: var(--color-emphasis-low);
 }
+
+.log {
+  padding: 2rem 0;
+
+  .console {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-family: monospace;
+    font-size: 1rem;
+    background: var(--overlay);
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+}

@@ -1,13 +1,14 @@
 .root {
   display: flex;
-  justify-content: space-around;
-  background: var(--overlay);
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
 
   > div {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    padding: 2rem;
+    padding: 0 1rem;
 
     .value {
       display: block;

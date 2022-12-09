@@ -1,10 +1,7 @@
-import { faWrench } from "@fortawesome/free-solid-svg-icons";
 import React, { ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useApi } from "../../api";
-import { GntJobLogEntry, GntJobWithLog } from "../../api/models";
-import Card from "../../components/Card/Card";
-import CardGrid from "../../components/CardGrid/CardGrid";
+import { GntJobWithLog } from "../../api/models";
 import ContentWrapper from "../../components/ContentWrapper/ContentWrapper";
 import JobStartedAt from "../../components/JobStartedAt";
 import JobStatus from "../../components/JobStatus";
@@ -16,16 +13,6 @@ import styles from "./JobDetail.module.scss";
 type JobResponse = {
   job: GntJobWithLog;
 };
-
-function LogEntryCard({ message, startedAt }: GntJobLogEntry): ReactElement {
-  return (
-    <Card icon={faWrench} title={message}>
-      <div className={styles.text}>
-        <JobStartedAt timestamp={startedAt} />
-      </div>
-    </Card>
-  );
-}
 
 export default function JobDetail(): ReactElement {
   const clusterName = useClusterName();
@@ -51,11 +38,17 @@ export default function JobDetail(): ReactElement {
         <JobStatus status={status} />
       </header>
       <JobSummary summary={summary} />
-      <CardGrid.Section headline="Log">
-        {log.map((entry) => (
-          <LogEntryCard key={entry.serial} {...entry} />
-        ))}
-      </CardGrid.Section>
+      <div className={styles.log}>
+        <h3>Log</h3>
+        <div className={styles.console}>
+          {log.map((entry) => (
+            <div key={entry.serial}>
+              <JobStartedAt timestamp={entry.startedAt} />{" "}
+              <span>{entry.message}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </ContentWrapper>
   );
 }

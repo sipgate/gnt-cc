@@ -4,37 +4,27 @@
   align-items: center;
 }
 
-.diskCapacity {
-  font-size: 1.25em;
-  margin: 0;
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
-.nicVlan {
-  margin: 0.5rem 0;
-}
+.nic,
+.disk {
+  padding: 0.5rem 0;
 
-.nicMac {
-  color: var(--color-emphasis-low);
-  margin: 0;
-}
-
-.nicBridge {
-  margin: 0 0 0.25rem;
-  font-size: 1.25em;
-}
-
-.nicParamList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-
-  li {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
+  > p {
+    margin: 0.125rem 0;
   }
 
-  li:not(:last-child) {
+  > p:last-of-type {
+    font-family: monospace;
+    font-size: 1rem;
+  }
+
+  &:not(:last-child) {
     border-bottom: 1px solid var(--color-separator);
   }
 }

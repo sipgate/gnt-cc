@@ -1,0 +1,47 @@
+.root {
+  .divider {
+    background: var(--color-separator);
+    width: 1px;
+  }
+
+  .specifications {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1rem 2rem;
+    background: var(--overlay);
+    padding: 1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
+  > footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border: 1px solid var(--color-separator);
+    border-top: 0;
+    border-radius: 0 0 0.5rem 0.5rem;
+  }
+
+  .nodes {
+    > h3 {
+      font-size: 1rem;
+      margin: 0 0 1rem;
+    }
+
+    .node {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid var(--color-separator);
+      }
+    }
+  }
+
+  .tags,
+  .osName {
+    display: flex;
+    gap: 0.5rem;
+  }
+}

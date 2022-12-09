@@ -38,28 +38,30 @@ function Dashboard(): ReactElement {
         {...apiProps}
         render={({ master, nodes, instances }) => (
           <>
-            <QuickInfoBanner>
-              <QuickInfoBanner.Item
-                icon={faServer}
-                label="Nodes"
-                value={String(nodes.count)}
-              />
-              <QuickInfoBanner.Item
-                icon={faServer}
-                label="Instances"
-                value={String(instances.count)}
-              />
-              <QuickInfoBanner.Item
-                icon={faMicrochip}
-                label="Node CPU Cores"
-                value={String(nodes.cpuCount)}
-              />
-              <QuickInfoBanner.Item
-                icon={faMemory}
-                label="Memory"
-                value={prettyPrintMiB(nodes.memoryTotal)}
-              />
-            </QuickInfoBanner>
+            <div className={styles.clusterSpecifications}>
+              <QuickInfoBanner>
+                <QuickInfoBanner.Item
+                  icon={faServer}
+                  label="Nodes"
+                  value={String(nodes.count)}
+                />
+                <QuickInfoBanner.Item
+                  icon={faServer}
+                  label="Instances"
+                  value={String(instances.count)}
+                />
+                <QuickInfoBanner.Item
+                  icon={faMicrochip}
+                  label="Node CPU Cores"
+                  value={String(nodes.cpuCount)}
+                />
+                <QuickInfoBanner.Item
+                  icon={faMemory}
+                  label="Memory"
+                  value={prettyPrintMiB(nodes.memoryTotal)}
+                />
+              </QuickInfoBanner>
+            </div>
             <div className={styles.currentMaster}>
               <StatusBadge>Master</StatusBadge>
               <PrefixLink to={`/nodes/${master}`}>

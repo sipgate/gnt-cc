@@ -12,7 +12,9 @@ function JobStartedAt({ timestamp }: Props): ReactElement {
 
   const date = unixToDate(timestamp);
 
-  return <span title={date.toLocaleString()}>{date.toLocaleTimeString()}</span>;
+  return (
+    <span title={date.toLocaleString()}>[{date.toLocaleTimeString()}]</span>
+  );
 }
 
 export default JobStartedAt;

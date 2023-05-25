@@ -1,0 +1,19 @@
+apiVersion: nautilus.sipgate.cloud/v1alpha1
+kind: Service
+metadata:
+  creationTimestamp: "2023-05-25T09:05:27Z"
+  name: gnt-cc
+  namespace: default
+  resourceVersion: "1"
+  uid: 0116efd0-0280-44ab-963e-2fcd5ec626b7
+spec:
+  backup: "false"
+  containerized: "true"
+  localPersistence: "false"
+  on_call_schedule: bestEffort
+  pciDssRelevant: "false"
+  ports: null
+  repositoryType: tooling
+  singleton: "false"
+  tlsProvider: none
+  virtualized: "true"

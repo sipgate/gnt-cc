@@ -10,16 +10,16 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 ```shell
 # Install dependencies
-yarn
+npm install
 
 # Start development server
-yarn start
+npm run start
 
 # lint application
-yarn lint
+npm run lint
 
 # fix linting errors
-yarn lint:fix
+npm run lint:fix
 ```
 
 **Note for VSCode:** The ESLint plugin for VSCode requires the following options to be set in `../.vscode/settings.json` for proper linting and to fix errors on save.
@@ -38,11 +38,11 @@ yarn lint:fix
 ### Testing (TODO)
 
 ```shell
-yarn test
+npm run test
 ```
 
 ### Build (TODO)
 
 ```shell
-yarn build
+npm run build
 ```

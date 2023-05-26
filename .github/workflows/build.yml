@@ -18,9 +18,9 @@ jobs:
       - name: Build web
         run: |
           cd web
-          yarn install
-          yarn test --watchAll=false
-          yarn build
+          npm ci
+          npm run test --watchAll=false
+          npm run build
 
       - name: Set up Go 1.x
         uses: actions/setup-go@v2

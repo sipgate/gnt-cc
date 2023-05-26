@@ -13,5 +13,5 @@ fi
 echo "Executing golang tests..."
 cd "$WORK_DIR/api" && go test ./...
 
-echo "Executing yarn linting..."
-cd "$WORK_DIR/web" && yarn lint && yarn test --watchAll=false
+echo "Executing frontend linter..."
+cd "$WORK_DIR/web" && npm run lint && npm run test --watchAll=false

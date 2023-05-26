@@ -11,10 +11,7 @@ $transition-duration: 0.1s;
   &::after {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     opacity: 0;
     background: var(--overlay);
     transition: opacity 0.1s;

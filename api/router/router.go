@@ -138,12 +138,12 @@ func (r *router) SetupAPIRoutes() {
 		})
 
 		authenticated.GET("/clusters", r.clusterController.GetAll)
+		authenticated.GET("/search", r.searchController.Search)
 	}
-
-	authenticated.GET("/search", r.searchController.Search)
 
 	withCluster := authenticated.Group("/clusters/:cluster")
 	withCluster.Use(middleware.RequireCluster())
+	withCluster.Use(middleware.ErrorHandler())
 	{
 		withCluster.GET("/nodes", r.nodeController.GetAll)
 		withCluster.GET("/nodes/:node", r.nodeController.Get)

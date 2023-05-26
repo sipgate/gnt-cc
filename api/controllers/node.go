@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"gnt-cc/model"
 	"gnt-cc/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 type NodeController struct {
@@ -27,7 +28,7 @@ func (controller *NodeController) GetAll(c *gin.Context) {
 	nodes, err := controller.Repository.GetAll(clusterName)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 
@@ -52,25 +53,25 @@ func (controller *NodeController) Get(c *gin.Context) {
 	nodeName := c.Param("node")
 
 	if nodeName == "" {
-		c.AbortWithStatusJSON(400, createErrorBody("node name is required"))
+		c.AbortWithStatusJSON(400, model.ErrorResponse{Message: "node name is required"})
 		return
 	}
 
 	nodeResult, err := controller.Repository.Get(clusterName, nodeName)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 
 	if !nodeResult.Found {
-		c.AbortWithStatusJSON(404, createErrorBody(fmt.Sprintf(MsgNodeNotFound, nodeName, clusterName)))
+		c.AbortWithStatusJSON(404, model.ErrorResponse{Message: fmt.Sprintf(MsgNodeNotFound, nodeName, clusterName)})
 	}
 
 	instances, err := controller.InstanceRepository.GetAll(clusterName)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 

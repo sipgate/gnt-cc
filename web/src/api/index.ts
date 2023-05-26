@@ -104,7 +104,14 @@ export const useApi = <TData>(
     }
 
     if (!response.ok) {
-      setError(response.statusText);
+      const body = await response.json();
+
+      if (isErrorBody(body)) {
+        setError(body.error);
+      } else {
+        setError(response.statusText);
+      }
+
       setIsLoading(false);
 
       return response.statusText;
@@ -128,3 +135,11 @@ export const useApi = <TData>(
 
   return [{ data, isLoading, error }, execute];
 };
+
+function isErrorBody(body: unknown): body is { error: string } {
+  return (
+    body !== null &&
+    typeof body === "object" &&
+    typeof (body as { error: string }).error === "string"
+  );
+}

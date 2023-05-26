@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"gnt-cc/model"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,12 +22,12 @@ type SearchController struct {
 func (controller *SearchController) Search(c *gin.Context) {
 	query, exists := c.GetQuery("query")
 	if !exists {
-		c.AbortWithStatusJSON(400, createErrorBody("query parameter is required"))
+		c.AbortWithStatusJSON(400, model.ErrorResponse{Message: "query parameter is required"})
 		return
 	}
 
 	if len(query) == 0 {
-		c.AbortWithStatusJSON(400, createErrorBody("query parameter must not be empty"))
+		c.AbortWithStatusJSON(400, model.ErrorResponse{Message: "query parameter must not be empty"})
 		return
 	}
 

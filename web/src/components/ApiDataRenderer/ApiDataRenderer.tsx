@@ -19,7 +19,7 @@ function renderError(error: string): ReactElement {
         <Icon className={styles.bolt} icon={faBolt} />
       </header>
       <div>
-        <h1>Something went wrong</h1>
+        <h1>An error occured</h1>
         <p>{error}</p>
       </div>
     </div>

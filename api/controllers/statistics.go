@@ -24,14 +24,14 @@ func (controller *StatisticsController) Get(c *gin.Context) {
 	instances, err := controller.InstanceRepository.GetAll(clusterName)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 
 	nodes, err := controller.NodeRepository.GetAll(clusterName)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 

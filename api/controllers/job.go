@@ -31,7 +31,7 @@ func (controller *JobController) GetAll(c *gin.Context) {
 	jobs, err := controller.Repository.GetAll(clusterName)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 
@@ -55,7 +55,7 @@ func (controller *JobController) GetManyWithLogs(c *gin.Context) {
 
 	var options GetManyWithLogsOptions
 	if c.BindQuery(&options) != nil {
-		c.AbortWithStatusJSON(400, createErrorBody("ids parameter is required"))
+		c.AbortWithStatusJSON(400, model.ErrorResponse{Message: "ids parameter is required"})
 		return
 	}
 
@@ -64,7 +64,7 @@ func (controller *JobController) GetManyWithLogs(c *gin.Context) {
 		job, err := controller.Repository.Get(clusterName, id)
 
 		if err != nil {
-			abortWithInternalServerError(c, err)
+			c.Error(err)
 			return
 		}
 
@@ -91,20 +91,20 @@ func (controller *JobController) Get(c *gin.Context) {
 	jobID := c.Param("job")
 
 	if jobID == "" {
-		c.AbortWithStatusJSON(400, createErrorBody("job ID is required"))
+		c.AbortWithStatusJSON(400, model.ErrorResponse{Message: "job ID is required"})
 		return
 	}
 
 	result, err := controller.Repository.Get(clusterName, jobID)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 
 	if !result.Found {
-		c.AbortWithStatusJSON(404, createErrorBody(
-			fmt.Sprintf(MsgJobNotFound, jobID, clusterName)))
+		c.AbortWithStatusJSON(404, model.ErrorResponse{Message: fmt.Sprintf(MsgJobNotFound, jobID, clusterName)})
+		return
 	}
 
 	c.JSON(200, model.JobResponse{

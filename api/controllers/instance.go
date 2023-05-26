@@ -27,7 +27,7 @@ func (controller *InstanceController) GetAll(c *gin.Context) {
 	instances, err := controller.Repository.GetAll(clusterName)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 
@@ -95,7 +95,7 @@ func (controller *InstanceController) SimpleAction(c *gin.Context, action string
 	jobID, err := controller.Actions.PerformSimpleInstanceAction(clusterName, instanceName, action)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 
@@ -118,20 +118,20 @@ func (controller *InstanceController) Get(c *gin.Context) {
 	instanceName := c.Param("instance")
 
 	if instanceName == "" {
-		c.AbortWithStatusJSON(400, createErrorBody("instance name is required"))
+		c.AbortWithStatusJSON(400, model.ErrorResponse{Message: "instance name is required"})
 		return
 	}
 
 	result, err := controller.Repository.Get(clusterName, instanceName)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 
 	if !result.Found {
-		c.AbortWithStatusJSON(404, createErrorBody(
-			fmt.Sprintf(MsgInstanceNotFound, instanceName, clusterName)))
+		c.AbortWithStatusJSON(404, model.ErrorResponse{Message: fmt.Sprintf(MsgInstanceNotFound, instanceName, clusterName)})
+		return
 	}
 
 	c.JSON(200, model.InstanceResponse{
@@ -152,26 +152,25 @@ func (controller *InstanceController) OpenInstanceConsole(c *gin.Context) {
 	instanceName := c.Param("instance")
 
 	if instanceName == "" {
-		c.AbortWithStatusJSON(400, createErrorBody("instance name is required"))
+		c.AbortWithStatusJSON(400, model.ErrorResponse{Message: "instance name is required"})
 		return
 	}
 
 	result, err := controller.Repository.Get(clusterName, instanceName)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 
 	if !result.Found {
-		c.AbortWithStatusJSON(404, createErrorBody(
-			fmt.Sprintf(MsgInstanceNotFound, instanceName, clusterName)))
+		c.AbortWithStatusJSON(404, model.ErrorResponse{Message: fmt.Sprintf(MsgInstanceNotFound, instanceName, clusterName)})
 	}
 
 	instance := result.Instance
 
 	if !instance.IsRunning {
-		c.AbortWithStatusJSON(400, createErrorBody("instance is not running"))
+		c.AbortWithStatusJSON(400, model.ErrorResponse{Message: "instance is not running"})
 		return
 	}
 
@@ -181,7 +180,7 @@ func (controller *InstanceController) OpenInstanceConsole(c *gin.Context) {
 	err = websocket.PassThrough(c.Writer, c.Request, primaryNode, port)
 
 	if err != nil {
-		abortWithInternalServerError(c, err)
+		c.Error(err)
 		return
 	}
 }

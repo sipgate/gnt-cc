@@ -3,9 +3,11 @@ package rapi_client
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"syscall"
 )
 
 func (client rapiClient) Get(clusterName string, slug string) (Response, error) {
@@ -17,8 +19,12 @@ func (client rapiClient) Get(clusterName string, slug string) (Response, error) 
 
 	httpResponse, err := client.http.Get(clusterURL + slug)
 
+	if errors.Is(err, syscall.ECONNREFUSED) {
+		return Response{}, fmt.Errorf("could not connect to cluster '%s'", clusterName)
+	}
+
 	if err != nil {
-		return Response{}, fmt.Errorf("request error: %s", err)
+		return Response{}, fmt.Errorf("could not send request to cluster '%s': %s", clusterName, err)
 	}
 
 	return parseRAPIResponse(httpResponse)
@@ -36,13 +42,13 @@ func (client rapiClient) modify(clusterName string, slug string, body interface{
 	clusterURL, exists := client.clusterUrls[clusterName]
 
 	if !exists {
-		return Response{}, fmt.Errorf("cluster not found: %s", clusterName)
+		return Response{}, fmt.Errorf("cluster '%s' not found", clusterName)
 	}
 
 	jsonBody, err := json.Marshal(body)
 
 	if err != nil {
-		return Response{}, fmt.Errorf("could not prepare request: %s", err)
+		return Response{}, fmt.Errorf("could not prepare request to cluster '%s': %s", clusterName, err)
 	}
 
 	request, err := http.NewRequest(
@@ -68,7 +74,7 @@ func (client rapiClient) modify(clusterName string, slug string, body interface{
 
 func parseRAPIResponse(httpResponse *http.Response) (Response, error) {
 	defer httpResponse.Body.Close()
-	body, err := ioutil.ReadAll(httpResponse.Body)
+	body, err := io.ReadAll(httpResponse.Body)
 
 	if err != nil {
 		return Response{}, fmt.Errorf("could not parse RAPI response: %s", err)

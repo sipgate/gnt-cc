@@ -21,7 +21,7 @@ This is an incomplete list of available/upcoming features.
 - [x] Track job status in frontend
 - [x] Start/stop/restart/migrate/failover instances
 - [x] VNC web console
-- [ ] Search resources (nodes, instances) across all clusters
+- [x] Search resources (nodes, instances) across all clusters
 - [ ] Spice web console
 - [ ] Create instances
 - [ ] Configure instances

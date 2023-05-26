@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { createTheme } from "react-data-table-component";
 import "./index.scss";
 import App from "./App";
@@ -40,9 +40,15 @@ createTheme("default", {
   },
 });
 
-ReactDOM.render(
+const container = document.getElementById("root");
+
+if (container === null) {
+  throw new Error("cannot find mount point element");
+}
+
+const root = createRoot(container);
+root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );

@@ -4,8 +4,9 @@ import { GntInstance } from "../../api/models";
 import InstanceList from "../../components/InstanceList/InstanceList";
 
 export default function NodeSecondaryInstances(): ReactElement {
-  const { secondaryInstances } =
-    useOutletContext<{ secondaryInstances: GntInstance[] }>();
+  const { secondaryInstances } = useOutletContext<{
+    secondaryInstances: GntInstance[];
+  }>();
 
   return (
     <div>

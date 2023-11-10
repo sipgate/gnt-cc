@@ -89,12 +89,16 @@ func Init() {
 		panic(err)
 	}
 
-	log.Info("Using config file ", path)
-
 	Parse(path)
 }
 
+func InitCustomConfig(config Config) {
+	c = config
+}
+
 func Parse(configPath string) {
+	log.Info("Using config file ", configPath)
+
 	var config Config
 
 	viper.SetConfigFile(configPath)

@@ -176,16 +176,11 @@ This is a minimalistic example configuration to configure apache as a reverse pr
 
 	ProxyRequests Off
 	ProxyPreserveHost On
-	ProxyPass / http://localhost:8000/
+	ProxyPass / http://localhost:8000/ upgrade=websocket
 	ProxyPassReverse / http://localhost:8000/
 
 	ErrorLog  /var/log/apache2/gnt-cc.example.com_error.log
 	CustomLog /var/log/apache2/gnt-cc.example.com_access.log
-
-	RewriteEngine on
-	RewriteCond %{HTTP:Upgrade} websocket [NC]
-	RewriteCond %{HTTP:Connection} upgrade [NC]
-	RewriteRule ^/?(.*) "ws://localhost:8000/$1" [P,L]
 </VirtualHost>
 ```
 

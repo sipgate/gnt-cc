@@ -131,7 +131,9 @@ ldapConfig:
 
 Please adapt the user and group search filters and base DN to your LDAP schema. You can use e.g. the `ldapsearch` tool to test filters on the commandline. `%s` will be substituted by `gnt-cc` with the username to be authenticated. If your LDAP server uses a self-signed TLS certificate (or the CA is unknown to your local CA trust store) you may set `skipCertificateVerify` to `true`.
 
-## Create a systemd service
+## Create a user and a systemd service
+
+Do not run `gnt-cc` as root, it's better to create a unique user for this service: `useradd -r -s /bin/false -d /non-existent gnt-cc`. Also set the permissions for the config directory containing passwords restrictive: `chown -Rh gnt-cc:gnt-cc /etc/gnt-cc/` and `chmod 0700 /etc/gnt-cc/`.
 
 You can use systemd to run `gnt-cc`. Please create the file `/etc/systemd/system/gnt-cc.service` with the following content:
 ```
@@ -139,6 +141,8 @@ You can use systemd to run `gnt-cc`. Please create the file `/etc/systemd/system
 Description=gnt-cc API server
 
 [Service]
+User=gnt-cc
+Group=gnt-cc
 Type=simple
 ExecStart=/usr/local/bin/gnt-cc
 

@@ -1,10 +1,8 @@
 name: Build
 
 on:
+  workflow_dispatch:
   push:
-  pull_request:
-  create:
-    tags:
 
 jobs:
   build:
@@ -29,7 +27,7 @@ jobs:
         id: go
 
       - name: Build
-        if: "!startsWith(github.ref, 'refs/tags/v')"
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
@@ -39,7 +37,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest

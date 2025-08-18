@@ -22,10 +22,10 @@ jobs:
           npm run test --watchAll=false
           npm run build
 
-      - name: Set up Go 1.16
+      - name: Set up Go 1.25
         uses: actions/setup-go@v5
         with:
-          go-version: '^1.16'
+          go-version: '1.25'
         id: go
 
       - name: Build

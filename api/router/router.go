@@ -171,4 +171,10 @@ func (r *router) SetupAPIRoutes() {
 
 		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
+
+	r.engine.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status": "gnt-cc is healthy :)",
+		})
+	})
 }

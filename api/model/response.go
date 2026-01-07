@@ -62,3 +62,7 @@ type StatisticsResponse struct {
 }
 
 type SearchResultsResponse SearchResults
+
+type HealthResponse struct {
+	Message string `json:"message"`
+}

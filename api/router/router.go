@@ -32,6 +32,7 @@ type router struct {
 	nodeController       controllers.NodeController
 	jobController        controllers.JobController
 	searchController     controllers.SearchController
+	healthController     controllers.HealthController
 }
 
 func New(engine *gin.Engine) *router {
@@ -81,6 +82,7 @@ func New(engine *gin.Engine) *router {
 	r.searchController = controllers.SearchController{
 		SearchService: &searchService,
 	}
+	r.healthController = controllers.HealthController{}
 
 	return &r
 }
@@ -122,6 +124,7 @@ func (r *router) SetupAPIRoutes() {
 
 	v1 := r.engine.Group("/api/v1")
 	{
+		v1.GET("/health", r.healthController.GetHealth)
 		v1.POST("/login", authMiddleware.LoginHandler)
 		v1.POST("/logout", authMiddleware.LogoutHandler)
 	}

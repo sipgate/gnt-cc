@@ -1,6 +1,6 @@
 module gnt-cc
 
-go 1.25.0
+go 1.26.10
 
 require (
 	github.com/GeertJohan/go.rice v1.0.3
